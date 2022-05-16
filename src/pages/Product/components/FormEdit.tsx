@@ -1,24 +1,18 @@
-import {
-  Box,
-  Grid,
-  TextField,
-  FormControl,
-  DialogTitle, DialogContent, DialogActions, Button, Dialog,
-} from "@mui/material";
-import {useFormik} from "formik";
 import React, {useEffect, useState} from "react";
 import {Product} from "../../../entities/Product";
 import {
+  useGetSkinConcernsQuery,
+  useGetSkinTypesQuery,
   usePutProductMutation,
 } from "../../../services";
-import {SelectSkinConcern} from "./SelectSkinConcern";
-import {SelectSkinType} from "./SelectSkinType";
-import {SelectCategory} from "./SelectCategory";
-import {TextEditor} from "../../../components/TextEditor";
 import {ImagePicker} from "../../../components/ImagePicker/index";
+import {Box, Button, Grid, Input, InputWrapper, Modal, MultiSelect, Select, TextInput} from "@mantine/core";
+import {useGetCategories} from "../hooks/useGetCategories";
+import {RichTextEditor} from "@mantine/rte";
+import {useForm} from "@mantine/form";
 
 type FormEditProp = {
-  data: Product|null;
+  data: Product;
   open: boolean;
   onClose: () => void
   onUpdated: () => void
@@ -27,35 +21,29 @@ type FormEditProp = {
 export const FormEdit = (props: FormEditProp) => {
   const {data, open, onClose, onUpdated} = props;
 
-  if (!data) {
-    return <div/>
-  }
-
-  const [onSubmit, {data: result}] = usePutProductMutation();
+  const categories = useGetCategories();
+  const [putRequest, {data: result}] = usePutProductMutation();
+  const {data: skinConcerns} = useGetSkinConcernsQuery({page: 1, perPage: 100});
+  const {data: skinTypes} = useGetSkinTypesQuery({page: 1, perPage: 100});
 
   const [bottle, setBottle] = useState('');
   const [bottleBox, setBottleBox] = useState('');
 
-  const {values, touched, errors, setFieldValue, submitForm} = useFormik({
+  const {values, errors, setFieldValue, onSubmit} = useForm({
     initialValues: {
+      id: data.id,
       name: data.name,
       sku: data.sku,
       keyingredient: data.keyingredient,
       categorySlug: data.category.slug,
-      skinConcernIds: data.skinConcerns.map((item) => item.id),
-      skinTypeIds: data.skinTypes.map((item) => item.id),
+      skinConcernIds: data.skinConcerns.map((item) => item.id.toString()),
+      skinTypeIds: data.skinTypes.map((item) => item.id.toString()),
       description: data.description,
       howToUse: data.howToUse,
       usedAs: data.usedAs,
       images: ['', ''],
       isFeatured: data.isFeatured
     },
-    onSubmit(values) {
-      onSubmit({
-        id: data.id,
-        ...values
-      })
-    }
   });
 
   useEffect(() => {
@@ -69,100 +57,156 @@ export const FormEdit = (props: FormEditProp) => {
   }, [bottle, bottleBox]);
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Edit Product</DialogTitle>
-      <DialogContent>
-        <Box
-          sx={{
-            marginTop: 1,
-          }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
+    <Modal
+      opened={open}
+      onClose={onClose}
+      title="Edit Product"
+      size="xl"
+    >
+      <Box>
+        <Grid>
+          <Grid.Col>
+            <InputWrapper
+              label="Product Name"
+              error={errors.name}
+            >
+              <Input
                 value={values.name}
-                label="Product Name"
-                variant="outlined"
-                sx={{width: "100%"}}
-                error={touched.name && !!errors.name}
-                helperText={touched.name && errors.name}
-                onChange={(e) => setFieldValue("name", e.target.value)}
+                onChange={(e: any) => setFieldValue("name", e.target.value)}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Product SKU"
+              error={errors.sku}
+            >
+              <Input
                 value={values.sku}
-                label="Product SKU"
-                variant="outlined"
-                sx={{width: "100%"}}
-                error={touched.sku && !!errors.sku}
-                helperText={touched.sku && errors.sku}
-                onChange={(e) => setFieldValue("sku", e.target.value)}
+                onChange={(e: any) => setFieldValue("sku", e.target.value)}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <SelectCategory value={values.categorySlug} onChange={(value) => setFieldValue('categorySlug', value)}/>
-            </Grid>
-            <Grid item xs={12}>
-              <SelectSkinConcern value={values.skinConcernIds}
-                                 onChange={(value) => setFieldValue('skinConcernIds', value)}/>
-            </Grid>
-            <Grid item xs={12}>
-              <SelectSkinType value={values.skinTypeIds} onChange={(value) => setFieldValue('skinTypeIds', value)}/>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Category"
+              error={errors.categorySlug}
+            >
+              <Select
+                value={values.categorySlug}
+                data={categories}
+                onChange={(e: any) => setFieldValue('categorySlug', e)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Skin Concern"
+              error={errors.skinConcernIds}
+            >
+              <MultiSelect
+                value={values.skinConcernIds}
+                data={skinConcerns?.data.map((item) => ({label: item.name, value: item.id.toString()})) || []}
+                onChange={(value: any) => setFieldValue('skinConcernIds', value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Skin Type"
+              error={errors.skinTypeIds}
+            >
+              <MultiSelect
+                value={values.skinTypeIds}
+                data={skinTypes?.data.map((item) => ({label: item.name, value: item.id.toString()})) || []}
+                onChange={(value: any) => setFieldValue('skinTypeIds', value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Used As"
+              error={errors.usedAs}
+            >
+              <TextInput
                 value={values.usedAs}
-                label="Used As"
-                variant="outlined"
-                sx={{width: "100%"}}
-                error={touched.usedAs && !!errors.usedAs}
-                helperText={touched.usedAs && errors.usedAs}
-                onChange={(e) => setFieldValue("name", e.target.value)}
+                onChange={(e: any) => setFieldValue("name", e.target.value)}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Product Ingredient"
+              error={errors.keyingredient}
+            >
+              <TextInput
                 value={values.keyingredient}
-                label="Product Ingredient"
-                variant="outlined"
-                sx={{width: "100%"}}
-                error={touched.keyingredient && !!errors.keyingredient}
-                helperText={touched.keyingredient && errors.keyingredient}
-                onChange={(e) => setFieldValue("keyingredient", e.target.value)}
+                onChange={(e: any) => setFieldValue("keyingredient", e.target.value)}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl>
-                <label>Description</label>
-                <TextEditor value={values.description} onChange={(value) => setFieldValue('description', value)}/>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl>
-                <label>How To Use</label>
-                <TextEditor value={values.howToUse} onChange={(value) => setFieldValue('howToUse', value)}/>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <label>Bottle Image</label>
-                <ImagePicker result={setBottle}/>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <label>Bottle Image with Box</label>
-                <ImagePicker result={setBottleBox}/>
-              </FormControl>
-            </Grid>
-          </Grid>
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={submitForm}>Save</Button>
-      </DialogActions>
-    </Dialog>
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Description"
+              error={errors.description}
+            >
+              <RichTextEditor
+                value={values.description}
+                onChange={(value) => setFieldValue('description', value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="How To Use"
+              error={errors.howToUse}
+            >
+              <RichTextEditor
+                value={values.howToUse}
+                onChange={(value) => setFieldValue('howToUse', value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Bottle Image"
+              error={errors.images}
+            >
+              <ImagePicker result={setBottle}/>
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Bottle Image with Box"
+              error={errors.images}
+            >
+              <ImagePicker result={setBottleBox}/>
+            </InputWrapper>
+          </Grid.Col>
+        </Grid>
+      </Box>
+
+      <Box
+        sx={(theme) => ({
+          display: 'flex',
+          justifyContent: 'end',
+          marginTop: theme.spacing.md,
+          gap: theme.spacing.md
+        })}
+      >
+        <Button onClick={onClose} variant="outline">Cancel</Button>
+        <Button onClick={() => onSubmit(putRequest)}>Save</Button>
+      </Box>
+    </Modal>
   );
 };

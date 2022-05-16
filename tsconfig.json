@@ -15,6 +15,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": "./src",
     "paths": {
       "services": ["./src/services"],
       "pages": ["./src/pages"]

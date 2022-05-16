@@ -1,186 +1,131 @@
 import {
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Button,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  DialogContentText,
-} from "@mui/material";
-import Layout from "../../components/Layout";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import {
-  useDeleteSkinConcernMutation,
   useGetSkinConcernsQuery,
 } from "../../services";
-import {useEffect, useRef, useState} from "react";
+import React, {useState} from "react";
 import {SkinConcern} from "../../entities/SkinConcern";
-import {FormEdit, FormCreate} from "./components";
+import {ActionIcon, Box, Button, Container, LoadingOverlay, Table} from "@mantine/core";
+import {useModal} from "../../hooks/useModal";
+import {Pencil, Trash} from "tabler-icons-react";
+import {DeleteConfirmation} from "./components/DeleteConfirmation";
+import {FormEdit} from "./components/FormEdit";
+import {FormCreate} from "./components/FormCreate";
 
 const SkinConcernPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [modal, setModal] = useModal();
+  const [selectedItem, setSelectedItem] = useState<SkinConcern | null>(null);
 
-  type Modal = {
-    create: boolean;
-    edit: boolean;
-    delete: false;
-  };
-  const [modal, setModal] = useState<Modal>({
-    create: false,
-    edit: false,
-    delete: false,
-  });
-  const [selectedItem, setSelectedItem] = useState<SkinConcern>();
-
-  const formCreateRef = useRef<any>();
-  const formEditRef = useRef<any>();
-
-  const query = new URLSearchParams();
-  const {data, refetch} = useGetSkinConcernsQuery(query);
-  const [deleteRequest, {isLoading: isDeleteLoading, data: deleteData}] =
-    useDeleteSkinConcernMutation();
-
-  const handleModal = (key: keyof Modal, value: boolean) => {
-    setModal({
-      ...modal,
-      [key]: value,
-    });
-  };
+  const {data, refetch, isLoading} = useGetSkinConcernsQuery({page: 1, perPage: 10});
 
   const onEdit = (item: SkinConcern) => {
     setSelectedItem(item);
-    handleModal("edit", true);
+    setModal("edit", true);
   };
 
   const onDelete = (item: SkinConcern) => {
     setSelectedItem(item);
-    handleModal("delete", true);
+    setModal("delete", true);
   };
 
-  const onCreateSuccess = () => {
-    setIsLoading(false);
-    handleModal("create", false);
+  const handleOnCreated = () => {
+    setModal("create", false);
     refetch();
   };
 
-  const onUpdateSuccess = () => {
-    setIsLoading(false);
-    handleModal("edit", false);
+  const handleOnUpdated = () => {
+    setModal("edit", false);
     refetch();
   };
 
-  const handleDeleteRequest = () => {
-    if (selectedItem) {
-      deleteRequest(selectedItem.id);
-    }
+  const handleOnDeleted = () => {
+    setModal('delete', false);
+    setSelectedItem(null);
+    refetch();
   };
-
-  useEffect(() => {
-    if (deleteData) {
-      refetch();
-      handleModal("delete", false);
-    }
-  }, [deleteData]);
 
   return (
-    <Layout>
-      <Button variant="contained" onClick={() => handleModal("create", true)}>
+    <Container
+      size="xl"
+    >
+      <LoadingOverlay visible={isLoading}/>
+      <Button
+        onClick={() => setModal("create", true)}
+      >
         Add
       </Button>
 
-      <TableContainer component={Paper} sx={{marginTop: 5}}>
-        <Table sx={{width: "100%"}}>
-          <TableHead>
-            <TableRow>
-              <TableCell>#ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>#Action</TableCell>
-            </TableRow>
-          </TableHead>
+      <Box
+        sx={(theme) => ({
+          marginTop: theme.spacing.md
+        })}
+      >
+        <Table>
+          <Table sx={{width: "100%"}}>
+            <thead>
+            <tr>
+              <th>#ID</th>
+              <th>Name</th>
+              <th>#Action</th>
+            </tr>
+            </thead>
 
-          <TableBody>
+            <tbody>
             {data?.data.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell>{item.id}</TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>
-                  <IconButton color="success" onClick={() => onEdit(item)}>
-                    <EditIcon/>
-                  </IconButton>
-                  <IconButton color="error" onClick={() => onDelete(item)}>
-                    <DeleteIcon/>
-                  </IconButton>
-                </TableCell>
-              </TableRow>
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.name}</td>
+                <td>
+                  <Box
+                    sx={{
+                      display: 'flex'
+                    }}
+                  >
+                    <ActionIcon
+                      color="blue"
+                      onClick={() => onEdit(item)}
+                    >
+                      <Pencil/>
+                    </ActionIcon>
+
+                    <ActionIcon
+                      color="red"
+                      onClick={() => onDelete(item)}
+                    >
+                      <Trash/>
+                    </ActionIcon>
+                  </Box>
+                </td>
+              </tr>
             ))}
-          </TableBody>
+            </tbody>
+          </Table>
         </Table>
-      </TableContainer>
+      </Box>
 
-      <Dialog open={modal.create} onClose={() => handleModal("create", false)}>
-        <DialogTitle>Add Skin Concern</DialogTitle>
-        <DialogContent>
-          <FormCreate
-            ref={formCreateRef}
-            onSuccess={onCreateSuccess}
-            onProcess={() => setIsLoading(true)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleModal("create", false)}>Cancel</Button>
-          <Button
-            disabled={isLoading}
-            onClick={() => formCreateRef.current.submit()}
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
 
-      <Dialog open={modal.edit} onClose={() => handleModal("edit", false)}>
-        <DialogTitle>Edit Skin Concern</DialogTitle>
-        <DialogContent>
+      <FormCreate
+        open={modal.create}
+        onClose={() => setModal('create', false)}
+        onCreated={handleOnCreated}
+      />
+
+      {selectedItem && (
+        <>
           <FormEdit
-            ref={formEditRef}
-            item={selectedItem}
-            onSuccess={onUpdateSuccess}
-            onProcess={() => setIsLoading(true)}
+            open={modal.edit}
+            data={selectedItem}
+            onClose={() => setModal('edit', false)}
+            onUpdated={handleOnUpdated}
           />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleModal("edit", false)}>Cancel</Button>
-          <Button
-            disabled={isLoading}
-            onClick={() => formEditRef.current.submit()}
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
 
-      <Dialog open={modal.delete} onClose={() => handleModal("delete", false)}>
-        <DialogTitle>Delete Skin Concern</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete this skin concern?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleModal("delete", false)}>No</Button>
-          <Button disabled={isDeleteLoading} onClick={handleDeleteRequest}>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Layout>
+          <DeleteConfirmation
+            open={modal.delete}
+            data={selectedItem}
+            onClose={() => setModal('delete', false)}
+            onDeleted={handleOnDeleted}
+          />
+        </>
+      )}
+    </Container>
   );
 };
 

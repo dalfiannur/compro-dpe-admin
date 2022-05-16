@@ -1,6 +1,7 @@
-import { Category } from "./Category";
-import { SkinConcern } from "./SkinConcern";
-import { SkinType } from "./SkinType";
+import {Category} from "./Category";
+import { ProductImage } from "./ProductImage";
+import {SkinConcern} from "./SkinConcern";
+import {SkinType} from "./SkinType";
 
 export interface Product {
   id: number;
@@ -16,14 +17,15 @@ export interface Product {
   description: string;
   keyingredient: string;
   createdAt: string;
+  images: ProductImage[];
 }
 
 export interface ProductDto {
   name: string;
   sku: string;
   categorySlug: string;
-  skinTypeIds: number[];
-  skinConcernIds: number[];
+  skinTypeIds: number[] | string[];
+  skinConcernIds: number[] | string[];
   images: string[];
   usedAs: string;
   howToUse: string;

@@ -1,32 +1,53 @@
-import {
-  Box,
-  Grid,
-  TextField,
-  FormControl,
-  DialogTitle, DialogContent, DialogActions, Button, Dialog,
-} from "@mui/material";
 import React, {useEffect, useState} from "react";
-import {usePostProductMutation} from "../../../services";
-import {SelectCategory} from "./SelectCategory";
-import {useFormik} from "formik";
-import {SelectSkinConcern} from "./SelectSkinConcern";
-import {SelectSkinType} from "./SelectSkinType";
-import {TextEditor} from "../../../components/TextEditor";
-import {ImagePicker} from "../../../components/ImagePicker/index";
+import {
+  usePostProductMutation,
+  useGetSkinConcernsQuery,
+  useGetSkinTypesQuery,
+} from "../../../services";
+import {ImagePicker} from "../../../components/ImagePicker";
+import {Modal, Box, Grid, InputWrapper, Input, Select, MultiSelect, Button} from "@mantine/core";
+import {useForm, zodResolver} from "@mantine/form";
+import {z} from 'zod';
+import {RichTextEditor} from "@mantine/rte";
+import { useMantineTheme } from "@mantine/core";
+import {useGetCategories} from "../hooks/useGetCategories";
+
+const schema = z.object({
+  name: z.string(),
+  sku: z.string(),
+  keyingredien: z.string(),
+  categorySlug: z.string(),
+  skinConcernIds: z.array(z.string()),
+  skinTypeIds: z.array(z.string()),
+  usedAs: z.string(),
+  description: z.string(),
+  howToUse: z.string(),
+  isFeatured: z.boolean()
+});
+
+
 
 type FormCreateProp = {
   open: boolean;
   onClose: () => void;
   onCreated: () => void;
 }
+
 export const FormCreate = (props: FormCreateProp) => {
   const {open, onClose, onCreated} = props;
-  const [onSubmit, { data: result }] = usePostProductMutation();
+
+  const theme = useMantineTheme();
+  const categories = useGetCategories();
+
+  const [postRequest, {data: result}] = usePostProductMutation();
+  const {data: skinConcerns} = useGetSkinConcernsQuery({page: 1, perPage: 100});
+  const {data: skinTypes} = useGetSkinTypesQuery({page: 1, perPage: 100});
 
   const [bottle, setBottle] = useState<string>('');
   const [bottleBox, setBottleBox] = useState<string>('');
 
-  const {values, errors, touched, submitForm, setFieldValue} = useFormik({
+  const {values, errors, onSubmit, setFieldValue} = useForm({
+    schema: zodResolver(schema),
     initialValues: {
       name: '',
       sku: '',
@@ -39,8 +60,7 @@ export const FormCreate = (props: FormCreateProp) => {
       usedAs: '',
       images: ['', ''],
       isFeatured: false
-    },
-    onSubmit
+    }
   });
 
   useEffect(() => {
@@ -54,101 +74,180 @@ export const FormCreate = (props: FormCreateProp) => {
   }, [bottle, bottleBox]);
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Add Product</DialogTitle>
-      <DialogContent>
-        <Box
+    <Modal
+      opened={open}
+      onClose={onClose}
+      size="xl"
+      title="Add Product"
+    >
+
+      <Box
+        sx={{
+          marginTop: 1,
+        }}
+      >
+        <Grid>
+          <Grid.Col>
+            <InputWrapper
+              id="input-name"
+              label="Product Name"
+              required
+              error={errors.name}
+            >
+              <Input
+                value={values.name}
+                onChange={(e: any) => setFieldValue('name', e.target.value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Product SKU"
+              required
+              error={errors.sku}
+            >
+              <Input
+                value={values.sku}
+                onChange={(e: any) => setFieldValue('sku', e.target.value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Category"
+              required
+              error={errors.categorySlug}
+            >
+              <Select
+                value={values.categorySlug}
+                data={categories}
+                onChange={(e) => setFieldValue('categorySlug', (e as string))}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Skin Concerns"
+              required
+              error={errors.skinConcernsId}
+            >
+              <MultiSelect
+                value={values.skinConcernIds}
+                data={skinConcerns?.data.map<any>((item) => ({label: item.name, value: item.id})) || []}
+                //@ts-ignore
+                onChange={(value) => setFieldValue('skinConcernIds', value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Skin Type"
+              required
+              error={errors.skinTypeIds}
+            >
+              <MultiSelect
+                value={values.skinTypeIds}
+                data={skinTypes?.data.map<any>((item) => ({label: item.name, value: item.id})) || []}
+                //@ts-ignore
+                onChange={(value) => setFieldValue('skinTypeIds', value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              required
+              label="Used as"
+              error={errors.usedAs}
+            >
+              <Input
+                value={values.usedAs}
+                onChange={(e: any) => setFieldValue('usedAs', e.target.value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Product Ingredient"
+              required
+              error={errors.keyingredient}
+            >
+              <Input
+                value={values.keyingredient}
+                onChange={(e: any) => setFieldValue('keyingredient', e.target.value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              required
+              label="Description"
+              error={errors.description}
+            >
+              <RichTextEditor value={values.description} onChange={(value) => setFieldValue('description', value)}/>
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              required
+              label="How to use"
+              error={errors.howToUse}
+            >
+              <RichTextEditor value={values.howToUse} onChange={(value) => setFieldValue('howToUse', value)}/>
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              required
+              label="Bottle Image"
+              error={errors.images}
+            >
+              <ImagePicker result={(val) => setBottle(val)}/>
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              required
+              label="Bottle Image with Box"
+              error={errors.images}
+            >
+              <ImagePicker result={(val) => setBottleBox(val)}/>
+            </InputWrapper>
+          </Grid.Col>
+        </Grid>
+      </Box>
+
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'end',
+          marginTop: theme.spacing.md
+        }}
+      >
+        <Button
+          onClick={onClose}
+          variant="outline"
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={() => onSubmit(postRequest)}
           sx={{
-            marginTop: 1,
+            marginLeft: theme.spacing.md
           }}
         >
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                value={values.name}
-                label="Product Name"
-                variant="outlined"
-                sx={{width: "100%"}}
-                error={touched.name && !!errors.name}
-                helperText={touched.name && errors.name}
-                onChange={(e) => setFieldValue('name', e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                value={values.sku}
-                label="Product SKU"
-                variant="outlined"
-                sx={{width: "100%"}}
-                error={touched.sku && !!errors.sku}
-                helperText={touched.sku && errors.sku}
-                onChange={(e) => setFieldValue('sku', e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <SelectCategory value={values.categorySlug}
-                              onChange={(e) => setFieldValue('categorySlug', e.target.value)}/>
-            </Grid>
-            <Grid item xs={12}>
-              <SelectSkinConcern value={values.skinConcernIds}
-                                 onChange={(value) => setFieldValue('skinConcernIds', value)}/>
-            </Grid>
-            <Grid item xs={12}>
-              <SelectSkinType value={values.skinTypeIds} onChange={(value) => setFieldValue('skinTypeIds', value)}/>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                value={values.usedAs}
-                label="Used as"
-                variant="outlined"
-                sx={{width: "100%"}}
-                error={touched.usedAs && !!errors.usedAs}
-                helperText={touched.usedAs && errors.usedAs}
-                onChange={(e) => setFieldValue('usedAs', e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                value={values.keyingredient}
-                label="Product Ingredient"
-                variant="outlined"
-                sx={{width: "100%"}}
-                error={touched.keyingredient && !!errors.keyingredient}
-                helperText={touched.keyingredient && errors.keyingredient}
-                onChange={(e) => setFieldValue('keyingredient', e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl>
-                <label>Description</label>
-                <TextEditor value={values.description} onChange={(value) => setFieldValue('description', value)}/>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl>
-                <label>How To Use</label>
-                <TextEditor value={values.howToUse} onChange={(value) => setFieldValue('howToUse', value)}/>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl sx={{ width: '100%' }}>
-                <label>Bottle Image</label>
-                <ImagePicker result={(val) => setBottle(val)} />
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl sx={{ width: '100%' }}>
-                <label>Bottle Image with Box</label>
-                <ImagePicker result={(val) => setBottleBox(val)} />
-              </FormControl>
-            </Grid>
-          </Grid>
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={submitForm}>Save</Button>
-      </DialogActions>
-    </Dialog>
+          Save
+        </Button>
+      </Box>
+    </Modal>
   );
 };

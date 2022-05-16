@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/dist/query/react";
 import { Banner, BannerDto, PaginationMeta } from "../entities";
-import { baseQuery, authorize } from './base'
+import { baseQuery } from './base'
 
 type BannersResult = {
   data: Banner[],
@@ -12,7 +12,7 @@ type BannerResult = {
 }
 export const bannerApi = createApi({
   reducerPath: 'bannerApi',
-  baseQuery: baseQuery(),
+  baseQuery,
   endpoints: (build) => ({
     getBanners: build.query<BannersResult, any>({
       query: () => ({
@@ -23,18 +23,16 @@ export const bannerApi = createApi({
       query: (body) => ({
         url: 'main-banners',
         method: 'POST',
-        body,
-        ...authorize()
+        body
       })
     }),
     deleteBanner: build.mutation<Omit<BannerResult, 'data'>, number>({
       query: (id) => ({
         url: 'main-banners/' + id,
-        method: 'DELETE',
-        ...authorize()
+        method: 'DELETE'
       })
     })
   })
-})
+});
 
-export const { useGetBannersQuery, usePostBannerMutation, useDeleteBannerMutation } = bannerApi
+export const { useGetBannersQuery, usePostBannerMutation, useDeleteBannerMutation } = bannerApi;

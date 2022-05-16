@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { productApi, skinConcernApi, skinTypeApi, authApi, bannerApi } from '../services'
+import { productApi, skinConcernApi, skinTypeApi, authApi, bannerApi, articleApi } from '../services'
 
 export const store = configureStore({
   reducer: {
@@ -8,7 +8,8 @@ export const store = configureStore({
     [productApi.reducerPath]: productApi.reducer,
     [skinTypeApi.reducerPath]: skinTypeApi.reducer,
     [skinConcernApi.reducerPath]: skinConcernApi.reducer,
-    [bannerApi.reducerPath]: bannerApi.reducer
+    [bannerApi.reducerPath]: bannerApi.reducer,
+    [articleApi.reducerPath]: articleApi.reducer
   },
 })
 

@@ -1,59 +1,86 @@
-import {
-  Box,
-  Grid,
-  TextField
-} from "@mui/material";
-import { useFormik } from "formik";
-import { ChangeEvent, forwardRef, useEffect, useImperativeHandle } from "react";
-import { usePostSkinTypeMutation } from "../../../services";
+import React, {ChangeEvent, useEffect} from "react";
+import {usePostSkinTypeMutation} from "../../../services";
+import {Box, Button, Grid, Input, InputWrapper, LoadingOverlay, Modal} from "@mantine/core";
+import {useFormik} from "formik";
+import * as yup from 'yup'
 
 type FormCreateProp = {
-  onSuccess: () => void
-  onProcess: () => void
+  open: boolean;
+  onClose: () => void;
+  onCreated: () => void;
 }
 
-export const FormCreate = forwardRef((props: FormCreateProp, ref) => {
-  const { onSuccess, onProcess } = props
-  const [onSubmit, { isLoading, data }] = usePostSkinTypeMutation()
-  const { values, errors, touched, setFieldValue, submitForm } = useFormik({
+const validationSchema = yup.object().shape({
+  name: yup.string().required()
+});
+
+export const FormCreate = (props: FormCreateProp) => {
+  const {open, onClose, onCreated} = props;
+
+  const [onSubmit, {isLoading, isSuccess}] = usePostSkinTypeMutation();
+  const {values, errors, setFieldValue, submitForm, resetForm} = useFormik({
     initialValues: {
       name: ''
     },
-    onSubmit,
-  })
-
-  useImperativeHandle(ref, () => ({
-    submit: submitForm
-  }), [])
+    validationSchema,
+    onSubmit
+  });
 
   useEffect(() => {
-    if(data) {
-      onSuccess()
+    if (isSuccess) {
+      onCreated();
+      resetForm()
     }
-    if (isLoading) {
-      onProcess()
-    }
-  }, [data, isLoading])
+  }, [isSuccess]);
 
   return (
-    <Box
-      sx={{
-        marginTop: 1,
-      }}
+    <Modal
+      opened={open}
+      onClose={onClose}
+      size="xl"
+      title="Create New Skin Type"
     >
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TextField
-            value={values.name}
-            label="Skin Type"
-            variant="outlined"
-            sx={{ width: "100%" }}
-            error={touched.name && !!errors.name}
-            helperText={touched.name && !!errors.name}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setFieldValue('name', e.target.value)}
-          />
+      <LoadingOverlay visible={isLoading}/>
+      <Box
+        sx={{
+          marginTop: 1,
+        }}
+      >
+        <Grid>
+          <Grid.Col>
+            <InputWrapper
+              required
+              label="Skin Concern"
+              error={errors.name}
+            >
+              <Input
+                value={values.name}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setFieldValue('name', e.target.value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
+
+      <Box
+        sx={(theme) => ({
+          marginTop: theme.spacing.md,
+          display: 'flex',
+          justifyContent: 'end',
+          gap: theme.spacing.md
+        })}
+      >
+        <Button
+          onClick={onClose}
+          color="gray"
+        >
+          Cancel
+        </Button>
+
+        <Button onClick={submitForm}>
+          Save
+        </Button>
+      </Box>
+    </Modal>
   );
-});
+};

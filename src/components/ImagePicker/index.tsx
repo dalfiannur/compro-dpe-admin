@@ -6,9 +6,10 @@ import "cropperjs/dist/cropper.css";
 type ImagePickerProp = {
   width?: number | string;
   result?: (result: string) => void;
+  aspectRatio?: number;
 };
 export const ImagePicker = (props: ImagePickerProp) => {
-  const { width, result } = props;
+  const { width, result, aspectRatio = 1 } = props;
 
   const inputRef = useRef<any>();
 
@@ -18,7 +19,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
   const cropperRef = useRef<HTMLImageElement>(null);
   const onCrop = () => {
     const imageElement: any = cropperRef?.current;
-    const cropper: any = imageElement?.cropper;    
+    const cropper: any = imageElement?.cropper;
     result && result(cropper.getCroppedCanvas().toDataURL());
   };
 
@@ -78,7 +79,8 @@ export const ImagePicker = (props: ImagePickerProp) => {
           src={dataUrl}
           style={{ height: 400, width: "100%" }}
           // Cropper.js options
-          initialAspectRatio={1}
+          initialAspectRatio={aspectRatio}
+          aspectRatio={aspectRatio}
           guides={false}
           crop={onCrop}
           ref={cropperRef}

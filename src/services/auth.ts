@@ -13,7 +13,7 @@ type LoginResult = {
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: baseQuery(),
+  baseQuery,
   endpoints: (builder) => ({
     postLogin: builder.mutation<LoginResult, LoginDto>({
       query: (body) => ({

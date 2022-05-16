@@ -1,70 +1,86 @@
-import { Box, Grid, TextField } from "@mui/material";
-import { useFormik } from "formik";
-import { ChangeEvent, forwardRef, useEffect, useImperativeHandle } from "react";
-import { SkinType } from "../../../entities/SkinType";
-import { usePutSkinTypeMutation } from "../../../services";
+import React, {ChangeEvent, FC, useEffect} from "react";
+import {SkinType} from "../../../entities/SkinType";
+import {usePutSkinTypeMutation} from "../../../services";
+import {Box, Button, Grid, Input, InputWrapper, LoadingOverlay, Modal} from "@mantine/core";
+import {useFormik} from "formik";
+import * as yup from 'yup';
 
-type FormEditProp = {
-  item?: SkinType;
-  onSuccess: () => void;
-  onProcess: () => void;
-};
+interface FormEditProp {
+  open: boolean;
+  data: SkinType;
+  onUpdated: () => void;
+  onClose: () => void;
+}
 
-export const FormEdit = forwardRef<any, FormEditProp>((props, ref) => {
-  const { item, onSuccess, onProcess } = props;
-  const [onSubmit, { isLoading, data }] = usePutSkinTypeMutation();
-  const { values, errors, touched, setFieldValue, submitForm } = useFormik({
+const validationSchema = yup.object().shape({
+  id: yup.number().required(),
+  name: yup.string().required(),
+});
+
+export const FormEdit: FC<FormEditProp> = ({open, data, onClose, onUpdated}) => {
+
+  const [onSubmit, {isLoading, isSuccess}] = usePutSkinTypeMutation();
+
+  const {values, errors, setFieldValue, submitForm} = useFormik({
     initialValues: {
-      name: item?.name || "",
+      id: data.id,
+      name: data.name
     },
-    onSubmit(values) {
-      if (item) {
-        onSubmit({
-          ...values,
-          id: item.id,
-        });
-      }
-    },
+    validationSchema,
+    onSubmit
   });
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      submit: submitForm,
-    }),
-    []
-  );
-
   useEffect(() => {
-    if (data) {
-      onSuccess();
+    if (isSuccess) {
+      onUpdated();
     }
-    if (isLoading) {
-      onProcess();
-    }
-  }, [data, isLoading]);
+  }, [isSuccess]);
 
   return (
-    <Box
-      sx={{
-        marginTop: 1,
-      }}
+    <Modal
+      opened={open}
+      onClose={onClose}
+      size="xl"
+      title="Edit Skin Type"
     >
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TextField
-            value={values.name}
-            label="Skin Type"
-            variant="outlined"
-            sx={{ width: "100%" }}
-            error={touched.name && !!errors.name}
-            helperText={touched.name && !!errors.name}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setFieldValue("name", e.target.value)
-            }
-          />
+      <LoadingOverlay visible={isLoading} />
+
+      <Box>
+        <Grid>
+          <Grid.Col>
+            <InputWrapper
+              required
+              label="Skin Type"
+              error={errors.name}
+            >
+              <Input
+                value={values.name}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setFieldValue("name", e.target.value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
+
+      <Box
+        sx={(theme) => ({
+          marginTop: theme.spacing.md,
+          display: 'flex',
+          justifyContent: 'end',
+          gap: theme.spacing.md
+        })}
+      >
+        <Button
+          color="gray"
+          onClick={onClose}
+        >
+          Cancel
+        </Button>
+
+        <Button onClick={submitForm}>
+          Save
+        </Button>
+      </Box>
+    </Modal>
   );
-});
+};

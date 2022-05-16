@@ -1,7 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react'
 import {PaginationMeta} from '../entities/PaginationMeta';
 import {Product, ProductDto} from '../entities/Product';
-import {baseQuery, authorize} from './base'
+import {baseQuery} from './base'
 
 type PaginationResult = {
   data: Product[],
@@ -15,7 +15,7 @@ type PaginationQuery = {
 
 export const productApi = createApi({
   reducerPath: 'productApi',
-  baseQuery: baseQuery(),
+  baseQuery,
   endpoints: (builder) => ({
     getProductPagination: builder.query<PaginationResult, PaginationQuery>({
       query: ({page, perPage}) => {
@@ -31,23 +31,20 @@ export const productApi = createApi({
       query: (body) => ({
         url: '/product',
         method: 'POST',
-        body,
-        ...authorize()
+        body
       })
     }),
     putProduct: builder.mutation<Product, Partial<ProductDto> & { id: number }>({
       query: ({id, ...body}) => ({
         url: `/product/${id}`,
         method: 'PUT',
-        body,
-        ...authorize()
+        body
       })
     }),
     deleteProduct: builder.mutation<Product, number>({
       query: (id) => ({
         url: '/product/' + id,
-        method: 'DELETE',
-        ...authorize()
+        method: 'DELETE'
       })
     })
   })

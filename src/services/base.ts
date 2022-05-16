@@ -1,14 +1,13 @@
-import { fetchBaseQuery } from "@reduxjs/toolkit/dist/query";
+import {fetchBaseQuery} from "@reduxjs/toolkit/dist/query";
 import store from 'store'
 
-export const baseQuery = () => {
-  return fetchBaseQuery({
-    baseUrl: 'https://api.dpelab.co.id'
-  })
-};
+export const baseQuery = fetchBaseQuery({
+  baseUrl: 'https://api.dpelab.co.id',
+  prepareHeaders: (headers) => {
+    const token = store.get('token', '');
 
-export const authorize = () => ({
-  headers: {
-    authorization: 'bearer ' + store.get('token', '')
+    headers.set('authorization', 'Bearer ' + token);
+
+    return headers;
   }
-})
+});
