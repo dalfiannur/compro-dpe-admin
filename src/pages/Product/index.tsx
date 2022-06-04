@@ -80,6 +80,7 @@ const ProductPage = () => {
           <Table>
             <thead>
               <tr>
+                <th>#</th>
                 <th>#ID</th>
                 <th>Name</th>
                 <th>Category</th>
@@ -91,6 +92,7 @@ const ProductPage = () => {
             <tbody>
               {productList?.data.map((item) => (
                 <tr>
+                  <td>{productList.data.indexOf(item) + 1}</td>
                   <td>{item.id}</td>
                   <td>{item.name}</td>
                   <td>{item.category.name}</td>
