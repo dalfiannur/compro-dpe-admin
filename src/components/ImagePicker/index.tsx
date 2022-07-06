@@ -1,5 +1,6 @@
-import { useRef, useState } from "react";
-import { Button } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { ActionIcon, Button } from "@mantine/core";
+import { Trash } from "tabler-icons-react";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
@@ -7,9 +8,10 @@ type ImagePickerProp = {
   width?: number | string;
   result?: (result: string) => void;
   aspectRatio?: number;
+  defaultImage?: string;
 };
 export const ImagePicker = (props: ImagePickerProp) => {
-  const { width, result, aspectRatio = 1 } = props;
+  const { width, result, aspectRatio = 1, defaultImage } = props;
 
   const inputRef = useRef<any>();
 
@@ -49,9 +51,28 @@ export const ImagePicker = (props: ImagePickerProp) => {
     }
   };
 
+  useEffect(() => {
+    const getImage = async () => {
+      if (defaultImage) {
+        fetch(defaultImage)
+          .then((response) => response.blob())
+          .then((result) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(result);
+            reader.onloadend = () => {
+              setDataUrl(reader.result as string);
+            };
+          });
+      }
+    };
+
+    getImage();
+  }, []);
+
   return (
     <div
       style={{
+        position: "relative",
         border: `1px solid ${isTooLarge ? "#ff0000" : "#cecece"}`,
         borderRadius: 4,
         width: width ?? "100%",
@@ -75,20 +96,34 @@ export const ImagePicker = (props: ImagePickerProp) => {
         !dataUrl && <p>Ukuran Maksimal adalah 1MB</p>
       )}
       {dataUrl ? (
-        <Cropper
-          src={dataUrl}
-          style={{ height: 400, width: "100%" }}
-          // Cropper.js options
-          initialAspectRatio={aspectRatio}
-          aspectRatio={aspectRatio}
-          guides={false}
-          crop={onCrop}
-          ref={cropperRef}
-        />
+        <>
+          <Cropper
+            src={dataUrl}
+            style={{ height: 400, width: "100%" }}
+            // Cropper.js options
+            initialAspectRatio={aspectRatio}
+            aspectRatio={aspectRatio}
+            guides={false}
+            crop={onCrop}
+            ref={cropperRef}
+          />
+
+          <ActionIcon
+            color="red"
+            sx={{
+              position: "absolute",
+              top: 5,
+              right: 5,
+              background: "white"
+            }}
+            onClick={() => setDataUrl(undefined)}
+          >
+            <Trash />
+          </ActionIcon>
+        </>
       ) : (
         <Button
           color={isTooLarge ? "error" : "primary"}
-          variant="contained"
           onClick={handleOnClick}
         >
           Pick Image

@@ -9,12 +9,14 @@ import {
   Table,
 } from "@mantine/core";
 import { useGetArticlesQuery } from "../../services/article";
-import { Eye, Pencil, Trash } from "tabler-icons-react";
+import { Eye, Pencil, Trash, Link } from "tabler-icons-react";
 import { Article } from "../../entities";
 import { useModal } from "../../hooks/useModal";
 import { Detail } from "./components/Detail";
 import { FormCreate } from "./components/FormCreate";
 import { DeleteConfirmation } from "./components/DeleteConfirmation";
+import { FormEdit } from "./components/FormEdit";
+import { Related } from "./components/Related";
 
 const ArticlePage = () => {
   const [selectedItem, setSelectedItem] = useState<Article>();
@@ -36,12 +38,28 @@ const ArticlePage = () => {
 
   const handleOnDeleteRequest = (item: Article) => {
     setSelectedItem(item);
-    setModal('delete', true)
-  }
+    setModal("delete", true);
+  };
 
   const handleOnDeleted = () => {
+    setModal("delete", false);
+    refetch();
+  };
 
-  }
+  const handleOnEditRequest = (item: Article) => {
+    setSelectedItem(item);
+    setModal("edit", true);
+  };
+
+  const handleOnUpdated = () => {
+    setModal("edit", false);
+    refetch();
+  };
+
+  const handleButtonLink = (item: Article) => {
+    setSelectedItem(item);
+    setModal("related", true);
+  };
 
   return (
     <>
@@ -80,6 +98,13 @@ const ArticlePage = () => {
                   >
                     <ActionIcon
                       color="blue"
+                      onClick={() => handleButtonLink(item)}
+                    >
+                      <Link />
+                    </ActionIcon>
+
+                    <ActionIcon
+                      color="blue"
                       onClick={() => handleOnViewRequest(item)}
                     >
                       <Eye />
@@ -87,7 +112,7 @@ const ArticlePage = () => {
 
                     <ActionIcon
                       color="blue"
-                      // onClick={() => handleOnEditRequest(item)}
+                      onClick={() => handleOnEditRequest(item)}
                     >
                       <Pencil />
                     </ActionIcon>
@@ -130,9 +155,22 @@ const ArticlePage = () => {
 
       {selectedItem && (
         <>
+          <FormEdit
+            data={selectedItem}
+            open={modal.edit}
+            onClose={() => setModal("edit", false)}
+            onUpdated={handleOnUpdated}
+          />
+
           <Detail
             open={modal.detail}
             onClose={() => setModal("detail", false)}
+            data={selectedItem}
+          />
+
+          <Related
+            open={modal.related}
+            onClose={() => setModal("related", false)}
             data={selectedItem}
           />
 
