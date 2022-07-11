@@ -16,6 +16,7 @@ import { useFormik } from "formik";
 import * as y from "yup";
 import { useInputState } from "@mantine/hooks";
 import { Article } from "entities";
+import '../../../assets/style.css'
 
 const validationSchema = y.object({
   title: y.string().required(),
@@ -73,6 +74,7 @@ export const FormEdit = (props: FormCreateProp) => {
         sx={{
           marginTop: 1,
         }}
+        className="modal-body"
       >
         <Grid>
           <Grid.Col>

@@ -1,6 +1,7 @@
 import { Modal, Box, Text, Image, List, Button } from "@mantine/core";
 import { Product } from "entities";
 import { FC } from "react";
+import '../../../assets/style.css'
 
 interface DetailProps {
   open: boolean;
@@ -18,7 +19,7 @@ export const Detail: FC<DetailProps> = (props) => {
   const { open, onClose, data } = props;
   return (
     <Modal opened={open} onClose={onClose} title="Detail Product" size="xl">
-      <Box>
+      <Box className="modal-body">
         <Box
           sx={{
             display: "grid",

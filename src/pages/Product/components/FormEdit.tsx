@@ -10,6 +10,7 @@ import {Box, Button, Grid, Input, InputWrapper, Modal, MultiSelect, Select, Text
 import {useGetCategories} from "../hooks/useGetCategories";
 import {RichTextEditor} from "@mantine/rte";
 import {useForm} from "@mantine/form";
+import '../../../assets/style.css'
 
 type FormEditProp = {
   data: Product;
@@ -63,7 +64,7 @@ export const FormEdit = (props: FormEditProp) => {
       title="Edit Product"
       size="xl"
     >
-      <Box>
+      <Box className="modal-body">
         <Grid>
           <Grid.Col>
             <InputWrapper

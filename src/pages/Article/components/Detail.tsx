@@ -2,6 +2,7 @@ import { Box, Button, Image, MantineTheme, Modal, Text } from "@mantine/core";
 import { Article } from "entities";
 import { useDateTimeFormat } from "../../../hooks/useDateTimeFormat";
 import React, { FC } from "react";
+import '../../../assets/style.css'
 
 interface DetailProps {
   open: boolean;
@@ -22,7 +23,7 @@ export const Detail: FC<DetailProps> = (props) => {
 
   return (
     <Modal opened={open} onClose={onClose} title="Detail Article">
-      <Box>
+      <Box className="modal-body">
         <Box sx={itemSection}>
           <Label>Thumbnail</Label>
           <Image src={data.thumbnailUrl} />
