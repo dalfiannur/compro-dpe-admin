@@ -4,15 +4,7 @@ import { FormEdit } from "./components/FormEdit";
 import { FormCreate } from "./components/FormCreate";
 import { useModal } from "../../hooks/useModal";
 import { DeleteConfirmation } from "./components/DeleteConfirmation";
-import {
-  ActionIcon,
-  Box,
-  Button,
-  Card,
-  Container,
-  Pagination,
-  Table,
-} from "@mantine/core";
+import { ActionIcon, Button, Card, Container, Table } from "@mantine/core";
 import { useGetProductPaginationQuery } from "../../services/product";
 import { Eye, Pencil, Trash } from "tabler-icons-react";
 import { Detail } from "./components/Detail";
@@ -22,7 +14,7 @@ const ProductPage = () => {
 
   const [modal, setModal] = useModal();
   const [page, setPage] = useState<number>(0);
-  const [perPage, setPerPage] = useState<number>(10);
+  const [perPage, setPerPage] = useState<number>(5);
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
@@ -88,7 +80,7 @@ const ProductPage = () => {
           <Table>
             <thead>
               <tr>
-                <th>#ID</th>
+                <th>No</th>
                 <th>Name</th>
                 <th>Category</th>
                 <th>Create Date</th>
@@ -99,7 +91,7 @@ const ProductPage = () => {
             <tbody>
               {productList?.data.map((item) => (
                 <tr>
-                  <td>{item.id}</td>
+                  <td>{productList.data.indexOf(item) + 1}</td>
                   <td>{item.name}</td>
                   <td>{item.category.name}</td>
                   <td>{item.createdAt}</td>
@@ -135,20 +127,6 @@ const ProductPage = () => {
               ))}
             </tbody>
           </Table>
-
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'end',
-              marginTop: 15
-            }}
-          >
-            <Pagination
-              page={page}
-              onChange={setPage}
-              total={Math.ceil((productList?.meta.total || 0) / perPage)}
-            />
-          </Box>
         </Card>
       </Container>
 

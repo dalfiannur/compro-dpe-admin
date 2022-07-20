@@ -76,17 +76,16 @@ const ArticlePage = () => {
           <Table>
             <thead>
               <tr>
-                <th>#ID</th>
+                <th>No</th>
                 <th>Title</th>
                 <th>Create Date</th>
                 <th>#Action</th>
               </tr>
             </thead>
-
             <tbody>
               {data?.data.map((item) => (
                 <tr>
-                  <td>{item.id}</td>
+                  <td>{data.data.indexOf(item) + 1}</td>
                   <td>{item.title}</td>
                   <td>{item.createdAt}</td>
                   <td
