@@ -7,9 +7,9 @@ export const MainRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<LoginPage/>}/>
+        <Route path="/" element={<LoginPage/>}/>
         <Route path="/" element={<BaseLayout/>}>
-          <Route element={<DashboardPage/>} path="/dashboard"/>
+          {/* <Route element={<DashboardPage/>} path="/dashboard"/> */}
           <Route element={<ProductPage/>} path="/product"/>
           <Route element={<BannerPage/>} path="/banner"/>
           <Route element={<SkinConcernPage/>} path="/skin-concern"/>
