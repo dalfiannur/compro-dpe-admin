@@ -1,40 +1,45 @@
-import React, {FC, useState} from 'react'
-import {
-  AppShell,
-  Footer,
-  useMantineTheme
-} from '@mantine/core';
-import {NavigationBar} from "./NavigationBar";
-import {MainHeader} from "./MainHeader";
-import {Outlet} from "react-router";
+import React, { FC, useEffect, useState } from "react";
+import { AppShell, Footer, useMantineTheme } from "@mantine/core";
+import { NavigationBar } from "./NavigationBar";
+import { MainHeader } from "./MainHeader";
+import { Outlet } from "react-router";
+import { useNavigate } from "react-router-dom";
 
-interface BaseLayoutProp {
-
-}
+interface BaseLayoutProp {}
 
 export const BaseLayout: FC<BaseLayoutProp> = () => {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("token") === null) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <AppShell
       styles={{
         main: {
-          background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
-        }
+          background:
+            theme.colorScheme === "dark"
+              ? theme.colors.dark[8]
+              : theme.colors.gray[0],
+        },
       }}
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       fixed
-      navbar={<NavigationBar opened={!opened}/>}
+      navbar={<NavigationBar opened={!opened} />}
       footer={
         <Footer height={60} p="md">
-          Application footer
+          DPE Lab
         </Footer>
       }
-      header={<MainHeader opened={opened} setOpened={setOpened}/>}
+      header={<MainHeader opened={opened} setOpened={setOpened} />}
     >
-      <Outlet/>
+      <Outlet />
     </AppShell>
   );
 };
