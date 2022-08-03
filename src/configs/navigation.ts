@@ -30,5 +30,10 @@ export const navigationLinks = [
     icon: Box,
     label: 'Article',
     path: '/article'
+  },
+  {
+    icon: Box,
+    label: 'User',
+    path: '/user'
   }
 ]

@@ -1,5 +1,5 @@
 import React from "react";
-import {LoginPage, DashboardPage, BannerPage, SkinConcernPage, SkinTypePage, ProductPage, ArticlePage} from "../pages";
+import {LoginPage, DashboardPage, BannerPage, SkinConcernPage, SkinTypePage, ProductPage, ArticlePage, UserPage} from "../pages";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {BaseLayout} from "../layouts/BaseLayout";
 
@@ -15,6 +15,7 @@ export const MainRoutes = () => {
           <Route element={<SkinConcernPage/>} path="/skin-concern"/>
           <Route element={<SkinTypePage/>} path="/skin-type"/>
           <Route element={<ArticlePage />} path="/article" />
+          <Route element={<UserPage />} path="/user" />
         </Route>
       </Routes>
     </BrowserRouter>
