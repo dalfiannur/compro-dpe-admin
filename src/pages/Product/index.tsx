@@ -13,13 +13,13 @@ const ProductPage = () => {
   const tableRef = useRef<any>();
 
   const [modal, setModal] = useModal();
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(5);
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const { data: productList, refetch } = useGetProductPaginationQuery({
-    page: page + 1,
+  const { data, refetch } = useGetProductPaginationQuery({
+    page,
     perPage,
   });
 
@@ -41,16 +41,12 @@ const ProductPage = () => {
 
   const handleOnUpdated = () => {
     setModal("edit", false);
-    if (tableRef.current) {
-      tableRef.current.refetch();
-    }
+    refetch();
   };
 
   const handleOnDeleted = () => {
     setModal("delete", false);
-    if (tableRef.current) {
-      tableRef.current.refetch();
-    }
+    refetch();
   };
 
   const handleOnFormEditClose = () => {
@@ -89,9 +85,9 @@ const ProductPage = () => {
             </thead>
 
             <tbody>
-              {productList?.data.map((item) => (
+              {data?.data.map((item) => (
                 <tr>
-                  <td>{productList.data.indexOf(item) + 1}</td>
+                  <td>{data.data.indexOf(item) + 1}</td>
                   <td>{item.name}</td>
                   <td>{item.category.name}</td>
                   <td>{item.createdAt}</td>

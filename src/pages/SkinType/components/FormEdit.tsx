@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FC, useEffect} from "react";
 import {SkinType} from "../../../entities/SkinType";
 import {usePutSkinTypeMutation} from "../../../services";
-import {Box, Button, Grid, Input, InputWrapper, LoadingOverlay, Modal} from "@mantine/core";
+import {Box, Button, Grid, Input, InputWrapper, Modal} from "@mantine/core";
 import {useFormik} from "formik";
 import * as yup from 'yup';
 
@@ -17,9 +17,10 @@ const validationSchema = yup.object().shape({
   name: yup.string().required(),
 });
 
-export const FormEdit: FC<FormEditProp> = ({open, data, onClose, onUpdated}) => {
+export const FormEdit = (props: FormEditProp) => {
+  const { open, onClose, onUpdated, data } = props;
 
-  const [onSubmit, {isLoading, isSuccess}] = usePutSkinTypeMutation();
+  const [onSubmit, { data: result }] = usePutSkinTypeMutation();
 
   const {values, errors, setFieldValue, submitForm} = useFormik({
     initialValues: {
@@ -27,14 +28,15 @@ export const FormEdit: FC<FormEditProp> = ({open, data, onClose, onUpdated}) => 
       name: data.name
     },
     validationSchema,
-    onSubmit
+    onSubmit,
+    enableReinitialize: true
   });
 
   useEffect(() => {
-    if (isSuccess) {
+    if (result) {
       onUpdated();
     }
-  }, [isSuccess]);
+  }, [result]);
 
   return (
     <Modal
@@ -43,8 +45,6 @@ export const FormEdit: FC<FormEditProp> = ({open, data, onClose, onUpdated}) => 
       size="xl"
       title="Edit Skin Type"
     >
-      <LoadingOverlay visible={isLoading} />
-
       <Box>
         <Grid>
           <Grid.Col>

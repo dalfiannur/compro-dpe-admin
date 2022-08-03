@@ -60,7 +60,8 @@ export const FormEdit = (props: FormEditProp) => {
       images: ['', ''],
       isFeatured: data.isFeatured
     },
-    onSubmit
+    onSubmit,
+    enableReinitialize: true
   });
 
   useEffect(() => {

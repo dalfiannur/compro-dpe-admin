@@ -17,9 +17,9 @@ const validationSchema = yup.object().shape({
   name: yup.string().required(),
 });
 
-export const FormEdit: FC<FormEditProp> = ({open, data, onClose, onUpdated}) => {
-
-  const [onSubmit, {isLoading, isSuccess}] = usePutSkinConcernMutation();
+export const FormEdit = (props: FormEditProp) => {
+  const { open, onClose, onUpdated, data } = props;
+  const [onSubmit, { data: result }] = usePutSkinConcernMutation();
 
   const {values, errors, setFieldValue, submitForm} = useFormik({
     initialValues: {
@@ -27,14 +27,15 @@ export const FormEdit: FC<FormEditProp> = ({open, data, onClose, onUpdated}) => 
       name: data.name
     },
     validationSchema,
-    onSubmit
+    onSubmit,
+    enableReinitialize: true
   });
 
   useEffect(() => {
-    if (isSuccess) {
+    if (result) {
       onUpdated();
     }
-  }, [isSuccess]);
+  }, [result]);
 
   return (
     <Modal
@@ -43,7 +44,6 @@ export const FormEdit: FC<FormEditProp> = ({open, data, onClose, onUpdated}) => 
       size="xl"
       title="Edit Skin Concern"
     >
-      <LoadingOverlay visible={isLoading} />
 
       <Box>
         <Grid>

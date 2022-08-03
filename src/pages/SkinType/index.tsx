@@ -73,27 +73,29 @@ const SkinConcernPage = () => {
             </thead>
 
             <tbody>
-              {data?.data.map((item) => (
-                <tr key={item.id}>
-                  <td>{data.data.indexOf(item) + 1}</td>
-                  <td>{item.name}</td>
-                  <td>
-                    <Box
-                      sx={{
-                        display: "flex",
-                      }}
-                    >
-                      <ActionIcon color="blue" onClick={() => onEdit(item)}>
-                        <Pencil />
-                      </ActionIcon>
+              {data?.data.map((item) => {
+                return (
+                  <tr key={item.id}>
+                    <td>{data.data.indexOf(item) + 1}</td>
+                    <td>{item.name}</td>
+                    <td>
+                      <Box
+                        sx={{
+                          display: "flex",
+                        }}
+                      >
+                        <ActionIcon color="blue" onClick={() => onEdit(item)}>
+                          <Pencil />
+                        </ActionIcon>
 
-                      <ActionIcon color="red" onClick={() => onDelete(item)}>
-                        <Trash />
-                      </ActionIcon>
-                    </Box>
-                  </td>
-                </tr>
-              ))}
+                        <ActionIcon color="red" onClick={() => onDelete(item)}>
+                          <Trash />
+                        </ActionIcon>
+                      </Box>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </Table>
         </Table>
