@@ -43,7 +43,7 @@ export default () => {
 
     if (data) {
       store.set("token", data.token);
-      navigate("/dashboard");
+      navigate("/banner");
     }
   }, [isLoading, data, error]);
 

@@ -1,65 +1,69 @@
 import FormCreate from "./components/FormCreate";
-import {useModal} from "../../hooks/useModal";
-import React, {useState} from "react";
+import { useModal } from "../../hooks/useModal";
+import React, { useState } from "react";
 import DeleteConfirmation from "./components/DeleteConfirmation";
-import {Banner} from "../../entities";
-import {ActionIcon, Box, Button, Card, Container, Table, Image} from "@mantine/core";
-import {useGetBannersQuery} from "../../services";
-import {Trash} from "tabler-icons-react";
+import { Banner } from "../../entities";
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Card,
+  Container,
+  Table,
+  Image,
+} from "@mantine/core";
+import { useGetBannersQuery } from "../../services";
+import { Trash } from "tabler-icons-react";
 
 const BannerPage = () => {
   const [modal, setModal] = useModal();
   const [selectedItem, setSelectedItem] = useState<Banner>();
 
-  const {data: banners, refetch} = useGetBannersQuery({page: 1, perPage: 5});
+  const { data: banners, refetch } = useGetBannersQuery({
+    page: 1,
+    perPage: 5,
+  });
 
   const handleDeleteRequest = (item: Banner) => {
     setSelectedItem(item);
-    setModal('delete', true)
+    setModal("delete", true);
   };
 
   const handleOnCreated = () => {
     setModal("create", false);
-    refetch()
+    refetch();
   };
 
   const handleOnDeleted = () => {
     setModal("delete", false);
-    refetch()
+    refetch();
   };
 
   return (
-    <Container
-      size="xl"
-    >
-      <Button
-        onClick={() => setModal("create", true)}
-      >
-        Add New Banner
-      </Button>
+    <Container size="xl">
+      <Button onClick={() => setModal("create", true)}>Add New Banner</Button>
 
       <Box
         sx={(theme) => ({
-          marginTop: theme.spacing.md
+          marginTop: theme.spacing.md,
         })}
       >
         <Card>
           <Table>
             <thead>
-            <tr>
-              <th>#ID</th>
-              <th>Image</th>
-              <th>Title</th>
-              <th>Subtitle</th>
-              <th>#Action</th>
-            </tr>
+              <tr>
+                <th>No</th>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Subtitle</th>
+                <th>#Action</th>
+              </tr>
             </thead>
 
             <tbody>
-            {
-              banners?.data.map((item) => (
+              {banners?.data.map((item) => (
                 <tr key={item.id}>
-                  <td>{item.id}</td>
+                  <td>{banners.data.indexOf(item) + 1}</td>
                   <td>
                     <Image
                       radius="md"
@@ -75,12 +79,11 @@ const BannerPage = () => {
                       color="red"
                       onClick={() => handleDeleteRequest(item)}
                     >
-                      <Trash/>
+                      <Trash />
                     </ActionIcon>
                   </td>
                 </tr>
-              ))
-            }
+              ))}
             </tbody>
           </Table>
         </Card>
@@ -100,7 +103,6 @@ const BannerPage = () => {
           onDeleted={handleOnDeleted}
         />
       )}
-
     </Container>
   );
 };

@@ -48,16 +48,12 @@ const ProductPage = () => {
 
   const handleOnUpdated = () => {
     setModal("edit", false);
-    if (tableRef.current) {
-      tableRef.current.refetch();
-    }
+    refetch();
   };
 
   const handleOnDeleted = () => {
     setModal("delete", false);
-    if (tableRef.current) {
-      tableRef.current.refetch();
-    }
+    refetch();
   };
 
   const handleOnFormEditClose = () => {

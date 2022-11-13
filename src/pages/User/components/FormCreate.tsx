@@ -1,51 +1,51 @@
-import React, {ChangeEvent, FC, useEffect} from "react";
-import {SkinType} from "../../../entities/SkinType";
-import {usePutSkinConcernMutation} from "../../../services";
+import React, {ChangeEvent, useEffect} from "react";
+import {usePostSkinTypeMutation} from "../../../services";
 import {Box, Button, Grid, Input, InputWrapper, LoadingOverlay, Modal} from "@mantine/core";
 import {useFormik} from "formik";
-import * as yup from 'yup';
+import * as yup from 'yup'
 
-interface FormEditProp {
+type FormCreateProp = {
   open: boolean;
-  data: SkinType;
-  onUpdated: () => void;
   onClose: () => void;
+  onCreated: () => void;
 }
 
 const validationSchema = yup.object().shape({
-  id: yup.number().required(),
-  name: yup.string().required(),
+  name: yup.string().required()
 });
 
-export const FormEdit = (props: FormEditProp) => {
-  const { open, onClose, onUpdated, data } = props;
-  const [onSubmit, { data: result }] = usePutSkinConcernMutation();
+export const FormCreate = (props: FormCreateProp) => {
+  const {open, onClose, onCreated} = props;
 
-  const {values, errors, setFieldValue, submitForm} = useFormik({
+  const [onSubmit, {isLoading, isSuccess}] = usePostSkinTypeMutation();
+  const {values, errors, setFieldValue, submitForm, resetForm} = useFormik({
     initialValues: {
-      id: data.id,
-      name: data.name
+      name: ''
     },
     validationSchema,
-    onSubmit,
-    enableReinitialize: true
+    onSubmit
   });
 
   useEffect(() => {
-    if (result) {
-      onUpdated();
+    if (isSuccess) {
+      onCreated();
+      resetForm()
     }
-  }, [result]);
+  }, [isSuccess]);
 
   return (
     <Modal
       opened={open}
       onClose={onClose}
       size="xl"
-      title="Edit Skin Concern"
+      title="Create New Skin Type"
     >
-
-      <Box>
+      <LoadingOverlay visible={isLoading}/>
+      <Box
+        sx={{
+          marginTop: 1,
+        }}
+      >
         <Grid>
           <Grid.Col>
             <InputWrapper
@@ -55,7 +55,7 @@ export const FormEdit = (props: FormEditProp) => {
             >
               <Input
                 value={values.name}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setFieldValue("name", e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setFieldValue('name', e.target.value)}
               />
             </InputWrapper>
           </Grid.Col>
@@ -71,8 +71,8 @@ export const FormEdit = (props: FormEditProp) => {
         })}
       >
         <Button
-          color="gray"
           onClick={onClose}
+          color="gray"
         >
           Cancel
         </Button>

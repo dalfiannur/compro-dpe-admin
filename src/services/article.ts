@@ -15,6 +15,10 @@ type GetArticlesResult = {
   };
 };
 
+type GetArticleResult = {
+  data: Article;
+};
+
 type PostArticleResult = {};
 
 export const articleApi = createApi({
@@ -31,6 +35,11 @@ export const articleApi = createApi({
         };
       },
     }),
+    getArticle: builder.query<GetArticleResult, any>({
+      query: (slug: string) => ({
+        url: "articles/" + slug,
+      }),
+    }),
     postArticle: builder.mutation<PostArticleResult, ArticleDto>({
       query: (body) => ({
         url: "articles",
@@ -38,9 +47,32 @@ export const articleApi = createApi({
         body,
       }),
     }),
+    putArticle: builder.mutation<
+      PostArticleResult,
+      ArticleDto & { id: number }
+    >({
+      query: ({ id, ...body }) => ({
+        url: "articles/" + id,
+        method: "PUT",
+        body,
+      }),
+    }),
     deleteArticle: builder.mutation<any, number>({
       query: (id) => ({
         url: "articles/" + id,
+        method: "DELETE",
+      }),
+    }),
+    postRelatedProductOnArticle: builder.mutation<any, any>({
+      query: ({ id, productIds }) => ({
+        url: "articles/" + id + "/products",
+        method: "POST",
+        body: { productIds },
+      }),
+    }),
+    deleteRelatedProductOnArticle: builder.mutation<any, any>({
+      query: ({ id, productId }) => ({
+        url: "articles/" + id + "/products/" + productId,
         method: "DELETE",
       }),
     }),
@@ -51,4 +83,8 @@ export const {
   useGetArticlesQuery,
   usePostArticleMutation,
   useDeleteArticleMutation,
+  usePutArticleMutation,
+  useLazyGetArticleQuery,
+  usePostRelatedProductOnArticleMutation,
+  useDeleteRelatedProductOnArticleMutation
 } = articleApi;

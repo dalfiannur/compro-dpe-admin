@@ -9,7 +9,9 @@ import {ImagePicker} from "../../../components/ImagePicker/index";
 import {Box, Button, Grid, Input, InputWrapper, Modal, MultiSelect, Select, TextInput} from "@mantine/core";
 import {useGetCategories} from "../hooks/useGetCategories";
 import {RichTextEditor} from "@mantine/rte";
-import {useForm} from "@mantine/form";
+import {useFormik} from "formik";
+import * as y from 'yup';
+import '../../../assets/style.css'
 
 type FormEditProp = {
   data: Product;
@@ -22,14 +24,28 @@ export const FormEdit = (props: FormEditProp) => {
   const {data, open, onClose, onUpdated} = props;
 
   const categories = useGetCategories();
-  const [putRequest, {data: result}] = usePutProductMutation();
+  const [onSubmit, {data: result}] = usePutProductMutation();
   const {data: skinConcerns} = useGetSkinConcernsQuery({page: 1, perPage: 100});
   const {data: skinTypes} = useGetSkinTypesQuery({page: 1, perPage: 100});
 
   const [bottle, setBottle] = useState('');
   const [bottleBox, setBottleBox] = useState('');
 
-  const {values, errors, setFieldValue, onSubmit} = useForm({
+  const validationSchema = y.object({
+    name: y.string().required(),
+    sku: y.string().required(),
+    keyingredient: y.string().required(),
+    categorySlug: y.string().required(),
+    skinConcernIds: y.array(y.string()).min(1),
+    skinTypeIds: y.array(y.string()).required().min(1),
+    usedAs: y.string().required(),
+    description: y.string().required(),
+    howToUse: y.string().required(),
+    isFeatured: y.boolean().required()
+  });
+
+  const {values, errors, setFieldValue, submitForm} = useFormik({
+    validationSchema,
     initialValues: {
       id: data.id,
       name: data.name,
@@ -44,6 +60,8 @@ export const FormEdit = (props: FormEditProp) => {
       images: ['', ''],
       isFeatured: data.isFeatured
     },
+    onSubmit,
+    enableReinitialize: true
   });
 
   useEffect(() => {
@@ -63,7 +81,7 @@ export const FormEdit = (props: FormEditProp) => {
       title="Edit Product"
       size="xl"
     >
-      <Box>
+      <Box className="modal-body">
         <Grid>
           <Grid.Col>
             <InputWrapper
@@ -205,7 +223,7 @@ export const FormEdit = (props: FormEditProp) => {
         })}
       >
         <Button onClick={onClose} variant="outline">Cancel</Button>
-        <Button onClick={() => onSubmit(putRequest)}>Save</Button>
+        <Button onClick={() => submitForm()}>Save</Button>
       </Box>
     </Modal>
   );

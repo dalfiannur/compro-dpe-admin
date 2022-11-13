@@ -6,13 +6,13 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import { useNavigate } from "react-router-dom";
 
 const mainList = [
-  {
-    text: "Dashboard",
-    link: "/dashboard",
-  },
+  // {
+  //   text: "Dashboard",
+  //   link: "/dashboard",
+  // },
   {
     text: "Main Banner",
-    link: "/main-banner",
+    link: "/banner",
   },
   {
     text: "Product",

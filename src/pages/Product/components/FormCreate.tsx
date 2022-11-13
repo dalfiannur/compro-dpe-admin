@@ -6,25 +6,24 @@ import {
 } from "../../../services";
 import {ImagePicker} from "../../../components/ImagePicker";
 import {Modal, Box, Grid, InputWrapper, Input, Select, MultiSelect, Button} from "@mantine/core";
-import {useForm, zodResolver} from "@mantine/form";
-import {z} from 'zod';
+import {useFormik} from "formik";
+import * as y from 'yup';
 import {RichTextEditor} from "@mantine/rte";
 import { useMantineTheme } from "@mantine/core";
 import {useGetCategories} from "../hooks/useGetCategories";
 
-const schema = z.object({
-  name: z.string(),
-  sku: z.string(),
-  keyingredien: z.string(),
-  categorySlug: z.string(),
-  skinConcernIds: z.array(z.string()),
-  skinTypeIds: z.array(z.string()),
-  usedAs: z.string(),
-  description: z.string(),
-  howToUse: z.string(),
-  isFeatured: z.boolean()
+const validationSchema = y.object({
+  name: y.string().required(),
+  sku: y.string().required(),
+  keyingredient: y.string().required(),
+  categorySlug: y.string().required(),
+  skinConcernIds: y.array(y.string()).min(1),
+  skinTypeIds: y.array(y.string()).required().min(1),
+  usedAs: y.string().required(),
+  description: y.string().required(),
+  howToUse: y.string().required(),
+  isFeatured: y.boolean().required()
 });
-
 
 
 type FormCreateProp = {
@@ -39,15 +38,15 @@ export const FormCreate = (props: FormCreateProp) => {
   const theme = useMantineTheme();
   const categories = useGetCategories();
 
-  const [postRequest, {data: result}] = usePostProductMutation();
+  const [onSubmit, {data: result}] = usePostProductMutation();
   const {data: skinConcerns} = useGetSkinConcernsQuery({page: 1, perPage: 100});
   const {data: skinTypes} = useGetSkinTypesQuery({page: 1, perPage: 100});
 
   const [bottle, setBottle] = useState<string>('');
   const [bottleBox, setBottleBox] = useState<string>('');
 
-  const {values, errors, onSubmit, setFieldValue} = useForm({
-    schema: zodResolver(schema),
+  const {values, errors, submitForm, setFieldValue} = useFormik({
+    validationSchema,
     initialValues: {
       name: '',
       sku: '',
@@ -60,7 +59,8 @@ export const FormCreate = (props: FormCreateProp) => {
       usedAs: '',
       images: ['', ''],
       isFeatured: false
-    }
+    },
+    onSubmit
   });
 
   useEffect(() => {
@@ -132,7 +132,7 @@ export const FormCreate = (props: FormCreateProp) => {
             <InputWrapper
               label="Skin Concerns"
               required
-              error={errors.skinConcernsId}
+              error={errors.skinConcernIds}
             >
               <MultiSelect
                 value={values.skinConcernIds}
@@ -240,12 +240,12 @@ export const FormCreate = (props: FormCreateProp) => {
           Cancel
         </Button>
         <Button
-          onClick={() => onSubmit(postRequest)}
+          onClick={submitForm}
           sx={{
             marginLeft: theme.spacing.md
           }}
         >
-          Save
+          Saves
         </Button>
       </Box>
     </Modal>

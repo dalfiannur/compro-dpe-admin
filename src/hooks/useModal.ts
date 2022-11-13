@@ -5,6 +5,7 @@ type Modal = {
   edit: boolean;
   delete: boolean;
   detail: boolean;
+  related: boolean;
 };
 
 export const useModal = (): [
@@ -16,6 +17,7 @@ export const useModal = (): [
     edit: false,
     delete: false,
     detail: false,
+    related: false,
   });
 
   const handleModal = (name: keyof Modal, value: boolean) => {

@@ -1,4 +1,4 @@
-import { useGetSkinConcernsQuery } from "../../services";
+import { useGetSkinTypesQuery } from "../../services";
 import React, { useState } from "react";
 import { SkinConcern } from "../../entities/SkinConcern";
 import {
@@ -15,11 +15,11 @@ import { DeleteConfirmation } from "./components/DeleteConfirmation";
 import { FormEdit } from "./components/FormEdit";
 import { FormCreate } from "./components/FormCreate";
 
-const SkinConcernPage = () => {
+const UserPage = () => {
   const [modal, setModal] = useModal();
   const [selectedItem, setSelectedItem] = useState<SkinConcern | null>(null);
 
-  const { data, refetch, isLoading } = useGetSkinConcernsQuery({
+  const { data, refetch, isLoading } = useGetSkinTypesQuery({
     page: 1,
     perPage: 10,
   });
@@ -53,7 +53,9 @@ const SkinConcernPage = () => {
   return (
     <Container size="xl">
       <LoadingOverlay visible={isLoading} />
-      <Button onClick={() => setModal("create", true)}>Add</Button>
+      <Button onClick={() => setModal("create", true)}>
+        Add New User
+      </Button>
 
       <Box
         sx={(theme) => ({
@@ -71,27 +73,29 @@ const SkinConcernPage = () => {
             </thead>
 
             <tbody>
-              {data?.data.map((item) => (
-                <tr key={item.id}>
-                  <td>{data.data.indexOf(item) + 1}</td>
-                  <td>{item.name}</td>
-                  <td>
-                    <Box
-                      sx={{
-                        display: "flex",
-                      }}
-                    >
-                      <ActionIcon color="blue" onClick={() => onEdit(item)}>
-                        <Pencil />
-                      </ActionIcon>
+              {data?.data.map((item) => {
+                return (
+                  <tr key={item.id}>
+                    <td>{data.data.indexOf(item) + 1}</td>
+                    <td>{item.name}</td>
+                    <td>
+                      <Box
+                        sx={{
+                          display: "flex",
+                        }}
+                      >
+                        <ActionIcon color="blue" onClick={() => onEdit(item)}>
+                          <Pencil />
+                        </ActionIcon>
 
-                      <ActionIcon color="red" onClick={() => onDelete(item)}>
-                        <Trash />
-                      </ActionIcon>
-                    </Box>
-                  </td>
-                </tr>
-              ))}
+                        <ActionIcon color="red" onClick={() => onDelete(item)}>
+                          <Trash />
+                        </ActionIcon>
+                      </Box>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </Table>
         </Table>
@@ -124,4 +128,4 @@ const SkinConcernPage = () => {
   );
 };
 
-export default SkinConcernPage;
+export default UserPage;

@@ -1,6 +1,9 @@
+import { Product } from "./Product";
+
 export interface Article {
   id: number;
   title: string;
+  slug: string;
   content: string;
   thumbnail: string;
   thumbnailUrl: string;
@@ -9,6 +12,7 @@ export interface Article {
   user: {
     name: string;
   };
+  products: Product[];
 }
 
 export interface ArticleDto {
@@ -16,5 +20,5 @@ export interface ArticleDto {
   content: string;
   thumbnail: string;
   isFeatured: boolean;
-  tags: string,
+  // tags: string,
 }

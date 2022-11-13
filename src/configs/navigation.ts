@@ -1,11 +1,11 @@
 import {Box, Home, PictureInPicture} from "tabler-icons-react";
 
 export const navigationLinks = [
-  {
-    icon: Home,
-    label: 'Dashboard',
-    path: '/dashboard'
-  },
+  // {
+  //   icon: Home,
+  //   label: 'Dashboard',
+  //   path: '/dashboard'
+  // },
   {
     icon: PictureInPicture,
     label: 'Banner',
@@ -30,5 +30,10 @@ export const navigationLinks = [
     icon: Box,
     label: 'Article',
     path: '/article'
+  },
+  {
+    icon: Box,
+    label: 'User',
+    path: '/user'
   }
 ]
