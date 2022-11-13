@@ -1,13 +1,13 @@
 import React, {ChangeEvent, FC, useEffect} from "react";
-import {SkinType} from "../../../entities/SkinType";
-import {usePutSkinTypeMutation} from "../../../services";
+import {User} from "../../../entities/User";
+import {usePutUserMutation} from "../../../services";
 import {Box, Button, Grid, Input, InputWrapper, Modal} from "@mantine/core";
 import {useFormik} from "formik";
 import * as yup from 'yup';
 
 interface FormEditProp {
   open: boolean;
-  data: SkinType;
+  data: User;
   onUpdated: () => void;
   onClose: () => void;
 }
@@ -20,7 +20,7 @@ const validationSchema = yup.object().shape({
 export const FormEdit = (props: FormEditProp) => {
   const { open, onClose, onUpdated, data } = props;
 
-  const [onSubmit, { data: result }] = usePutSkinTypeMutation();
+  const [onSubmit, { data: result }] = usePutUserMutation();
 
   const {values, errors, setFieldValue, submitForm} = useFormik({
     initialValues: {

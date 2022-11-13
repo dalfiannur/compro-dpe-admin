@@ -1,17 +1,17 @@
 import {Box, Button, LoadingOverlay, Modal, Text} from "@mantine/core";
 import React, {FC, useEffect} from "react";
-import {useDeleteSkinTypeMutation} from "../../../services";
-import {SkinConcern} from "../../../entities/SkinConcern";
+import {useDeleteUserMutation} from "../../../services";
+import {User} from "../../../entities/User";
 
 interface DeleteConfirmationProp {
   open: boolean;
-  data: SkinConcern;
+  data: User;
   onClose: () => void;
   onDeleted: () => void;
 }
 
 export const DeleteConfirmation: FC<DeleteConfirmationProp> = ({open, onClose, onDeleted, data}) => {
-  const [deleteRequest, {isLoading, isSuccess}] = useDeleteSkinTypeMutation();
+  const [deleteRequest, {isLoading, isSuccess}] = useDeleteUserMutation();
 
   useEffect(() => {
     if (isSuccess) {

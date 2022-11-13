@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { usePostArticleMutation } from "../../../services";
+import React, { useEffect, useMemo } from "react";
+import { useGetUsersQuery, usePostArticleMutation } from "../../../services";
 import { ImagePicker } from "../../../components/ImagePicker";
 import {
   Modal,
@@ -9,6 +9,7 @@ import {
   Input,
   Button,
   MultiSelect,
+  Select,
 } from "@mantine/core";
 import { RichTextEditor } from "@mantine/rte";
 import { useMantineTheme } from "@mantine/core";
@@ -18,6 +19,7 @@ import { useInputState } from "@mantine/hooks";
 
 const validationSchema = y.object({
   title: y.string().required(),
+  authorId: y.number().required(),
   content: y.string(),
   thumbnail: y.string().required(),
   tags: y.array(y.string()).required()
@@ -34,6 +36,19 @@ export const FormCreate = (props: FormCreateProp) => {
   const [tags, setTags] = useInputState<string[]>([]);
 
   const theme = useMantineTheme();
+  const {data: user} = useGetUsersQuery({
+    page: 1,
+    perPage: 100,
+  })
+  const userOption = useMemo(() => {
+    if(user){
+      return user.data.data.map((item) => ({
+        label: item.name,
+        value: item.id.toString()
+      }))
+    } 
+    return []
+  }, [user])
 
   const [onSubmit, { data: result }] = usePostArticleMutation();
 
@@ -41,6 +56,7 @@ export const FormCreate = (props: FormCreateProp) => {
     validationSchema,
     initialValues: {
       title: "",
+      authorId: 0,
       content: "",
       thumbnail: "",
       isFeatured: false,
@@ -82,6 +98,19 @@ export const FormCreate = (props: FormCreateProp) => {
               <Input
                 value={values.title}
                 onChange={(e: any) => setFieldValue("title", e.target.value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+              label="Author"
+              required
+              error={errors.authorId}
+            >
+              <Select
+                data={userOption}
+                onChange={(e) => setFieldValue('authorId', + (e as string))}
               />
             </InputWrapper>
           </Grid.Col>

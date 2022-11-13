@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useEffect} from "react";
-import {usePostSkinTypeMutation} from "../../../services";
+import {usePostUserMutation} from "../../../services";
 import {Box, Button, Grid, Input, InputWrapper, LoadingOverlay, Modal} from "@mantine/core";
 import {useFormik} from "formik";
 import * as yup from 'yup'
@@ -17,13 +17,19 @@ const validationSchema = yup.object().shape({
 export const FormCreate = (props: FormCreateProp) => {
   const {open, onClose, onCreated} = props;
 
-  const [onSubmit, {isLoading, isSuccess}] = usePostSkinTypeMutation();
+  const [onSubmit, {isLoading, isSuccess}] = usePostUserMutation();
   const {values, errors, setFieldValue, submitForm, resetForm} = useFormik({
     initialValues: {
       name: ''
     },
     validationSchema,
-    onSubmit
+    onSubmit(values){
+      onSubmit({
+        ...values,
+        email: values.name.replaceAll(" ", "") + "@mail.com",
+        password: "password"
+      })
+    }
   });
 
   useEffect(() => {

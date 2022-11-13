@@ -1,6 +1,6 @@
-import { useGetSkinTypesQuery } from "../../services";
+import { useGetUsersQuery } from "../../services";
 import React, { useState } from "react";
-import { SkinConcern } from "../../entities/SkinConcern";
+import { User } from "../../entities/User";
 import {
   ActionIcon,
   Box,
@@ -8,6 +8,7 @@ import {
   Container,
   LoadingOverlay,
   Table,
+  Pagination
 } from "@mantine/core";
 import { useModal } from "../../hooks/useModal";
 import { Pencil, Trash } from "tabler-icons-react";
@@ -17,19 +18,23 @@ import { FormCreate } from "./components/FormCreate";
 
 const UserPage = () => {
   const [modal, setModal] = useModal();
-  const [selectedItem, setSelectedItem] = useState<SkinConcern | null>(null);
+  const [selectedItem, setSelectedItem] = useState<User | null>(null);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(5);
 
-  const { data, refetch, isLoading } = useGetSkinTypesQuery({
-    page: 1,
-    perPage: 10,
+  const { data: user, refetch, isLoading } = useGetUsersQuery({
+    page: page,
+    perPage: perPage,
   });
 
-  const onEdit = (item: SkinConcern) => {
+
+
+  const onEdit = (item: User) => {
     setSelectedItem(item);
     setModal("edit", true);
   };
 
-  const onDelete = (item: SkinConcern) => {
+  const onDelete = (item: User) => {
     setSelectedItem(item);
     setModal("delete", true);
   };
@@ -62,43 +67,54 @@ const UserPage = () => {
           marginTop: theme.spacing.md,
         })}
       >
-        <Table>
-          <Table sx={{ width: "100%" }}>
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Name</th>
-                <th>#Action</th>
-              </tr>
-            </thead>
+        <Table sx={{ width: "100%" }}>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Name</th>
+              <th>#Action</th>
+            </tr>
+          </thead>
 
-            <tbody>
-              {data?.data.map((item) => {
-                return (
-                  <tr key={item.id}>
-                    <td>{data.data.indexOf(item) + 1}</td>
-                    <td>{item.name}</td>
-                    <td>
-                      <Box
-                        sx={{
-                          display: "flex",
-                        }}
-                      >
-                        <ActionIcon color="blue" onClick={() => onEdit(item)}>
-                          <Pencil />
-                        </ActionIcon>
+          <tbody>
+            {user?.data?.data.map((item) => {
+              return (
+                <tr key={item.id}>
+                  <td>{user.data?.data.indexOf(item) + 1}</td>
+                  <td>{item.name}</td>
+                  <td>
+                    <Box
+                      sx={{
+                        display: "flex",
+                      }}
+                    >
+                      {item.id !== 1 && (
+                        <>
+                          <ActionIcon color="blue" onClick={() => onEdit(item)}>
+                            <Pencil />
+                          </ActionIcon>
 
-                        <ActionIcon color="red" onClick={() => onDelete(item)}>
-                          <Trash />
-                        </ActionIcon>
-                      </Box>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+                          <ActionIcon color="red" onClick={() => onDelete(item)}>
+                            <Trash />
+                          </ActionIcon>
+                        </>
+                      )}
+                      
+                    </Box>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
         </Table>
+
+        <Pagination
+              total={Math.ceil(
+                (user?.data?.meta.total || 0) / (user?.data?.meta.per_page || perPage)
+              )}
+              page={page}
+              onChange={setPage}
+            />
       </Box>
 
       <FormCreate
