@@ -10,6 +10,7 @@ export interface Article {
   createdAt: string;
   isFeatured: boolean;
   user: {
+    id: number;
     name: string;
   };
   products: Product[];

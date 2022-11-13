@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActionIcon, Button } from "@mantine/core";
 import { Trash } from "tabler-icons-react";
 import Cropper from "react-cropper";
-import "cropperjs/dist/cropper.css";
+import "./cropper.min.css";
 
 type ImagePickerProp = {
   width?: number | string;
@@ -10,6 +10,7 @@ type ImagePickerProp = {
   aspectRatio?: number;
   defaultImage?: string;
 };
+
 export const ImagePicker = (props: ImagePickerProp) => {
   const { width, result, aspectRatio = 1, defaultImage } = props;
 
