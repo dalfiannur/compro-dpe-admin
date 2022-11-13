@@ -1,10 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import { Product } from "../../entities";
 import { FormEdit } from "./components/FormEdit";
 import { FormCreate } from "./components/FormCreate";
 import { useModal } from "../../hooks/useModal";
 import { DeleteConfirmation } from "./components/DeleteConfirmation";
-import { ActionIcon, Button, Card, Container, Table } from "@mantine/core";
+import { ActionIcon, Button, Card, Container, Table, Pagination } from "@mantine/core";
 import { useGetProductPaginationQuery } from "../../services/product";
 import { Eye, Pencil, Trash } from "tabler-icons-react";
 import { Detail } from "./components/Detail";
@@ -13,15 +13,22 @@ const ProductPage = () => {
   const tableRef = useRef<any>();
 
   const [modal, setModal] = useModal();
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(5);
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const { data: productList, refetch } = useGetProductPaginationQuery({
-    page: page + 1,
+    page: page,
     perPage,
   });
+
+  const totalPage = useMemo(() => {
+    if (productList){
+      return Math.ceil(productList.meta.total/perPage)
+    }
+    return 0
+  }, [productList])
 
   const handleOnEditRequest = (item: Product) => {
     console.log(item);
@@ -129,6 +136,11 @@ const ProductPage = () => {
               ))}
             </tbody>
           </Table>
+          <Pagination
+              total={totalPage}
+              page={page}
+              onChange={setPage}
+            />
         </Card>
       </Container>
 
