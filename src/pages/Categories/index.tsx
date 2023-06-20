@@ -1,11 +1,11 @@
 import React, { useRef, useState, useMemo } from "react";
-import { Product } from "../../entities";
+import { ProdSeries } from "../../entities";
 import { FormEdit } from "./components/FormEdit";
 import { FormCreate } from "./components/FormCreate";
 import { useModal } from "../../hooks/useModal";
 import { DeleteConfirmation } from "./components/DeleteConfirmation";
 import { ActionIcon, Button, Card, Container, Table, Pagination } from "@mantine/core";
-import { useGetProductPaginationQuery } from "../../services/product";
+import { useGetProductPaginationQuery } from "../../services/prod-series";
 import { Eye, Pencil, Trash } from "tabler-icons-react";
 import { Detail } from "./components/Detail";
 
@@ -16,7 +16,7 @@ const ProductPage = () => {
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(5);
 
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<ProdSeries | null>(null);
 
   const { data: productList, refetch } = useGetProductPaginationQuery({
     page: page,
@@ -30,13 +30,13 @@ const ProductPage = () => {
     return 0
   }, [productList])
 
-  const handleOnEditRequest = (item: Product) => {
+  const handleOnEditRequest = (item: ProdSeries) => {
     console.log(item);
     setSelectedProduct(item);
     setModal("edit", true);
   };
 
-  const handleOnDeleteRequest = (item: Product) => {
+  const handleOnDeleteRequest = (item: ProdSeries) => {
     setSelectedProduct(item);
     setModal("delete", true);
   };
@@ -61,7 +61,7 @@ const ProductPage = () => {
     setSelectedProduct(null);
   };
 
-  const handleOnViewRequest = (item: Product) => {
+  const handleOnViewRequest = (item: ProdSeries) => {
     setSelectedProduct(item);
     setModal("detail", true);
   };

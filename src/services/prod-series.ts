@@ -1,10 +1,10 @@
 import {createApi} from '@reduxjs/toolkit/query/react'
 import {PaginationMeta} from '../entities/PaginationMeta';
-import {Product, ProductDto} from '../entities/Product';
+import {ProdSeries, ProductDto} from '../entities/ProdSeries';
 import {baseQuery} from './base'
 
 type PaginationResult = {
-  data: Product[],
+  data: ProdSeries[],
   meta: PaginationMeta
 }
 
@@ -27,21 +27,27 @@ export const productApi = createApi({
         }
       }
     }),
-    postProduct: builder.mutation<Product, ProductDto>({
+    postProduct: builder.mutation<ProdSeries, ProductDto>({
       query: (body) => ({
         url: '/product',
         method: 'POST',
         body
       })
     }),
-    putProduct: builder.mutation<Product, Partial<ProductDto> & { id: number }>({
-      query: ({id, ...body}) => ({
-        url: `/product/${id}`,
-        method: 'PUT',
-        body
-      })
+    putProduct: builder.mutation<ProdSeries, Partial<ProductDto> & { id: number }>({
+      query: ({id, ...body}) => {
+        console.log("Inside putTypeCategory mutation");
+        console.log("id:", id);
+        console.log("body:", body);
+
+        return {
+          url: `/product/${id}`,
+          method: 'PUT',
+          body
+        };
+      }
     }),
-    deleteProduct: builder.mutation<Product, number>({
+    deleteProduct: builder.mutation<ProdSeries, number>({
       query: (id) => ({
         url: '/product/' + id,
         method: 'DELETE'

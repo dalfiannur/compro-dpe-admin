@@ -3,8 +3,8 @@ import {
   usePostProductMutation,
   useGetSkinConcernsQuery,
   useGetSkinTypesQuery,
-} from "../../../services";
-import {ImagePicker} from "../../../components/ImagePicker";
+} from "../../../../services";
+import {ImagePicker} from "../../../../components/ImagePicker";
 import {Modal, Box, Grid, InputWrapper, Input, Select, MultiSelect, Button} from "@mantine/core";
 import {useFormik} from "formik";
 import * as y from 'yup';
@@ -78,7 +78,7 @@ export const FormCreate = (props: FormCreateProp) => {
       opened={open}
       onClose={onClose}
       size="xl"
-      title="Add Product"
+      title="Add ProdSeries"
     >
 
       <Box
@@ -90,7 +90,7 @@ export const FormCreate = (props: FormCreateProp) => {
           <Grid.Col>
             <InputWrapper
               id="input-name"
-              label="Product Name"
+              label="ProdSeries Name"
               required
               error={errors.name}
             >
@@ -103,7 +103,7 @@ export const FormCreate = (props: FormCreateProp) => {
 
           <Grid.Col>
             <InputWrapper
-              label="Product SKU"
+              label="ProdSeries SKU"
               required
               error={errors.sku}
             >
@@ -173,7 +173,7 @@ export const FormCreate = (props: FormCreateProp) => {
 
           <Grid.Col>
             <InputWrapper
-              label="Product Ingredient"
+              label="ProdSeries Ingredient"
               required
               error={errors.keyingredient}
             >

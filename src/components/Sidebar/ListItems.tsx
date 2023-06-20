@@ -15,8 +15,12 @@ const mainList = [
     link: "/banner",
   },
   {
-    text: "Product",
-    link: "/product",
+    text: "Product Series",
+    link: "/series",
+  },
+  {
+    text: "Type Categories",
+    link: "/type/categories",
   },
   {
     text: "Skin Concern",

@@ -17,6 +17,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
   const inputRef = useRef<any>();
 
   const [dataUrl, setDataUrl] = useState<string>();
+  const [fetchImageStatus, setFetchImageStatus] = useState<boolean>();
   const [isTooLarge, setIsToLarge] = useState<boolean>(false);
 
   const cropperRef = useRef<HTMLImageElement>(null);
@@ -55,15 +56,21 @@ export const ImagePicker = (props: ImagePickerProp) => {
   useEffect(() => {
     const getImage = async () => {
       if (defaultImage) {
-        fetch(defaultImage)
-          .then((response) => response.blob())
-          .then((result) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(result);
-            reader.onloadend = () => {
-              setDataUrl(reader.result as string);
-            };
-          });
+          try {
+              fetch(defaultImage)
+                  .then((response) => response.blob())
+                  .then((result) => {
+                      const reader = new FileReader();
+                      reader.readAsDataURL(result);
+                      reader.onloadend = () => {
+                          setDataUrl(reader.result as string);
+                      };
+                      setFetchImageStatus(true)
+                  });
+          } catch (e) {
+              setFetchImageStatus(false)
+              setDataUrl("failed to fetch image")
+          }
       }
     };
 
@@ -91,45 +98,47 @@ export const ImagePicker = (props: ImagePickerProp) => {
         onChange={handleOnChange}
         accept="image/*"
       />
-      {isTooLarge ? (
+      {isTooLarge && fetchImageStatus ? (
         <p style={{ color: "red" }}>Ukuran file terlalu besar. Max: 1MB</p>
       ) : (
         !dataUrl && <p>Ukuran Maksimal adalah 1MB</p>
       )}
-      {dataUrl ? (
-        <>
-          <Cropper
-            src={dataUrl}
-            style={{ height: 400, width: "100%" }}
-            // Cropper.js options
-            initialAspectRatio={aspectRatio}
-            aspectRatio={aspectRatio}
-            guides={false}
-            crop={onCrop}
-            ref={cropperRef}
-          />
+        {fetchImageStatus ?
+            dataUrl ? (
+                <>
+                    <Cropper
+                        src={dataUrl}
+                        style={{ height: 400, width: "100%" }}
+                        // Cropper.js options
+                        initialAspectRatio={aspectRatio}
+                        aspectRatio={aspectRatio}
+                        guides={false}
+                        crop={onCrop}
+                        ref={cropperRef}
+                    />
 
-          <ActionIcon
-            color="red"
-            sx={{
-              position: "absolute",
-              top: 5,
-              right: 5,
-              background: "white"
-            }}
-            onClick={() => setDataUrl(undefined)}
-          >
-            <Trash />
-          </ActionIcon>
-        </>
-      ) : (
-        <Button
-          color={isTooLarge ? "error" : "primary"}
-          onClick={handleOnClick}
-        >
-          Pick Image
-        </Button>
-      )}
+                    <ActionIcon
+                        color="red"
+                        sx={{
+                            position: "absolute",
+                            top: 5,
+                            right: 5,
+                            background: "white"
+                        }}
+                        onClick={() => setDataUrl(undefined)}
+                    >
+                        <Trash />
+                    </ActionIcon>
+                </>
+            ) : (
+                <Button
+                    color={isTooLarge ? "error" : "primary"}
+                    onClick={handleOnClick}
+                >
+                    Pick Image
+                </Button>
+            ) : fetchImageStatus
+        }
     </div>
   );
 };

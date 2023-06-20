@@ -1,4 +1,4 @@
-import { Product } from "./Product";
+import { ProdSeries } from "./ProdSeries";
 
 export interface Article {
   id: number;
@@ -13,7 +13,7 @@ export interface Article {
     id: number;
     name: string;
   };
-  products: Product[];
+  products: ProdSeries[];
 }
 
 export interface ArticleDto {

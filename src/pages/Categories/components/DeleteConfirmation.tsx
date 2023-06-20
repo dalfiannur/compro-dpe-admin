@@ -1,10 +1,10 @@
 import React, {useEffect} from "react";
-import {Product} from "../../../entities/Product";
+import {ProdSeries} from "../../../entities/ProdSeries";
 import {useDeleteProductMutation} from "../../../services";
 import {Box, Button, Modal, Text} from "@mantine/core";
 
 type DeleteConfirmationProp = {
-  data: Product,
+  data: ProdSeries,
   open: boolean;
   onClose: () => void;
   onDeleted: () => void;
@@ -25,7 +25,7 @@ export const DeleteConfirmation = (props: DeleteConfirmationProp) => {
     <Modal
       opened={open}
       onClose={onClose}
-      title="Delete Product"
+      title="Delete ProdSeries"
     >
       <Box>
         <Text>

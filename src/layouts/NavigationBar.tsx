@@ -29,7 +29,7 @@ export const NavigationBar: FC<NavigationBarProp> = ({opened}) => {
       <Navbar.Section grow component={ScrollArea}>
         {
           navigationLinks.map((item) => (
-            <MainLink key={item.label} icon={<item.icon/>} color='blue' label={item.label} path={item.path}/>
+            <MainLink key={item.label} icon={<item.icon/>} color='blue' label={item.label as string} path={item.path as string}/>
           ))
         }
       </Navbar.Section>

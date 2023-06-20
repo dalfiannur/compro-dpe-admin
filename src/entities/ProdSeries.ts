@@ -3,7 +3,7 @@ import { ProductImage } from "./ProductImage";
 import {SkinConcern} from "./SkinConcern";
 import {SkinType} from "./SkinType";
 
-export interface Product {
+export interface ProdSeries {
   id: number;
   name: string;
   sku: string

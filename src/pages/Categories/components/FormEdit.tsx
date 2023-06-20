@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Product} from "../../../entities/Product";
+import {ProdSeries} from "../../../entities/ProdSeries";
 import {
   useGetSkinConcernsQuery,
   useGetSkinTypesQuery,
@@ -14,7 +14,7 @@ import * as y from 'yup';
 import '../../../assets/style.css'
 
 type FormEditProp = {
-  data: Product;
+  data: ProdSeries;
   open: boolean;
   onClose: () => void
   onUpdated: () => void
@@ -78,14 +78,14 @@ export const FormEdit = (props: FormEditProp) => {
     <Modal
       opened={open}
       onClose={onClose}
-      title="Edit Product"
+      title="Edit ProdSeries"
       size="xl"
     >
       <Box className="modal-body">
         <Grid>
           <Grid.Col>
             <InputWrapper
-              label="Product Name"
+              label="ProdSeries Name"
               error={errors.name}
             >
               <Input
@@ -97,7 +97,7 @@ export const FormEdit = (props: FormEditProp) => {
 
           <Grid.Col>
             <InputWrapper
-              label="Product SKU"
+              label="ProdSeries SKU"
               error={errors.sku}
             >
               <Input
@@ -160,7 +160,7 @@ export const FormEdit = (props: FormEditProp) => {
 
           <Grid.Col>
             <InputWrapper
-              label="Product Ingredient"
+              label="ProdSeries Ingredient"
               error={errors.keyingredient}
             >
               <TextInput

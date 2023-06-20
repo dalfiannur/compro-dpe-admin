@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { User } from 'tabler-icons-react'
 
-import { productApi, skinConcernApi, skinTypeApi, authApi, bannerApi, articleApi, userApi } from '../services'
+import { productApi, skinConcernApi, skinTypeApi, authApi, bannerApi, articleApi, userApi, typeSeriesApi, typeCategoriesApi } from '../services'
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +11,9 @@ export const store = configureStore({
     [skinConcernApi.reducerPath]: skinConcernApi.reducer,
     [bannerApi.reducerPath]: bannerApi.reducer,
     [articleApi.reducerPath]: articleApi.reducer,
-    [userApi.reducerPath]: userApi.reducer
+    [userApi.reducerPath]: userApi.reducer,
+    [typeCategoriesApi.reducerPath]: typeCategoriesApi.reducer,
+    [typeSeriesApi.reducerPath]: typeSeriesApi.reducer,
   },
 })
 
