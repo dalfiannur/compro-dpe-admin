@@ -4,8 +4,8 @@ import { FormEdit } from "./components/FormEdit";
 import { FormCreate } from "./components/FormCreate";
 import { useModal } from "../../hooks/useModal";
 import { DeleteConfirmation } from "./components/DeleteConfirmation";
-import { ActionIcon, Button, Card, Container, Table, Pagination } from "@mantine/core";
-import { useGetProductPaginationQuery } from "../../services/prod-series";
+import {ActionIcon, Button, Card, Container, Table, Pagination, Select, Grid} from "@mantine/core";
+import { useGetProductCategoriesPaginationQuery } from "../../services";
 import { Eye, Pencil, Trash } from "tabler-icons-react";
 import { Detail } from "./components/Detail";
 
@@ -18,14 +18,15 @@ const ProductPage = () => {
 
   const [selectedProduct, setSelectedProduct] = useState<ProdSeries | null>(null);
 
-  const { data: productList, refetch } = useGetProductPaginationQuery({
+  const { data: productList, refetch } = useGetProductCategoriesPaginationQuery({
     page: page,
     perPage,
   });
 
   const totalPage = useMemo(() => {
     if (productList){
-      return Math.ceil(productList.meta.total/perPage)
+      return 10
+      // return Math.ceil(productList.meta.total/perPage)
     }
     return 0
   }, [productList])
@@ -69,9 +70,16 @@ const ProductPage = () => {
   return (
     <>
       <Container size="xl">
-        <Button onClick={() => setModal("create", true)}>
-          Add New Product
-        </Button>
+        <Grid>
+          <Grid.Col span={2}>
+            <Button onClick={() => setModal("create", true)}>
+              Add New Product
+            </Button>
+          </Grid.Col>
+          <Grid.Col span={2}>
+            <Select data={["data"]} defaultValue={"Cat A"} />
+          </Grid.Col>
+        </Grid>
       </Container>
 
       <Container size="xl">
@@ -86,20 +94,16 @@ const ProductPage = () => {
                 <th>#</th>
                 <th>#ID</th>
                 <th>Name</th>
-                <th>Category</th>
-                <th>Create Date</th>
                 <th>#Action</th>
               </tr>
             </thead>
 
             <tbody>
-              {productList?.data.map((item) => (
+              {productList?.data.map((item: any) => (
                 <tr>
                   <td>{productList.data.indexOf(item) + 1}</td>
                   <td>{item.id}</td>
                   <td>{item.name}</td>
-                  <td>{item.category.name}</td>
-                  <td>{item.createdAt}</td>
                   <td
                     style={{
                       display: "flex",
@@ -107,13 +111,6 @@ const ProductPage = () => {
                       gap: 5,
                     }}
                   >
-                    <ActionIcon
-                      color="blue"
-                      onClick={() => handleOnViewRequest(item)}
-                    >
-                      <Eye />
-                    </ActionIcon>
-
                     <ActionIcon
                       color="blue"
                       onClick={() => handleOnEditRequest(item)}

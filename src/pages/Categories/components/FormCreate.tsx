@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {
-  usePostProductMutation,
+  usePostProductCategoriesMutation,
   useGetSkinConcernsQuery,
   useGetSkinTypesQuery,
 } from "../../../services";
@@ -38,7 +38,7 @@ export const FormCreate = (props: FormCreateProp) => {
   const theme = useMantineTheme();
   const categories = useGetCategories();
 
-  const [onSubmit, {data: result}] = usePostProductMutation();
+  const [onSubmit, {data: result}] = usePostProductCategoriesMutation();
   const {data: skinConcerns} = useGetSkinConcernsQuery({page: 1, perPage: 100});
   const {data: skinTypes} = useGetSkinTypesQuery({page: 1, perPage: 100});
 

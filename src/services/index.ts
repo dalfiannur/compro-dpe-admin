@@ -1,5 +1,6 @@
 export * from './auth'
 export * from './prod-series'
+export * from './prod-categories'
 export * from './skin-type'
 export * from './skin-concern'
 export * from './banner'

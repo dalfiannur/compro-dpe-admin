@@ -3,7 +3,7 @@ import {ProdSeries} from "../../../entities/ProdSeries";
 import {
   useGetSkinConcernsQuery,
   useGetSkinTypesQuery,
-  usePutProductMutation,
+  usePutProductCategoriesMutation,
 } from "../../../services";
 import {ImagePicker} from "../../../components/ImagePicker/index";
 import {Box, Button, Grid, Input, InputWrapper, Modal, MultiSelect, Select, TextInput} from "@mantine/core";
@@ -24,7 +24,7 @@ export const FormEdit = (props: FormEditProp) => {
   const {data, open, onClose, onUpdated} = props;
 
   const categories = useGetCategories();
-  const [onSubmit, {data: result}] = usePutProductMutation();
+  const [onSubmit, {data: result}] = usePutProductCategoriesMutation();
   const {data: skinConcerns} = useGetSkinConcernsQuery({page: 1, perPage: 100});
   const {data: skinTypes} = useGetSkinTypesQuery({page: 1, perPage: 100});
 

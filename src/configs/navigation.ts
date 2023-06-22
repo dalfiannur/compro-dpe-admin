@@ -18,8 +18,18 @@ export const navigationLinks = [
   },
   {
     icon: Box,
+    label: 'Product Category',
+    path: '/categories'
+  },
+  {
+    icon: Box,
     label: 'Type Categories',
     path: '/type/categories',
+  },
+  {
+    icon: Box,
+    label: 'Type Series',
+    path: '/type/series',
   },
   {
     icon: Box,

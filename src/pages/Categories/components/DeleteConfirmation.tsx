@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {ProdSeries} from "../../../entities/ProdSeries";
-import {useDeleteProductMutation} from "../../../services";
+import {useDeleteProductCategoriesMutation} from "../../../services";
 import {Box, Button, Modal, Text} from "@mantine/core";
 
 type DeleteConfirmationProp = {
@@ -13,7 +13,7 @@ type DeleteConfirmationProp = {
 export const DeleteConfirmation = (props: DeleteConfirmationProp) => {
   const {open, data, onClose, onDeleted} = props;
 
-  const [deleteRequest, {isSuccess}] = useDeleteProductMutation();
+  const [deleteRequest, {isSuccess}] = useDeleteProductCategoriesMutation();
 
   useEffect(() => {
     if (isSuccess) {

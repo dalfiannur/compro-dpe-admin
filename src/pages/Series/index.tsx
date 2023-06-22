@@ -5,7 +5,7 @@ import { FormCreate } from "./components/FormCreate";
 import { useModal } from "../../hooks/useModal";
 import { DeleteConfirmation } from "./components/DeleteConfirmation";
 import { ActionIcon, Button, Card, Container, Table, Pagination } from "@mantine/core";
-import { useGetProductPaginationQuery } from "../../services/prod-series";
+import { useGetProductPaginationQuery } from "../../services";
 import { Eye, Pencil, Trash } from "tabler-icons-react";
 import { Detail } from "./components/Detail";
 
@@ -86,7 +86,7 @@ const ProductPage = () => {
                 <th>#</th>
                 <th>#ID</th>
                 <th>Name</th>
-                <th>Category</th>
+                <th>Series</th>
                 <th>Create Date</th>
                 <th>#Action</th>
               </tr>
