@@ -19,7 +19,7 @@ const mainList = [
     link: "/series",
   },
   {
-    text: "Type Categories",
+    text: "Type Products",
     link: "/type/categories",
   },
   {

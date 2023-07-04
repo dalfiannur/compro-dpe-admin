@@ -18,12 +18,12 @@ export const navigationLinks = [
   },
   {
     icon: Box,
-    label: 'Product Category',
-    path: '/categories'
+    label: 'Products',
+    path: '/products'
   },
   {
     icon: Box,
-    label: 'Type Categories',
+    label: 'Type Products',
     path: '/type/categories',
   },
   {

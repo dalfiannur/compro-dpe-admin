@@ -14,15 +14,16 @@ import {useGetCategories} from "../hooks/useGetCategories";
 
 const validationSchema = y.object({
   name: y.string().required(),
-  sku: y.string().required(),
-  keyingredient: y.string().required(),
+  seriesSlug: y.string().required(),
   categorySlug: y.string().required(),
+  sku: y.string().required(),
+  description: y.string().required(),
+  usedAs: y.string().required(),
+  howToUse: y.string().required(),
+  keyingredient: y.string().required(),
+  isFeatured: y.boolean().required(),
   skinConcernIds: y.array(y.string()).min(1),
   skinTypeIds: y.array(y.string()).required().min(1),
-  usedAs: y.string().required(),
-  description: y.string().required(),
-  howToUse: y.string().required(),
-  isFeatured: y.boolean().required()
 });
 
 
@@ -36,6 +37,7 @@ export const FormCreate = (props: FormCreateProp) => {
   const {open, onClose, onCreated} = props;
 
   const theme = useMantineTheme();
+  const series = useGetCategories();
   const categories = useGetCategories();
 
   const [onSubmit, {data: result}] = usePostProductMutation();
@@ -49,16 +51,17 @@ export const FormCreate = (props: FormCreateProp) => {
     validationSchema,
     initialValues: {
       name: '',
-      sku: '',
-      keyingredient: '',
+      seriesSlug: '',
       categorySlug: '',
+      sku: '',
+      description: '',
+      usedAs: '',
+      howToUse: '',
+      keyingredient: '',
+      isFeatured: false,
       skinConcernIds: [],
       skinTypeIds: [],
-      description: '',
-      howToUse: '',
-      usedAs: '',
-      images: ['', ''],
-      isFeatured: false
+      images: ['', '']
     },
     onSubmit
   });
@@ -97,6 +100,20 @@ export const FormCreate = (props: FormCreateProp) => {
               <Input
                 value={values.name}
                 onChange={(e: any) => setFieldValue('name', e.target.value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+                label="Series"
+                required
+                error={errors.seriesSlug}
+            >
+              <Input
+                  value={values.seriesSlug}
+                  data={series}
+                  onChange={(e) => setFieldValue('seriesSlug', (e as string))}
               />
             </InputWrapper>
           </Grid.Col>
