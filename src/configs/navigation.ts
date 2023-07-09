@@ -13,17 +13,12 @@ export const navigationLinks = [
   },
   {
     icon: Box,
-    label: 'Product Series',
-    path: '/series'
-  },
-  {
-    icon: Box,
     label: 'Products',
     path: '/products'
   },
   {
     icon: Box,
-    label: 'Type Products',
+    label: 'Type Categories',
     path: '/type/categories',
   },
   {

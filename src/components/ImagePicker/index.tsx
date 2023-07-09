@@ -189,15 +189,14 @@ export const ImagePicker = (props: ImagePickerProp) => {
 
                             <DialogActions sx={{ flexDirection: 'column', mx: 3, my: 2 }}>
                                 <Box sx={{width: "100%", mb: 1}}>
-                                    <Input
-                                        type="range"
+                                    <Slider
                                         value={zoom}
                                         min={1}
                                         max={3}
                                         step={0.01}
                                         aria-labelledby="Zoom"
-                                        onChange={(e: any) => {
-                                            setZoom(e.target.value)
+                                        onChange={(zoom: any) => {
+                                            setZoom(zoom)
                                         }}
                                     />
                                 </Box>

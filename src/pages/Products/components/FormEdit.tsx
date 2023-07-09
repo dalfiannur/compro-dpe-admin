@@ -115,7 +115,7 @@ export const FormEdit = (props: FormEditProp) => {
             </InputWrapper>
           </Grid.Col>
 
- {/*------------------------------ SERIES BELUM MASUK ----------------------------- */}
+ {/* ------------------------------ SERIES BELUM MASUK ----------------------------- */}
           {/*<Grid.Col>*/}
           {/*  <InputWrapper*/}
           {/*      label="Series"*/}
