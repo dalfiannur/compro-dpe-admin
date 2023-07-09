@@ -2,14 +2,17 @@ import React, {useEffect, useState} from "react";
 import {
   usePostProductCategoriesMutation,
   useGetSkinConcernsQuery,
-  useGetSkinTypesQuery, useGetProductPaginationQuery,
+  useGetSkinTypesQuery,
+  useGetProductCategoriesPaginationQuery,
+  useGetTypeSeriesPaginationQuery,
+  useGetTypeCategoryPaginationQuery,
 } from "../../../services";
 import {ImagePicker} from "../../../components/ImagePicker";
 import {Modal, Box, Grid, InputWrapper, Input, Select, MultiSelect, Button} from "@mantine/core";
 import {useFormik} from "formik";
 import * as y from 'yup';
 import {RichTextEditor} from "@mantine/rte";
-import { useMantineTheme } from "@mantine/core";
+import { useMantineTheme} from "@mantine/core";
 import {useGetCategories} from "../hooks/useGetCategories";
 
 const validationSchema = y.object({
@@ -38,13 +41,17 @@ export const FormCreate = (props: FormCreateProp) => {
   const {open, onClose, onCreated} = props;
 
   const theme = useMantineTheme();
-  const series = useGetCategories();
-  const categories = useGetCategories();
+
+  const {data: series} = useGetTypeSeriesPaginationQuery({page: 1, perPage: 100})
+  const {data: categories} = useGetTypeCategoryPaginationQuery({page: 1, perPage: 100})
+
+  // const series = useGetCategories();
+  // const categories = useGetCategories();
 
   const [onSubmit, {data: result}] = usePostProductCategoriesMutation();
   const {data: skinConcerns} = useGetSkinConcernsQuery({page: 1, perPage: 100});
   const {data: skinTypes} = useGetSkinTypesQuery({page: 1, perPage: 100});
-  const {data: products} = useGetProductPaginationQuery({page: 1, perPage: 100})
+  const {data: products} = useGetProductCategoriesPaginationQuery({page: 1, perPage: 100})
 
   const [bottle, setBottle] = useState<string>('');
   const [bottleBox, setBottleBox] = useState<string>('');
@@ -79,6 +86,8 @@ export const FormCreate = (props: FormCreateProp) => {
     setFieldValue('images', [bottle, bottleBox])
   }, [bottle, bottleBox]);
 
+  // @ts-ignore
+  // @ts-ignore
   return (
     <Modal
       opened={open}
@@ -109,13 +118,13 @@ export const FormCreate = (props: FormCreateProp) => {
 
           <Grid.Col>
             <InputWrapper
-                label="Category"
+                label="Series"
                 required
                 error={errors.seriesSlug}
             >
               <Select
                   value={values.seriesSlug}
-                  data={series}
+                  data={series?.data.map((item: any) => ({label: item.name, value: item.id})) || []}
                   onChange={(e) => setFieldValue('seriesSlug', (e as string))}
               />
             </InputWrapper>
@@ -129,7 +138,7 @@ export const FormCreate = (props: FormCreateProp) => {
             >
               <Select
                   value={values.categorySlug}
-                  data={categories}
+                  data={categories?.data.map((item: any) => ({label: item.name, value: item.id})) || []}
                   onChange={(e) => setFieldValue('categorySlug', (e as string))}
               />
             </InputWrapper>
@@ -232,7 +241,7 @@ export const FormCreate = (props: FormCreateProp) => {
             >
               <MultiSelect
                   value={values.relatedProductIds}
-                  data={products?.data.map<any>((item) => ({label: item.name, value: item.id})) || []}
+                  data={products?.data.map((item: any)=> ({label: item.name, value: item.id})) || []}
                   //@ts-ignore
                   onChange={(value) => setFieldValue('relatedProductIds', value)}
                   maxSelectedValues={4}

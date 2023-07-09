@@ -85,7 +85,7 @@ export const FormEdit = (props: FormCreateProp) => {
   }, [errors])
 
   return (
-    <Modal opened={open} onClose={onClose} size="xl" title="Add Article">
+    <Modal opened={open} onClose={onClose} size="xl" title="Edit Article">
       <Box
         sx={{
           marginTop: 1,
