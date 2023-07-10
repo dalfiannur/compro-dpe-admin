@@ -1,6 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react'
 import {PaginationMeta} from '../entities/PaginationMeta';
 import {baseQuery} from './base'
+import {base64ToBlob} from "../helpers/base64toImg";
 
 type PaginationResult = {
   data: any,
@@ -34,13 +35,21 @@ export const typeCategoriesApi = createApi({
       })
     }),
     putTypeCategory: builder.mutation<any, Partial<any> & { id: number }>({
-      query: ({id, ...body}) => {
+      query: ({ id, ...body }) => {
+        const formData = new FormData();
+        for (const key in body) {
+          if (body.hasOwnProperty(key)) {
+            key === "icon" ? formData.append(key, base64ToBlob(body[key]))
+            : formData.append(key, body[key]);
+          }
+        }
+
         return {
           url: `/categories/${id}`,
           method: 'PUT',
-          body
+          body: formData,
         };
-      }
+      },
     }),
     deleteTypeCategory: builder.mutation<any, number>({
       query: (id) => ({

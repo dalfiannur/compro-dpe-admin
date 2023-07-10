@@ -32,6 +32,7 @@ export const FormEdit = (props: FormEditProp) => {
       name: data.name,
       slug: data.slug,
       icon: data.iconUrl,
+      description: "asdasd"
     },
     onSubmit,
     enableReinitialize: true

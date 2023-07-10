@@ -3,6 +3,7 @@ import { ActionIcon, Button } from "@mantine/core";
 import { Trash } from "tabler-icons-react";
 import Cropper from "react-cropper";
 import "./cropper.min.css";
+import {promise} from "zod";
 
 type ImagePickerProp = {
   width?: number | string;
@@ -40,6 +41,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
         setIsToLarge(false);
         const result = reader.result as string;
         setDataUrl(result);
+          setFetchImageStatus(true)
       };
 
       if (inputRef.current.files) {
@@ -55,10 +57,17 @@ export const ImagePicker = (props: ImagePickerProp) => {
 
   useEffect(() => {
     const getImage = async () => {
+        console.log(defaultImage)
       if (defaultImage) {
           try {
               fetch(defaultImage)
-                  .then((response) => response.blob())
+                  .then((response) => {
+                      if(response.ok) {
+                          return response.blob()}else {
+                          throw new Error("Oops, something went wrong!");
+                      }
+                    }
+                  )
                   .then((result) => {
                       const reader = new FileReader();
                       reader.readAsDataURL(result);
@@ -98,12 +107,25 @@ export const ImagePicker = (props: ImagePickerProp) => {
         onChange={handleOnChange}
         accept="image/*"
       />
-      {isTooLarge && fetchImageStatus ? (
-        <p style={{ color: "red" }}>Ukuran file terlalu besar. Max: 1MB</p>
-      ) : (
-        !dataUrl && <p>Ukuran Maksimal adalah 1MB</p>
-      )}
-        {fetchImageStatus ?
+        {!fetchImageStatus && (
+            <>
+                <p>Gagal memuat gambar! Unggah ulang dengan Ukuran Maksimal adalah 1MB</p>
+                <Button
+                    color={isTooLarge ? "error" : "primary"}
+                    onClick={handleOnClick}
+                >
+                    Pick Image
+                </Button>
+            </>
+        )}
+        {fetchImageStatus && (
+            isTooLarge ? (
+            <p style={{ color: "red" }}>Ukuran file terlalu besar. Max: 1MB</p>
+            ) : (
+            !dataUrl && <p>Ukuran Maksimal adalah 1MB</p>
+            )
+        )}
+        {fetchImageStatus && (
             dataUrl ? (
                 <>
                     <Cropper
@@ -137,7 +159,8 @@ export const ImagePicker = (props: ImagePickerProp) => {
                 >
                     Pick Image
                 </Button>
-            ) : fetchImageStatus
+                )
+            )
         }
     </div>
   );
