@@ -23,7 +23,7 @@ export const productCategoriesApi = createApi({
         query.set('page', page.toString());
         query.set('perPage', perPage.toString());
         return {
-          url: '/product',
+          url: '/product?' + query.toString(),
         }
       }
     }),

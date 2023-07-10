@@ -1,11 +1,15 @@
-import React, {useRef, useState, useMemo} from "react";
+import React, {useRef, useState, useMemo, useEffect} from "react";
 import {ProdSeries} from "../../entities";
 import {FormEdit} from "./components/FormEdit";
 import {FormCreate} from "./components/FormCreate";
 import {useModal} from "../../hooks/useModal";
 import {DeleteConfirmation} from "./components/DeleteConfirmation";
 import {ActionIcon, Button, Card, Container, Table, Pagination, Select, Grid} from "@mantine/core";
-import {useGetProductCategoriesPaginationQuery} from "../../services";
+import {
+    useGetProductCategoriesPaginationQuery,
+    useGetTypeCategoryPaginationQuery,
+    useGetTypeSeriesPaginationQuery
+} from "../../services";
 import {Eye, Pencil, Trash} from "tabler-icons-react";
 import {Detail} from "./components/Detail";
 import {useGetCategories} from "./hooks/useGetCategories";
@@ -23,18 +27,46 @@ const ProductPage = () => {
         page: page,
         perPage,
     });
-    console.log(productList)
+
+    const {data: seriesList} = useGetTypeSeriesPaginationQuery({
+        page: page,
+        perPage,
+    });
+
+    const {data: categoryList} = useGetTypeCategoryPaginationQuery({
+        page: page,
+        perPage,
+    });
+
+    const seriesObj = useMemo(() => {
+        if (seriesList) {
+            return seriesList.data.reduce((result:any, item:any) => {
+                result[item.id] = item.name;
+                return result;
+            }, {});
+        }
+        return {}
+    }, [seriesList])
+
+    const categoryObj = useMemo(() => {
+        if (categoryList) {
+            return categoryList.data.reduce((result:any, item:any) => {
+                result[item.id] = item.name;
+                return result;
+            }, {});
+        }
+        return {}
+    }, [categoryList])
 
     const totalPage = useMemo(() => {
         if (productList) {
-            return 10
-            // return Math.ceil(productList.meta.total/perPage)
+            return Math.ceil(productList.meta.total/perPage)
         }
         return 0
     }, [productList])
 
     const handleOnEditRequest = (item: ProdSeries) => {
-        console.log(item);
+        console.log(item)
         setSelectedProduct(item);
         setModal("edit", true);
     };
@@ -97,16 +129,20 @@ const ProductPage = () => {
                             <th>#</th>
                             <th>#ID</th>
                             <th>Name</th>
+                            <th>Series</th>
+                            <th>Category</th>
                             <th>#Action</th>
                         </tr>
                         </thead>
 
                         <tbody>
-                        {productList?.data.map((item: any) => (
-                            <tr>
-                                <td>{productList.data.indexOf(item) + 1}</td>
+                        {productList?.data.map((item: any, index:number) => (
+                            <tr key={"prod" + index}>
+                                <td>{page === 1 ? index + 1 :  ((page - 1)  * perPage) + index + 1}</td>
                                 <td>{item.id}</td>
                                 <td>{item.name}</td>
+                                <td>{seriesObj[item.seriesId] || "-"}</td>
+                                <td>{categoryObj[item.categoryId] || "-"}</td>
                                 <td
                                     style={{
                                         display: "flex",

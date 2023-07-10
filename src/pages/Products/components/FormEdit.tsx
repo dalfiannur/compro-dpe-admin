@@ -34,8 +34,8 @@ export const FormEdit = (props: FormEditProp) => {
 
   const validationSchema = y.object({
     name: y.string().required(),
-    seriesSlug: y.string().required(),
-    categorySlug: y.string().required(),
+    // seriesSlug: y.string().required(),
+    // categorySlug: y.string().required(),
     sku: y.string().required(),
     description: y.string().required(),
     usedAs: y.string().required(),
@@ -54,8 +54,8 @@ export const FormEdit = (props: FormEditProp) => {
       name: data.name,
 
       // ------------------- SERIES BELUM MASUK ------------------------------
-      // seriesSlug: data.series.slug,
-      categorySlug: data.category.slug,
+      // seriesSlug: data.slug,
+      // categorySlug: data.category.slug,
       sku: data.sku,
       description: data.description,
       usedAs: data.usedAs,
@@ -130,18 +130,18 @@ export const FormEdit = (props: FormEditProp) => {
           {/*  </InputWrapper>*/}
           {/*</Grid.Col>*/}
 
-          <Grid.Col>
-            <InputWrapper
-              label="Category"
-              error={errors.categorySlug}
-            >
-              <Select
-                value={values.categorySlug}
-                data={categories?.data.map((item: any) => ({label: item.name, value: item.id})) || []}
-                onChange={(e: any) => setFieldValue('categorySlug', e)}
-              />
-            </InputWrapper>
-          </Grid.Col>
+          {/*<Grid.Col>*/}
+          {/*  <InputWrapper*/}
+          {/*    label="Category"*/}
+          {/*    error={errors.categorySlug}*/}
+          {/*  >*/}
+          {/*    <Select*/}
+          {/*      value={values.categorySlug}*/}
+          {/*      data={categories?.data.map((item: any) => ({label: item.name, value: item.id})) || []}*/}
+          {/*      onChange={(e: any) => setFieldValue('categorySlug', e)}*/}
+          {/*    />*/}
+          {/*  </InputWrapper>*/}
+          {/*</Grid.Col>*/}
 
           <Grid.Col>
             <InputWrapper

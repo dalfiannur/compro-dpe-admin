@@ -39,7 +39,7 @@ export const Detail: FC<DetailProps> = (props) => {
 
           <Box sx={boxBorderStyle}>
             <Label>Category</Label>
-            <Text>{data.category.name}</Text>
+            <Text>{data.categoryId}</Text>
           </Box>
         </Box>
 

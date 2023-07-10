@@ -9,6 +9,7 @@ export interface ProdSeries {
   sku: string
   slug: string;
   category: Category;
+  categoryId: number;
   skinTypes: SkinType[];
   skinConcerns: SkinConcern[]
   isFeatured: boolean;
