@@ -94,7 +94,7 @@ const TypeSeries = () => {
 
             <tbody>
               {typeSeriesList?.data.map((item: any) => (
-                <tr key={item.id}>
+                <tr key={item.id} >
                   <td>{typeSeriesList.data.indexOf(item) + 1}</td>
                   <td>{item.id}</td>
                   <td>{item.name}</td>
@@ -104,7 +104,7 @@ const TypeSeries = () => {
                         radius="md"
                         src={item.iconUrl}
                         alt={item.slug}
-                        width={150}
+                        width={80}
                     />
                   </td>
                   <td
@@ -112,6 +112,7 @@ const TypeSeries = () => {
                       display: "flex",
                       flexDirection: "row",
                       gap: 5,
+                      height: 80,
                     }}
                   >
                     <ActionIcon

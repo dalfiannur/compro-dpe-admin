@@ -25,6 +25,9 @@ export const ImagePicker = (props: ImagePickerProp) => {
     const [fetchImageStatus, setFetchImageStatus] = useState<boolean>();
     const [isTooLarge, setIsToLarge] = useState<boolean>(false);
 
+
+    const [croppedImage, setCroppedImage] = useState<string>();
+
     const cropperRef = useRef<HTMLImageElement>(null);
 
     const [crop, setCrop] = useState({x: 0, y: 0})
@@ -32,9 +35,26 @@ export const ImagePicker = (props: ImagePickerProp) => {
 
     const [opened, { open, close }] = useDisclosure(false);
 
-    const onCropComplete = useCallback((croppedArea: any, croppedAreaPixels: any) => {
-        console.log(croppedArea, croppedAreaPixels)
-    }, [])
+    function onCropComplete(data: any, propsDataUrl: any){
+        // console.log(croppedArea, croppedAreaPixels)
+        // console.log(data, propsDataUrl)
+
+        const {x, y, width, height} = data
+
+        let img: any = new window.Image()
+
+        img.src = propsDataUrl
+
+        const canvas = document.createElement('canvas')
+        const context = canvas.getContext('2d')
+
+        if (context) context.drawImage(img, x, y, width, height, 0, 0, width, height);
+
+        let croppedImageData = canvas.toDataURL();
+
+        setCroppedImage(croppedImageData)
+        // console.log(croppedImageData)
+    }
 
     // const onCrop = () => {
     //   const imageElement: any = cropperRef?.current;
@@ -48,6 +68,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
 
 // ------------------- BELUM TERINTEGRASI ------------------------------------------------------------------------
     const handleImageCropClick = () => {
+        setDataUrl(croppedImage)
     }
 
     const handleOnChange = () => {
@@ -182,7 +203,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
                                     zoom={zoom}
                                     aspect={aspectRatio}
                                     onCropChange={setCrop}
-                                    onCropComplete={onCropComplete}
+                                    onCropComplete={(data) => {onCropComplete(data, dataUrl)}}
                                     onZoomChange={setZoom}
                                 />
                             </DialogContent>
