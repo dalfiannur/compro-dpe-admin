@@ -5,6 +5,7 @@ import Cropper from "react-easy-crop";
 import "./cropper.min.css";
 import {useDisclosure} from "@mantine/hooks";
 import {DialogActions, DialogContent, Typography} from "@mui/material";
+import {useModal} from "../../hooks/useModal";
 
 type ImagePickerProp = {
     width?: number | string;
@@ -25,7 +26,8 @@ export const ImagePicker = (props: ImagePickerProp) => {
     const [fetchImageStatus, setFetchImageStatus] = useState<boolean>();
     const [isTooLarge, setIsToLarge] = useState<boolean>(false);
 
-
+    const [modal, setModal] = useModal();
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
     const [croppedImage, setCroppedImage] = useState<string>();
 
     const cropperRef = useRef<HTMLImageElement>(null);
@@ -35,11 +37,20 @@ export const ImagePicker = (props: ImagePickerProp) => {
 
     const [opened, { open, close }] = useDisclosure(false);
 
-    function onCropComplete(data: any, propsDataUrl: any){
+
+    const handleOnEditRequest = (item: any) => {
+        setModal("edit", true);
+    };
+
+    const onCropComplete = useCallback((croppedArea: any, croppedAreaPixels: any) => {
+        setCroppedAreaPixels(croppedAreaPixels)
+    }, [])
+
+    function croppingImage(croppedAreaPixel: any, propsDataUrl: any){
         // console.log(croppedArea, croppedAreaPixels)
         // console.log(data, propsDataUrl)
 
-        const {x, y, width, height} = data
+        // const {x, y, width, height} = croppedAreaPixel
 
         let img: any = new window.Image()
 
@@ -48,12 +59,32 @@ export const ImagePicker = (props: ImagePickerProp) => {
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
 
-        if (context) context.drawImage(img, x, y, width, height, 0, 0, width, height);
+        canvas.width = croppedAreaPixel.width
+        canvas.height = croppedAreaPixel.height
+
+        if (context) context.drawImage(
+            canvas,
+            croppedAreaPixel.x,
+            croppedAreaPixel.y,
+            croppedAreaPixel.width,
+            croppedAreaPixel.height,
+            0,
+            0,
+            croppedAreaPixel.width,
+            croppedAreaPixel.height
+        );
 
         let croppedImageData = canvas.toDataURL();
 
-        setCroppedImage(croppedImageData)
-        // console.log(croppedImageData)
+        // setDataUrl(croppedImageData)
+
+        console.log(dataUrl)
+        return setCroppedImage(croppedImageData)
+    }
+
+// ------------------- PERLU CLICK DUA KALI ------------------------------------------------------------------------
+    const handleImageCropClick = () => {
+        croppingImage(croppedAreaPixels, dataUrl)
     }
 
     // const onCrop = () => {
@@ -65,11 +96,6 @@ export const ImagePicker = (props: ImagePickerProp) => {
     const handleOnClick = () => {
         if (inputRef.current) inputRef.current.click();
     };
-
-// ------------------- BELUM TERINTEGRASI ------------------------------------------------------------------------
-    const handleImageCropClick = () => {
-        setDataUrl(croppedImage)
-    }
 
     const handleOnChange = () => {
         setIsToLarge(false);
@@ -178,14 +204,17 @@ export const ImagePicker = (props: ImagePickerProp) => {
                                 right: 35,
                                 background: "white"
                             }}
-                            onClick={open}
+                            onClick={handleOnEditRequest}
                         >
                             <Pencil/>
                         </ActionIcon>
 
 
 {/*-------------------------- MODAL CROPING OVERLAY -----------------------------------------------------------*/}
-                        <Modal opened={opened} onClose={close} size="xl">
+                        <Modal
+                            opened={modal.edit}
+                            onClose={() => setModal("edit", false)}
+                            size="xl">
                             <DialogContent
                                 dividers
                                 sx={{
@@ -203,7 +232,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
                                     zoom={zoom}
                                     aspect={aspectRatio}
                                     onCropChange={setCrop}
-                                    onCropComplete={(data) => {onCropComplete(data, dataUrl)}}
+                                    onCropComplete={onCropComplete}
                                     onZoomChange={setZoom}
                                 />
                             </DialogContent>
