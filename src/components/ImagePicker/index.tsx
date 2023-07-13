@@ -46,40 +46,38 @@ export const ImagePicker = (props: ImagePickerProp) => {
         setCroppedAreaPixels(croppedAreaPixels)
     }, [])
 
-    function croppingImage(croppedAreaPixel: any, propsDataUrl: any){
-        // console.log(croppedArea, croppedAreaPixels)
-        // console.log(data, propsDataUrl)
+    function croppingImage(croppedAreaPixel: any, propsDataUrl: any) {
+        let img = new window.Image();
+        img.src = propsDataUrl;
 
-        // const {x, y, width, height} = croppedAreaPixel
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = croppedAreaPixel.width;
+            canvas.height = croppedAreaPixel.height;
 
-        let img: any = new window.Image()
+            if (context) {
+                context.drawImage(
+                    img,
+                    croppedAreaPixel.x,
+                    croppedAreaPixel.y,
+                    croppedAreaPixel.width,
+                    croppedAreaPixel.height,
+                    0,
+                    0,
+                    croppedAreaPixel.width,
+                    croppedAreaPixel.height
+                );
+                let croppedImageData = canvas.toDataURL();
 
-        img.src = propsDataUrl
+                console.log('propsdata', propsDataUrl);
+                console.log('croppeddata', croppedImageData);
 
-        const canvas = document.createElement('canvas')
-        const context = canvas.getContext('2d')
+                setCroppedImage(croppedImageData);
+            }
+        };
 
-        canvas.width = croppedAreaPixel.width
-        canvas.height = croppedAreaPixel.height
-
-        if (context) context.drawImage(
-            canvas,
-            croppedAreaPixel.x,
-            croppedAreaPixel.y,
-            croppedAreaPixel.width,
-            croppedAreaPixel.height,
-            0,
-            0,
-            croppedAreaPixel.width,
-            croppedAreaPixel.height
-        );
-
-        let croppedImageData = canvas.toDataURL();
-
-        // setDataUrl(croppedImageData)
-
-        console.log(dataUrl)
-        return setCroppedImage(croppedImageData)
+        return croppedImage;
     }
 
 // ------------------- PERLU CLICK DUA KALI ------------------------------------------------------------------------
@@ -176,7 +174,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
             {fetchImageStatus ?
                 dataUrl ? (
                     <>
-                        <Image src={dataUrl} />
+                        <Image src={croppedImage ? croppedImage : dataUrl} />
                         {/*<Cropper*/}
                         {/*    image={dataUrl}*/}
                         {/*    crop={crop}*/}
