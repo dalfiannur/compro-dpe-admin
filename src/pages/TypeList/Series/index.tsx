@@ -68,13 +68,13 @@ const TypeSeries = () => {
   return (
     <>
       {console.log(typeSeriesList)}
-      <Container size="xl">
+      <Container size="md">
         <Button onClick={() => setModal("create", true)}>
-          Add New Category
+          Add New Series
         </Button>
       </Container>
 
-      <Container size="xl">
+      <Container size="md">
         <Card
           sx={(theme) => ({
             marginTop: theme.spacing.md,
@@ -84,8 +84,7 @@ const TypeSeries = () => {
             <thead>
               <tr>
                 <th>#</th>
-                <th>#ID</th>
-                <th>Name</th>
+                <th>Name (<b>#id</b>)</th>
                 <th>Slug</th>
                 <th>Icon</th>
                 <th>#Action</th>
@@ -96,15 +95,14 @@ const TypeSeries = () => {
               {typeSeriesList?.data.map((item: any) => (
                 <tr key={item.id} >
                   <td>{typeSeriesList.data.indexOf(item) + 1}</td>
-                  <td>{item.id}</td>
-                  <td>{item.name}</td>
+                  <td>{item.name} <b>({item.id})</b></td>
                   <td>{item.slug}</td>
                   <td>
                     <Image
                         radius="md"
                         src={item.iconUrl}
                         alt={item.slug}
-                        width={80}
+                        width={50}
                     />
                   </td>
                   <td
@@ -112,7 +110,7 @@ const TypeSeries = () => {
                       display: "flex",
                       flexDirection: "row",
                       gap: 5,
-                      height: 80,
+                      height: 50,
                     }}
                   >
                     <ActionIcon

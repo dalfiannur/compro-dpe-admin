@@ -35,7 +35,6 @@ export const ImagePicker = (props: ImagePickerProp) => {
     const [crop, setCrop] = useState({x: 0, y: 0})
     const [zoom, setZoom] = useState(1)
 
-    const [opened, { open, close }] = useDisclosure(false);
 
 
     const handleOnEditRequest = (item: any) => {
@@ -83,6 +82,11 @@ export const ImagePicker = (props: ImagePickerProp) => {
 // ------------------- PERLU CLICK DUA KALI ------------------------------------------------------------------------
     const handleImageCropClick = () => {
         croppingImage(croppedAreaPixels, dataUrl)
+        setModal("edit", false);
+    }
+
+    const close = () => {
+        setModal("edit", false)
     }
 
     // const onCrop = () => {

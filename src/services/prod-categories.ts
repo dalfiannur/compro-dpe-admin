@@ -56,4 +56,9 @@ export const productCategoriesApi = createApi({
   })
 });
 
-export const {useGetProductCategoriesPaginationQuery, usePutProductCategoriesMutation, usePostProductCategoriesMutation, useDeleteProductCategoriesMutation} = productCategoriesApi;
+export const {
+  useGetProductCategoriesPaginationQuery,
+  usePutProductCategoriesMutation,
+  usePostProductCategoriesMutation,
+  useDeleteProductCategoriesMutation
+} = productCategoriesApi;

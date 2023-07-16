@@ -36,12 +36,14 @@ export const FormCreate = (props: FormCreateProp) => {
   const validationSchema = y.object({
     name: y.string().required(),
     icon: y.string().required(),
+    description: y.string()
   });
 
-  const {values, errors, submitForm, setFieldValue} = useFormik({
+  const {values, errors, submitForm, setFieldValue, touched} = useFormik({
     validationSchema,
     initialValues: {
       name: '',
+      description: '',
       slug: '',
       icon: '',
     },
@@ -85,12 +87,25 @@ export const FormCreate = (props: FormCreateProp) => {
               />
             </InputWrapper>
           </Grid.Col>
+          
+          <Grid.Col>
+            <InputWrapper
+                required
+                label="Content"
+                error={touched.description && errors.description}
+            >
+              <RichTextEditor
+                  value={values.description}
+                  onChange={(value) => setFieldValue("description", value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
 
           <Grid.Col>
             <InputWrapper
                 required
                 label="Icon"
-                error={errors.icon as string}
+                error={touched.icon && errors.icon}
             >
               <ImagePicker result={(val) => setIcon(val)}/>
             </InputWrapper>

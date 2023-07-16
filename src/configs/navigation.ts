@@ -1,4 +1,4 @@
-import {Box, Home, PictureInPicture} from "tabler-icons-react";
+import {Home, List, ListDetails, Archive, Artboard, BoxMargin, File, User, PictureInPicture} from "tabler-icons-react";
 
 export const navigationLinks = [
   // {
@@ -12,37 +12,37 @@ export const navigationLinks = [
     path: '/banner'
   },
   {
-    icon: Box,
+    icon: Archive,
     label: 'Products',
     path: '/products'
   },
   {
-    icon: Box,
+    icon: ListDetails,
     label: 'Type Categories',
     path: '/type/categories',
   },
   {
-    icon: Box,
+    icon: List,
     label: 'Type Series',
     path: '/type/series',
   },
   {
-    icon: Box,
+    icon: BoxMargin,
     label: 'Skin Concern',
     path: '/skin-concern'
   },
   {
-    icon: Box,
+    icon: Artboard,
     label: 'Skin Type',
     path: '/skin-type'
   },
   {
-    icon: Box,
+    icon: File,
     label: 'Article',
     path: '/article'
   },
   {
-    icon: Box,
+    icon: User,
     label: 'User',
     path: '/user'
   }

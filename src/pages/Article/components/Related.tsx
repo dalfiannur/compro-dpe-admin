@@ -20,7 +20,7 @@ import {
   useLazyGetArticleQuery,
   useGetProductPaginationQuery,
   usePostRelatedProductOnArticleMutation,
-  useDeleteRelatedProductOnArticleMutation,
+  useDeleteRelatedProductOnArticleMutation, useGetProductCategoriesPaginationQuery,
 } from "../../../services";
 
 interface DetailProps {
@@ -40,7 +40,7 @@ export const Related: FC<DetailProps> = (props) => {
 
   const [fetcher, { data: article }] = useLazyGetArticleQuery();
   const [product, setProduct] = useState<any>();
-  const { data: products, refetch } = useGetProductPaginationQuery({
+  const { data: products, refetch } = useGetProductCategoriesPaginationQuery({
     page: 1,
     perPage: 1000,
   });
@@ -67,6 +67,8 @@ export const Related: FC<DetailProps> = (props) => {
     }
   }, [isSuccess, delIsSuccess]);
 
+  console.log(products?.data)
+
   return (
     <Modal opened={open} size="lg" onClose={onClose} title="Related Products">
       <Box>
@@ -76,7 +78,7 @@ export const Related: FC<DetailProps> = (props) => {
               <Select
                 value={product}
                 data={
-                  products?.data.map((item) => ({
+                  products?.data.map((item: any) => ({
                     label: item.name,
                     value: item.id.toString(),
                   })) || []

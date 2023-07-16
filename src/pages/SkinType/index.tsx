@@ -51,7 +51,7 @@ const SkinConcernPage = () => {
   };
 
   return (
-    <Container size="xl">
+    <Container size="md">
       <LoadingOverlay visible={isLoading} />
       <Button onClick={() => setModal("create", true)}>
         Add New Skin Type

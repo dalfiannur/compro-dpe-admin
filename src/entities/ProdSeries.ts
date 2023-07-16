@@ -2,12 +2,14 @@ import {Category} from "./Category";
 import { ProductImage } from "./ProductImage";
 import {SkinConcern} from "./SkinConcern";
 import {SkinType} from "./SkinType";
+import Series from "../pages/TypeList/Series";
 
 export interface ProdSeries {
   id: number;
   name: string;
   sku: string
   slug: string;
+  seriesId: number;
   category: Category;
   categoryId: number;
   skinTypes: SkinType[];
@@ -24,7 +26,8 @@ export interface ProdSeries {
 export interface ProductDto {
   name: string;
   sku: string;
-  categorySlug: string;
+  seriesId: number;
+  categoryId: number;
   skinTypeIds: number[] | string[];
   skinConcernIds: number[] | string[];
   images: string[];

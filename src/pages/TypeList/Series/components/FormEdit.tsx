@@ -5,6 +5,7 @@ import * as y from 'yup';
 import '../../../../assets/style.css'
 import {ImagePicker} from "../../../../components/ImagePicker";
 import {usePutTypeCategoryMutation} from "../../../../services";
+import {RichTextEditor} from "@mantine/rte";
 
 type FormEditProp = {
   data: any;
@@ -23,13 +24,15 @@ export const FormEdit = (props: FormEditProp) => {
   const validationSchema = y.object({
     name: y.string().required(),
     slug: y.string().required(),
+    description: y.string()
   });
 
-  const {values, errors, setFieldValue, submitForm} = useFormik({
+  const {values, errors, setFieldValue, submitForm, touched} = useFormik({
     validationSchema,
     initialValues: {
       id: data.id,
       name: data.name,
+      description: data.description,
       slug: data.slug,
       icon: data.iconUrl,
     },
@@ -76,6 +79,18 @@ export const FormEdit = (props: FormEditProp) => {
                   <Input
                       value={values.slug}
                       onChange={(e: any) => setFieldValue("slug", e.target.value)}
+                  />
+                </InputWrapper>
+              </Grid.Col>
+              <Grid.Col>
+                <InputWrapper
+                    required
+                    label="Content"
+                    error={touched.description && errors.description}
+                >
+                  <RichTextEditor
+                      value={values.description}
+                      onChange={(value) => setFieldValue("description", value)}
                   />
                 </InputWrapper>
               </Grid.Col>

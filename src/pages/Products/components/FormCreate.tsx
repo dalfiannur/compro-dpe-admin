@@ -17,8 +17,8 @@ import {useGetCategories} from "../hooks/useGetCategories";
 
 const validationSchema = y.object({
   name: y.string().required(),
-  seriesSlug: y.string().required(),
-  categorySlug: y.string().required(),
+  seriesId: y.string().required(),
+  categoryId: y.string().required(),
   sku: y.string().required(),
   description: y.string().required(),
   usedAs: y.string().required(),
@@ -60,8 +60,8 @@ export const FormCreate = (props: FormCreateProp) => {
     validationSchema,
     initialValues: {
       name: '',
-      seriesSlug: '',
-      categorySlug: '',
+      seriesId: '',
+      categoryId: '',
       sku: '',
       description: '',
       usedAs: '',
@@ -120,10 +120,10 @@ export const FormCreate = (props: FormCreateProp) => {
             <InputWrapper
                 label="Series"
                 required
-                error={errors.seriesSlug}
+                error={errors.seriesId}
             >
               <Select
-                  value={values.seriesSlug}
+                  value={values.seriesId}
                   data={series?.data.map((item: any) => ({label: item.name, value: item.id})) || []}
                   onChange={(e) => setFieldValue('seriesSlug', (e as string))}
               />
@@ -134,10 +134,10 @@ export const FormCreate = (props: FormCreateProp) => {
             <InputWrapper
                 label="Category"
                 required
-                error={errors.categorySlug}
+                error={errors.categoryId}
             >
               <Select
-                  value={values.categorySlug}
+                  value={values.categoryId}
                   data={categories?.data.map((item: any) => ({label: item.name, value: item.id})) || []}
                   onChange={(e) => setFieldValue('categorySlug', (e as string))}
               />
