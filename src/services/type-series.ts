@@ -26,6 +26,14 @@ export const typeSeriesApi = createApi({
         }
       }
     }),
+    getTypeSeries: builder.query<PaginationResult, any>({
+      query: () => {
+        const query = new URLSearchParams();
+        return {
+          url: '/series?' + query.toString(),
+        }
+      }
+    }),
     postTypeSeries: builder.mutation<any, any>({
       query: (body) => ({
         url: '/series',
@@ -51,4 +59,4 @@ export const typeSeriesApi = createApi({
   })
 });
 
-export const {useGetTypeSeriesPaginationQuery, usePutTypeSeriesMutation, usePostTypeSeriesMutation, useDeleteTypeSeriesMutation} = typeSeriesApi;
+export const {useGetTypeSeriesPaginationQuery, useGetTypeSeriesQuery, usePutTypeSeriesMutation, usePostTypeSeriesMutation, useDeleteTypeSeriesMutation} = typeSeriesApi;

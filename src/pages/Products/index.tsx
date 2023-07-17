@@ -6,9 +6,7 @@ import {useModal} from "../../hooks/useModal";
 import {DeleteConfirmation} from "./components/DeleteConfirmation";
 import {ActionIcon, Button, Card, Container, Table, Pagination, Select, Grid} from "@mantine/core";
 import {
-    useGetProductCategoriesPaginationQuery,
-    useGetTypeCategoryPaginationQuery,
-    useGetTypeSeriesPaginationQuery
+    useGetProductCategoriesPaginationQuery, useGetTypeCategoryQuery, useGetTypeSeriesQuery
 } from "../../services";
 import {Eye, Pencil, Trash} from "tabler-icons-react";
 import {Detail} from "./components/Detail";
@@ -28,15 +26,9 @@ const ProductPage = () => {
         perPage,
     });
 
-    const {data: seriesList} = useGetTypeSeriesPaginationQuery({
-        page: page,
-        perPage,
-    });
+    const {data: seriesList} = useGetTypeSeriesQuery({});
 
-    const {data: categoryList} = useGetTypeCategoryPaginationQuery({
-        page: page,
-        perPage,
-    });
+    const {data: categoryList} = useGetTypeCategoryQuery({});
 
     const seriesObj = useMemo(() => {
         if (seriesList) {

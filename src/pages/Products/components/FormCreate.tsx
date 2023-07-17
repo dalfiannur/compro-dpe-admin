@@ -17,8 +17,8 @@ import {useGetCategories} from "../hooks/useGetCategories";
 
 const validationSchema = y.object({
   name: y.string().required(),
-  seriesId: y.string().required(),
-  categoryId: y.string().required(),
+  seriesSlug: y.string().required(),
+  categorySlug: y.string().required(),
   sku: y.string().required(),
   description: y.string().required(),
   usedAs: y.string().required(),
@@ -28,6 +28,7 @@ const validationSchema = y.object({
   skinConcernIds: y.array(y.string()).min(1),
   skinTypeIds: y.array(y.string()).required().min(1),
   relatedProductIds: y.array(y.string()).min(1),
+  featuredImage: y.string().required(),
 });
 
 
@@ -60,14 +61,15 @@ export const FormCreate = (props: FormCreateProp) => {
     validationSchema,
     initialValues: {
       name: '',
-      seriesId: '',
-      categoryId: '',
+      seriesSlug: '',
+      categorySlug: '',
       sku: '',
       description: '',
       usedAs: '',
       howToUse: '',
       keyingredient: '',
       isFeatured: false,
+      featuredImage: "",
       skinConcernIds: [],
       skinTypeIds: [],
       images: ['', ''],
@@ -120,26 +122,25 @@ export const FormCreate = (props: FormCreateProp) => {
             <InputWrapper
                 label="Series"
                 required
-                error={errors.seriesId}
+                error={errors.seriesSlug}
             >
               <Select
-                  value={values.seriesId}
-                  data={series?.data.map((item: any) => ({label: item.name, value: item.id})) || []}
-                  onChange={(e) => setFieldValue('seriesSlug', (e as string))}
+                  value={values.seriesSlug}
+                  data={series?.data.map((item: any) => ({label: item.name, value: String(item.slug)})) || []}
+                  onChange={(e) => setFieldValue('seriesSlug', String(e))}
               />
             </InputWrapper>
           </Grid.Col>
-
           <Grid.Col>
             <InputWrapper
                 label="Category"
                 required
-                error={errors.categoryId}
+                error={errors.categorySlug}
             >
               <Select
-                  value={values.categoryId}
-                  data={categories?.data.map((item: any) => ({label: item.name, value: item.id})) || []}
-                  onChange={(e) => setFieldValue('categorySlug', (e as string))}
+                  value={(values.categorySlug)}
+                  data={categories?.data.map((item: any) => ({label: item.name, value: String(item.slug)})) || []}
+                  onChange={(e:string) => setFieldValue('categorySlug', String(e))}
               />
             </InputWrapper>
           </Grid.Col>
@@ -252,20 +253,20 @@ export const FormCreate = (props: FormCreateProp) => {
           <Grid.Col>
             <InputWrapper
               required
-              label="Bottle Image"
-              error={errors.images}
+              label="Featured Image"
+              error={errors.featuredImage}
             >
-              <ImagePicker result={(val) => setBottle(val)}/>
+              <ImagePicker result={""} propsOnChange={(value: any) => setFieldValue('featuredImage', value[0])}/>
             </InputWrapper>
           </Grid.Col>
 
           <Grid.Col>
             <InputWrapper
               required
-              label="Bottle Image with Box"
+              label="Images"
               error={errors.images}
             >
-              <ImagePicker result={(val) => setBottleBox(val)}/>
+              <ImagePicker result={""} propsOnChange={(value: any) => setFieldValue('images', value)}/>
             </InputWrapper>
           </Grid.Col>
         </Grid>

@@ -1,50 +1,66 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
-import {ActionIcon, Box, Button, Image, Input, Modal, Slider, useMantineTheme} from "@mantine/core";
+import React, {ChangeEvent, useCallback, useEffect, useRef, useState} from "react";
+import {Grid, ActionIcon, Box, Button, Image, Modal, Slider, useMantineTheme} from "@mantine/core";
 import {Pencil, Trash} from "tabler-icons-react";
 import Cropper from "react-easy-crop";
 import "./cropper.min.css";
-import {useDisclosure} from "@mantine/hooks";
 import {DialogActions, DialogContent, Typography} from "@mui/material";
 import {useModal} from "../../hooks/useModal";
+import {usePostImgMutation, usePostProductCategoriesMutation} from "../../services";
+import * as y from "yup";
+import {useFormik} from "formik";
+import base64ToImageFile from "../../../helpers/helper";
+
+const validationSchema = y.object({
+    images: y.array().required(),
+});
 
 type ImagePickerProp = {
     width?: number | string;
-    result?: (result: string) => void;
+    result?: string;
     aspectRatio?: number;
     defaultImage?: string;
+    propsOnChange?: any;
 };
 
 export const ImagePicker = (props: ImagePickerProp) => {
-
     const theme = useMantineTheme();
-
-    const {width, result, aspectRatio = 1, defaultImage} = props;
-
+    const {width, result, aspectRatio = 1, defaultImage, propsOnChange} = props;
+    const [onSubmit, {data: resultImg}] = usePostImgMutation();
     const inputRef = useRef<any>();
-
     const [dataUrl, setDataUrl] = useState<string>();
     const [fetchImageStatus, setFetchImageStatus] = useState<boolean>();
     const [isTooLarge, setIsToLarge] = useState<boolean>(false);
-
     const [modal, setModal] = useModal();
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
     const [croppedImage, setCroppedImage] = useState<string>();
-
-    const cropperRef = useRef<HTMLImageElement>(null);
-
     const [crop, setCrop] = useState({x: 0, y: 0})
     const [zoom, setZoom] = useState(1)
+    const [resultUrl, setResultUrl] = useState(result)
 
+    const handleSubmit = (values: { images: any; }) => {
+        onSubmit({ images: values.images })
+            .then((result:any) => {
+                propsOnChange(result?.data.data)
+            })
+            .catch((error) => {
+                console.error('API call error!', error);
+            });
+    };
 
+    const {values, errors, submitForm, setFieldValue} = useFormik({
+        validationSchema,
+        initialValues: {
+            images: [],
+        },
+        onSubmit: handleSubmit,
+    })
 
     const handleOnEditRequest = (item: any) => {
         setModal("edit", true);
     };
-
     const onCropComplete = useCallback((croppedArea: any, croppedAreaPixels: any) => {
         setCroppedAreaPixels(croppedAreaPixels)
     }, [])
-
     function croppingImage(croppedAreaPixel: any, propsDataUrl: any) {
         let img = new window.Image();
         img.src = propsDataUrl;
@@ -69,36 +85,19 @@ export const ImagePicker = (props: ImagePickerProp) => {
                 );
                 let croppedImageData = canvas.toDataURL();
 
-                console.log('propsdata', propsDataUrl);
-                console.log('croppeddata', croppedImageData);
-
                 setCroppedImage(croppedImageData);
             }
         };
 
         return croppedImage;
     }
-
-// ------------------- PERLU CLICK DUA KALI ------------------------------------------------------------------------
-    const handleImageCropClick = () => {
-        croppingImage(croppedAreaPixels, dataUrl)
-        setModal("edit", false);
+    const handleImageCropClick = async () => {
+        await croppingImage(croppedAreaPixels, dataUrl)
+        await setModal("edit", false)
     }
-
-    const close = () => {
-        setModal("edit", false)
-    }
-
-    // const onCrop = () => {
-    //   const imageElement: any = cropperRef?.current;
-    //   const cropper: any = imageElement?.cropper;
-    //   result && result(cropper.getCroppedCanvas().toDataURL());
-    // };
-
     const handleOnClick = () => {
         if (inputRef.current) inputRef.current.click();
     };
-
     const handleOnChange = () => {
         setIsToLarge(false);
         if (inputRef.current) {
@@ -113,6 +112,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
             if (inputRef.current.files) {
                 const file = inputRef.current.files[0];
                 if (file.size < 5000000) {
+                    setFieldValue("images", [file])
                     reader.readAsDataURL(file);
                 } else {
                     setIsToLarge(true);
@@ -120,7 +120,6 @@ export const ImagePicker = (props: ImagePickerProp) => {
             }
         }
     };
-
     useEffect(() => {
         const getImage = async () => {
             if (defaultImage) {
@@ -148,160 +147,107 @@ export const ImagePicker = (props: ImagePickerProp) => {
 
 
     return (
-        // @ts-ignore
-        <div
-            className="imagaPicker"
-            style={{
-                position: "relative",
-                border: `1px solid ${isTooLarge ? "#ff0000" : "#cecece"}`,
-                borderRadius: 4,
-                width: width ?? "100%",
-                minHeight: 400,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-        >
-            <input
-                ref={inputRef}
-                type="file"
-                style={{display: "none"}}
-                onChange={handleOnChange}
-                accept="image/*"
-            />
-            {isTooLarge && fetchImageStatus ? (
-                <p style={{color: "red"}}>Ukuran file terlalu besar. Max: 5MB</p>
-            ) : (
-                !dataUrl && <p>Ukuran Maksimal adalah 5MB</p>
-            )}
-            {fetchImageStatus ?
-                dataUrl ? (
-                    <>
-                        <Image src={croppedImage ? croppedImage : dataUrl} />
-                        {/*<Cropper*/}
-                        {/*    image={dataUrl}*/}
-                        {/*    crop={crop}*/}
-                        {/*    zoom={zoom}*/}
-                        {/*    aspect={aspectRatio}*/}
-                        {/*    onCropChange={setCrop}*/}
-                        {/*    onCropComplete={onCropComplete}*/}
-                        {/*    onZoomChange={setZoom}*/}
-
-                        {/*    // src={dataUrl}*/}
-                        {/*    // style={{ height: 400, width: "100%" }}*/}
-                        {/*    // // Cropper.js options*/}
-                        {/*    // initialAspectRatio={aspectRatio}*/}
-                        {/*    // aspectRatio={aspectRatio}*/}
-                        {/*    // guides={false}*/}
-                        {/*    // crop={onCrop}*/}
-                        {/*    // ref={cropperRef}*/}
-                        {/*/>*/}
-
-                        <ActionIcon
-                            color="blue"
-                            sx={{
-                                position: "absolute",
-                                top: 5,
-                                right: 35,
-                                background: "white"
-                            }}
-                            onClick={handleOnEditRequest}
-                        >
-                            <Pencil/>
-                        </ActionIcon>
-
-
-{/*-------------------------- MODAL CROPING OVERLAY -----------------------------------------------------------*/}
-                        <Modal
-                            opened={modal.edit}
-                            onClose={() => setModal("edit", false)}
-                            size="xl">
-                            <DialogContent
-                                dividers
-                                sx={{
-                                    background: '#333',
-                                    position: 'relative',
-                                    height: 400,
-                                    width: 'auto',
-                                    minWidth: { sm: 500 },
-                                }}
-                            >
-
-                                <Cropper
-                                    image={dataUrl}
-                                    crop={crop}
-                                    zoom={zoom}
-                                    aspect={aspectRatio}
-                                    onCropChange={setCrop}
-                                    onCropComplete={onCropComplete}
-                                    onZoomChange={setZoom}
-                                />
-                            </DialogContent>
-
-                            <DialogActions sx={{ flexDirection: 'column', mx: 3, my: 2 }}>
-                                <Box sx={{width: "100%", mb: 1}}>
-                                    <Slider
-                                        value={zoom}
-                                        min={1}
-                                        max={3}
-                                        step={0.01}
-                                        aria-labelledby="Zoom"
-                                        onChange={(zoom: any) => {
-                                            setZoom(zoom)
+        <div className="flex flex-col">
+            <div
+                className="imagaPicker"
+                style={{
+                    position: "relative",
+                    border: `1px solid ${isTooLarge ? "#ff0000" : "#cecece"}`,
+                    borderRadius: 4,
+                    width: width ?? "100%",
+                    minHeight: 400,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
+                <>
+                    {!resultUrl ? <>
+                        <input
+                            ref={inputRef}
+                            type="file"
+                            style={{display: "none"}}
+                            onChange={handleOnChange}
+                            accept="image/*"
+                        />
+                        {isTooLarge && fetchImageStatus ? (
+                            <p style={{color: "red"}}>Ukuran file terlalu besar. Max: 5MB</p>
+                        ) : (
+                            !dataUrl && <p>Ukuran Maksimal adalah 5MB</p>
+                        )}
+                        {fetchImageStatus ?
+                            dataUrl ? (
+                                <div className={"flex flex-col"}>
+                                    <Image src={croppedImage ? croppedImage : dataUrl} />
+                                    <ActionIcon
+                                        color="blue"
+                                        sx={{
+                                            position: "absolute",
+                                            top: 5,
+                                            right: 35,
+                                            background: "white"
                                         }}
-                                    />
-                                </Box>
-                            </DialogActions>
+                                        onClick={handleOnEditRequest}
+                                    >
+                                        <Pencil/>
+                                    </ActionIcon>
 
-
-                            <Box
+                                    <ActionIcon
+                                        color="red"
+                                        sx={{
+                                            position: "absolute",
+                                            top: 5,
+                                            right: 5,
+                                            background: "white"
+                                        }}
+                                        onClick={() => setDataUrl(undefined)}
+                                    >
+                                        <Trash/>
+                                    </ActionIcon>
+                                </div>
+                            ) : (
+                                <Button
+                                    color={isTooLarge ? "error" : "primary"}
+                                    onClick={handleOnClick}
+                                >
+                                    Pick Image
+                                </Button>
+                            ) : setFetchImageStatus(true)
+                        }
+                    </> :
+                        <>
+                            <Image src={resultUrl} />
+                            <ActionIcon
+                                color="blue"
                                 sx={{
-                                    display: 'flex',
-                                    justifyContent: 'end',
-                                    marginTop: theme.spacing.md
+                                    position: "absolute",
+                                    top: 5,
+                                    right: 5,
+                                    background: "white"
                                 }}
-                            >
-                                <Button
-                                    onClick={close}
-                                    variant="outline"
+                                onClick={() => setResultUrl("")}
                                 >
-                                    Cancel
-                                </Button>
-                                <Button
-// --------------------------------- BELUM TERINTEGRASI ---------------------------------------------------------
-                                    onClick={handleImageCropClick}
-                                    sx={{
-                                        marginLeft: theme.spacing.md
-                                    }}
-                                >
-                                    Saves
-                                </Button>
-                            </Box>
-                        </Modal>
-
-                        <ActionIcon
-                            color="red"
-                            sx={{
-                                position: "absolute",
-                                top: 5,
-                                right: 5,
-                                background: "white"
-                            }}
-                            onClick={() => setDataUrl(undefined)}
-                        >
-                            <Trash/>
-                        </ActionIcon>
+                                <Pencil/>
+                            </ActionIcon>
+                        </>
+                    }
                     </>
-                ) : (
-                    <Button
-                        color={isTooLarge ? "error" : "primary"}
-                        onClick={handleOnClick}
-                    >
-                        Pick Image
-                    </Button>
-                ) : setFetchImageStatus(true)
-            }
+            </div>
+            <Grid
+                mt={8}
+                mr={1}
+                justify={"flex-end"}
+            >
+                <Button
+                    variant="outline"
+                    color={"primary"}
+                    size={"xs"}
+                    onClick={submitForm}
+                >
+                    Upload
+                </Button>
+            </Grid>
         </div>
     );
 };

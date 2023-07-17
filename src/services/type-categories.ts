@@ -26,6 +26,14 @@ export const typeCategoriesApi = createApi({
         }
       }
     }),
+    getTypeCategory: builder.query<PaginationResult, any>({
+      query: () => {
+        const query = new URLSearchParams();
+        return {
+          url: '/categories?' + query.toString(),
+        }
+      }
+    }),
     postTypeCategory: builder.mutation<any, any>({
       query: (body) => ({
         url: '/categories',
@@ -51,4 +59,4 @@ export const typeCategoriesApi = createApi({
   })
 });
 
-export const {useGetTypeCategoryPaginationQuery, usePutTypeCategoryMutation, usePostTypeCategoryMutation, useDeleteTypeCategoryMutation} = typeCategoriesApi;
+export const {useGetTypeCategoryPaginationQuery, useGetTypeCategoryQuery, usePutTypeCategoryMutation, usePostTypeCategoryMutation, useDeleteTypeCategoryMutation} = typeCategoriesApi;
