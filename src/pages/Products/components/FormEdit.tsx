@@ -34,8 +34,8 @@ export const FormEdit = (props: FormEditProp) => {
 
   const validationSchema = y.object({
     name: y.string().required(),
-    seriesSlug: y.string().required(),
-    categorySlug: y.string().required(),
+    seriesId: y.string().required(),
+    categoryId: y.string().required(),
     sku: y.string().required(),
     description: y.string().required(),
     usedAs: y.string().required(),
@@ -55,8 +55,8 @@ export const FormEdit = (props: FormEditProp) => {
       name: data.name,
 
       // ------------------- SERIES BELUM MASUK ------------------------------
-      seriesSlug: data.seriesSlug,
-      categorySlug: data.category.slug,
+      seriesId: data.seriesId,
+      categoryId: data.categoryId,
       sku: data.sku,
       description: data.description,
       usedAs: data.usedAs,
@@ -124,12 +124,12 @@ export const FormEdit = (props: FormEditProp) => {
             <InputWrapper
                 label="Series"
                 required
-                error={errors.seriesSlug}
+                error={errors.seriesId}
             >
               <Select
-                  value={values.seriesSlug}
-                  data={series?.data.map((item: any) => ({label: item.name, value: item.slug})) || []}
-                  onChange={(e) => setFieldValue('seriesSlug', (e))}
+                  value={String(values.seriesId)}
+                  data={series?.data.map((item: any) => ({label: item.name, value: String(item.id)})) || []}
+                  onChange={(e) => setFieldValue('seriesId', String(e))}
               />
             </InputWrapper>
           </Grid.Col>
@@ -137,12 +137,12 @@ export const FormEdit = (props: FormEditProp) => {
           <Grid.Col>
             <InputWrapper
               label="Category"
-              error={errors.categorySlug}
+              error={errors.categoryId}
             >
               <Select
-                value={values.categorySlug}
-                data={categories?.data.map((item: any) => ({label: item.name, value: item.slug})) || []}
-                onChange={(e: any) => setFieldValue('categorySlug', e)}
+                value={String(values.categoryId)}
+                data={categories?.data.map((item: any) => ({label: item.name, value: String(item.id)})) || []}
+                onChange={(e: any) => setFieldValue('categoryId', String(e))}
               />
             </InputWrapper>
           </Grid.Col>

@@ -36,10 +36,12 @@ export const ImagePicker = (props: ImagePickerProp) => {
     const [crop, setCrop] = useState({x: 0, y: 0})
     const [zoom, setZoom] = useState(1)
     const [resultUrl, setResultUrl] = useState(result)
+    const [name, setName] = useState("")
 
     const handleSubmit = (values: { images: any; }) => {
         onSubmit({ images: values.images })
             .then((result:any) => {
+                console.log(result?.data.data)
                 propsOnChange(result?.data.data)
             })
             .catch((error) => {
@@ -85,7 +87,9 @@ export const ImagePicker = (props: ImagePickerProp) => {
                 );
                 let croppedImageData = canvas.toDataURL();
 
+                const fileCropped = base64ToImageFile(croppedImageData, name)
                 setCroppedImage(croppedImageData);
+                setFieldValue("images", [fileCropped])
             }
         };
 
@@ -112,6 +116,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
             if (inputRef.current.files) {
                 const file = inputRef.current.files[0];
                 if (file.size < 5000000) {
+                    setName(file.name)
                     setFieldValue("images", [file])
                     reader.readAsDataURL(file);
                 } else {
@@ -205,6 +210,72 @@ export const ImagePicker = (props: ImagePickerProp) => {
                                     >
                                         <Trash/>
                                     </ActionIcon>
+                                    <Modal
+                                        opened={modal.edit}
+                                        onClose={() => setModal("edit", false)}
+                                        size="xl">
+                                        <DialogContent
+                                            dividers
+                                            sx={{
+                                                background: '#333',
+                                                position: 'relative',
+                                                height: 400,
+                                                width: 'auto',
+                                                minWidth: { sm: 500 },
+                                            }}
+                                        >
+
+                                            <Cropper
+                                                image={dataUrl}
+                                                crop={crop}
+                                                zoom={zoom}
+                                                aspect={aspectRatio}
+                                                onCropChange={setCrop}
+                                                onCropComplete={onCropComplete}
+                                                onZoomChange={setZoom}
+                                            />
+                                        </DialogContent>
+
+                                        <DialogActions sx={{ flexDirection: 'column', mx: 3, my: 2 }}>
+                                            <Box sx={{width: "100%", mb: 1}}>
+                                                <Slider
+                                                    value={zoom}
+                                                    min={1}
+                                                    max={3}
+                                                    step={0.01}
+                                                    aria-labelledby="Zoom"
+                                                    onChange={(zoom: any) => {
+                                                        setZoom(zoom)
+                                                    }}
+                                                />
+                                            </Box>
+                                        </DialogActions>
+
+
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                justifyContent: 'end',
+                                                marginTop: theme.spacing.md
+                                            }}
+                                        >
+                                            <Button
+                                                variant="outline"
+                                                onClick={() => setModal("edit", false)}
+                                            >
+                                                Cancel
+                                            </Button>
+                                            <Button
+                                                // --------------------------------- BELUM TERINTEGRASI ---------------------------------------------------------
+                                                onClick={handleImageCropClick}
+                                                sx={{
+                                                    marginLeft: theme.spacing.md
+                                                }}
+                                            >
+                                                Saves
+                                            </Button>
+                                        </Box>
+                                    </Modal>
                                 </div>
                             ) : (
                                 <Button
@@ -219,7 +290,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
                         <>
                             <Image src={resultUrl} />
                             <ActionIcon
-                                color="blue"
+                                color="red"
                                 sx={{
                                     position: "absolute",
                                     top: 5,
@@ -228,7 +299,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
                                 }}
                                 onClick={() => setResultUrl("")}
                                 >
-                                <Pencil/>
+                                <Trash/>
                             </ActionIcon>
                         </>
                     }
