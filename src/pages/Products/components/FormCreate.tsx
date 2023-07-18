@@ -73,7 +73,7 @@ export const FormCreate = (props: FormCreateProp) => {
       skinConcernIds: [],
       skinTypeIds: [],
       images: ['', ''],
-      relatedProductIds: []
+      relates: []
     },
     onSubmit
   });
@@ -126,7 +126,7 @@ export const FormCreate = (props: FormCreateProp) => {
             >
               <Select
                   value={values.seriesId}
-                  data={series?.data.map((item: any) => ({label: item.name, value: String(item.slug)})) || []}
+                  data={series?.data.map((item: any) => ({label: item.name, value: String(item.id)})) || []}
                   onChange={(e) => setFieldValue('seriesId', String(e))}
               />
             </InputWrapper>
@@ -140,7 +140,7 @@ export const FormCreate = (props: FormCreateProp) => {
             >
               <Select
                   value={(values.categoryId)}
-                  data={categories?.data.map((item: any) => ({label: item.name, value: String(item.slug)})) || []}
+                  data={categories?.data.map((item: any) => ({label: item.name, value: String(item.id)})) || []}
                   onChange={(e:string) => setFieldValue('categoryId', String(e))}
               />
             </InputWrapper>
@@ -239,12 +239,13 @@ export const FormCreate = (props: FormCreateProp) => {
             <InputWrapper
                 label="Related Products"
                 required
-                error={errors.relatedProductIds}
+                error={errors.relates}
             >
               <MultiSelect
-                  value={values.relatedProductIds}
+                  value={values.relates}
                   data={products?.data.map((item: any)=> ({label: item.name, value: item.id})) || []}
-                  onChange={(value) => setFieldValue('relatedProductIds', value)}
+                  //@ts-ignore
+                  onChange={(value) => setFieldValue('relates', value)}
                   maxSelectedValues={4}
               />
             </InputWrapper>

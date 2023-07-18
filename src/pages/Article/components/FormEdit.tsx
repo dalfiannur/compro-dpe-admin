@@ -84,6 +84,8 @@ export const FormEdit = (props: FormCreateProp) => {
     console.log(errors);
   }, [errors])
 
+  console.log(data)
+
   return (
     <Modal opened={open} onClose={onClose} size="xl" title="Edit Article">
       <Box
@@ -157,7 +159,8 @@ export const FormEdit = (props: FormCreateProp) => {
               error={touched.thumbnail && errors.thumbnail}
             >
               <ImagePicker
-                result={(val) => setFieldValue("thumbnail", val)}
+                result={''}
+                propsOnChange={(value: any) => setFieldValue("thumbnail", value)}
                 aspectRatio={16 / 9}
                 defaultImage={data.thumbnailUrl}
               />

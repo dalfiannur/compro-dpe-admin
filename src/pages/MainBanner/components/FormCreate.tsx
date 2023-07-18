@@ -77,7 +77,7 @@ const FormCreate = (props: FormCreateProp) => {
               label="Image"
               error={errors.imageSource}
             >
-              <ImagePicker result={(e) => setFieldValue("imageSource", e)} aspectRatio={12/5}/>
+              <ImagePicker result={""} propsOnChange={(value: any) => setFieldValue("imageSource", value)} aspectRatio={12/5}/>
             </InputWrapper>
           </Grid.Col>
         </Grid>

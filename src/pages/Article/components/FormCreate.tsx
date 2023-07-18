@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { useGetUsersQuery, usePostArticleMutation } from "../../../services";
 import { ImagePicker } from "../../../components/ImagePicker";
 import {
@@ -21,7 +21,7 @@ const validationSchema = y.object({
   title: y.string().required(),
   authorId: y.number().required(),
   content: y.string(),
-  thumbnail: y.string().required(),
+  thumbnail: y.string(),
   tags: y.array(y.string()).required()
 });
 
@@ -34,6 +34,8 @@ type FormCreateProp = {
 export const FormCreate = (props: FormCreateProp) => {
   const { open, onClose, onCreated } = props;
   const [tags, setTags] = useInputState<string[]>([]);
+
+  const [banner, setBanner] = useState<string>('')
 
   const theme = useMantineTheme();
   const {data: user} = useGetUsersQuery({
@@ -57,8 +59,8 @@ export const FormCreate = (props: FormCreateProp) => {
     initialValues: {
       title: "",
       authorId: 0,
-      content: "",
-      thumbnail: "",
+      content: '',
+      thumbnail: '',
       isFeatured: false,
       tags: "",
     },
@@ -77,8 +79,12 @@ export const FormCreate = (props: FormCreateProp) => {
   }, [tags]);
 
   useEffect(() => {
-    console.log(errors);
-  }, [errors])
+    setFieldValue('thumbnail', banner)
+  }, [banner])
+
+  // useEffect(() => {
+  //   console.log(errors);
+  // }, [errors])
 
   return (
     <Modal opened={open} onClose={onClose} size="xl" title="Add Article">
@@ -151,8 +157,7 @@ export const FormCreate = (props: FormCreateProp) => {
               label="Thumbnail"
               error={touched.thumbnail && errors.thumbnail}
             >
-              <ImagePicker
-                result={(val) => setFieldValue("thumbnail", val)}
+              <ImagePicker result={""} propsOnChange={(value: any) => setFieldValue('thumbnail', value)}
                 aspectRatio={16 / 9}
               />
             </InputWrapper>

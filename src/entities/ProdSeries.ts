@@ -13,7 +13,6 @@ export interface ProdSeries {
   slug: string;
   seriesId: number;
   seriesSlug: string;
-  category: Category;
   categoryId: number;
   categorySlug: string;
   skinTypes: SkinType[];
@@ -26,10 +25,11 @@ export interface ProdSeries {
   createdAt: string;
   featuredImage: string;
   images: ProductImage[];
-  relatedProductIds: ProductDto[]
+  relates: ProductDto[]
 }
 
 export interface ProductDto {
+  id: number;
   name: string;
   sku: string;
   seriesId: number;
@@ -42,5 +42,5 @@ export interface ProductDto {
   description: string;
   keyingredient: string;
   isFeatured: boolean;
-  relatedProductIds: number[] | string[]
+  relates: number[] | string[]
 }

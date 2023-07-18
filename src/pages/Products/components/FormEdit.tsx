@@ -46,7 +46,7 @@ export const FormEdit = (props: FormEditProp) => {
     isFeatured: y.boolean().required(),
     skinConcernIds: y.array(y.string()).min(1),
     skinTypeIds: y.array(y.string()).required().min(1),
-    relatedProductIds: y.array(y.string()).min(1),
+    relates: y.array(y.string()).min(1),
     featuredImage: y.string().required(),
   });
 
@@ -71,14 +71,12 @@ export const FormEdit = (props: FormEditProp) => {
       skinTypeIds: data.skinTypes.map((item) => item.id.toString()),
       // ------------------ IMAGES DAN RELATED PRODUCT BELUM ADA DI ENTITIES ----------------------------------
       images: ['', ''],
-      imagesUrl: data.images[0].imageSourceUrl,
-      // relatedProductIds: data.relates.map((item) => item.id.toString())
+      imagesUrl: data.images[0]?.imageSourceUrl,
+      relates: data.relates.map((item) => item.id.toString())
     },
     onSubmit,
     enableReinitialize: true
   });
-
-  console.log(data)
 
   useEffect(() => {
     if (result) {
@@ -123,7 +121,6 @@ export const FormEdit = (props: FormEditProp) => {
             </InputWrapper>
           </Grid.Col>
 
- {/* ------------------------------ SERIES BELUM MASUK ----------------------------- */}
           <Grid.Col>
             <InputWrapper
                 label="Series"
@@ -131,9 +128,9 @@ export const FormEdit = (props: FormEditProp) => {
                 error={errors.seriesId}
             >
               <Select
-                  value={values.seriesId}
-                  data={series?.data.map((item: any) => ({label: item.name, value: item.id})) || []}
-                  onChange={(e) => setFieldValue('seriesId', (e))}
+                  value={String(values.seriesId)}
+                  data={series?.data.map((item: any) => ({label: item.name, value: String(item.id)})) || []}
+                  onChange={(e) => setFieldValue('seriesId', String(e))}
               />
             </InputWrapper>
           </Grid.Col>
@@ -144,9 +141,9 @@ export const FormEdit = (props: FormEditProp) => {
               error={errors.categoryId}
             >
               <Select
-                value={values.categoryId}
-                data={categories?.data.map((item: any) => ({label: item.name, value: item.id})) || []}
-                onChange={(e: any) => setFieldValue('categoryId', e)}
+                value={String(values.categoryId)}
+                data={categories?.data.map((item: any) => ({label: item.name, value: String(item.id)})) || []}
+                onChange={(e: any) => setFieldValue('categoryId', String(e))}
               />
             </InputWrapper>
           </Grid.Col>
@@ -229,12 +226,12 @@ export const FormEdit = (props: FormEditProp) => {
             <InputWrapper
                 label="Related Products"
                 required
-                error={errors.relatedProductIds}
+                error={errors.relates}
             >
               <MultiSelect
-                  value={values.relatedProductIds}
-                  data={products?.data.map((item: any)=> ({label: item.name, value: item.id})) || []}
-                  onChange={(value) => setFieldValue('relatedProductIds', value)}
+                  value={values.relates}
+                  data={products?.data.map((item: any)=> ({label: item.name, value: item.id.toString()})) || []}
+                  onChange={(value) => setFieldValue('relates', value)}
                   maxSelectedValues={4}
               />
             </InputWrapper>
