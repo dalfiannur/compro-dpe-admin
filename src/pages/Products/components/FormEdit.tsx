@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {ProdSeries} from "../../../entities/ProdSeries";
 import {
+  useGetProductCategoriesPaginationQuery,
   useGetSkinConcernsQuery,
   useGetSkinTypesQuery, useGetTypeCategoryPaginationQuery, useGetTypeSeriesPaginationQuery,
   usePutProductCategoriesMutation,
@@ -28,14 +29,15 @@ export const FormEdit = (props: FormEditProp) => {
   const [onSubmit, {data: result}] = usePutProductCategoriesMutation();
   const {data: skinConcerns} = useGetSkinConcernsQuery({page: 1, perPage: 100});
   const {data: skinTypes} = useGetSkinTypesQuery({page: 1, perPage: 100});
+  const {data: products} = useGetProductCategoriesPaginationQuery({page: 1, perPage: 100})
 
   const [bottle, setBottle] = useState('');
   const [bottleBox, setBottleBox] = useState('');
 
   const validationSchema = y.object({
     name: y.string().required(),
-    seriesSlug: y.string().required(),
-    categorySlug: y.string().required(),
+    seriesId: y.string().required(),
+    categoryId: y.string().required(),
     sku: y.string().required(),
     description: y.string().required(),
     usedAs: y.string().required(),
@@ -55,8 +57,8 @@ export const FormEdit = (props: FormEditProp) => {
       name: data.name,
 
       // ------------------- SERIES BELUM MASUK ------------------------------
-      seriesSlug: data.seriesSlug,
-      categorySlug: data.category.slug,
+      seriesId: data.seriesId,
+      categoryId: data.categoryId,
       sku: data.sku,
       description: data.description,
       usedAs: data.usedAs,
@@ -70,11 +72,13 @@ export const FormEdit = (props: FormEditProp) => {
       // ------------------ IMAGES DAN RELATED PRODUCT BELUM ADA DI ENTITIES ----------------------------------
       images: ['', ''],
       imagesUrl: data.images[0].imageSourceUrl,
-      relatedProductIds: []
+      // relatedProductIds: data.relates.map((item) => item.id.toString())
     },
     onSubmit,
     enableReinitialize: true
   });
+
+  console.log(data)
 
   useEffect(() => {
     if (result) {
@@ -124,12 +128,12 @@ export const FormEdit = (props: FormEditProp) => {
             <InputWrapper
                 label="Series"
                 required
-                error={errors.seriesSlug}
+                error={errors.seriesId}
             >
               <Select
-                  value={values.seriesSlug}
-                  data={series?.data.map((item: any) => ({label: item.name, value: item.slug})) || []}
-                  onChange={(e) => setFieldValue('seriesSlug', (e))}
+                  value={values.seriesId}
+                  data={series?.data.map((item: any) => ({label: item.name, value: item.id})) || []}
+                  onChange={(e) => setFieldValue('seriesId', (e))}
               />
             </InputWrapper>
           </Grid.Col>
@@ -137,12 +141,12 @@ export const FormEdit = (props: FormEditProp) => {
           <Grid.Col>
             <InputWrapper
               label="Category"
-              error={errors.categorySlug}
+              error={errors.categoryId}
             >
               <Select
-                value={values.categorySlug}
-                data={categories?.data.map((item: any) => ({label: item.name, value: item.slug})) || []}
-                onChange={(e: any) => setFieldValue('categorySlug', e)}
+                value={values.categoryId}
+                data={categories?.data.map((item: any) => ({label: item.name, value: item.id})) || []}
+                onChange={(e: any) => setFieldValue('categoryId', e)}
               />
             </InputWrapper>
           </Grid.Col>
@@ -217,6 +221,21 @@ export const FormEdit = (props: FormEditProp) => {
               <RichTextEditor
                 value={values.howToUse}
                 onChange={(value) => setFieldValue('howToUse', value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+                label="Related Products"
+                required
+                error={errors.relatedProductIds}
+            >
+              <MultiSelect
+                  value={values.relatedProductIds}
+                  data={products?.data.map((item: any)=> ({label: item.name, value: item.id})) || []}
+                  onChange={(value) => setFieldValue('relatedProductIds', value)}
+                  maxSelectedValues={4}
               />
             </InputWrapper>
           </Grid.Col>
