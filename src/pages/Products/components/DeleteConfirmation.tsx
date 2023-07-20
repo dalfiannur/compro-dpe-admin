@@ -25,7 +25,7 @@ export const DeleteConfirmation = (props: DeleteConfirmationProp) => {
     <Modal
       opened={open}
       onClose={onClose}
-      title="Delete ProdSeries"
+      title="Delete Product"
     >
       <Box>
         <Text>

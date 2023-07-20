@@ -35,7 +35,7 @@ const FormCreate = (props: FormCreateProp) => {
     <Modal
       opened={open}
       onClose={onClose}
-      title="Add New ProdSeries"
+      title="Add New Banner"
       size="xl"
     >
 

@@ -1,4 +1,5 @@
-export * from './Category'
+export * from './TypeCategories'
+export * from './TypeSeries'
 export * from './PaginationMeta'
 export * from './ProdSeries'
 export * from './SkinConcern'

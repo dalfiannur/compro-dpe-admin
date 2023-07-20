@@ -1,4 +1,4 @@
-export interface TypeCategories {
+export interface TypeSeries {
   id: number;
   name: string;
   slug: string;

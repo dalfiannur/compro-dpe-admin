@@ -1,12 +1,12 @@
 import { Modal, Box, Text, Image, List, Button } from "@mantine/core";
-import { ProdSeries } from "entities";
+import { TypeCategories } from "entities";
 import { FC } from "react";
 import '../../../../assets/style.css'
 
 interface DetailProps {
   open: boolean;
   onClose: () => void;
-  data: ProdSeries;
+  data: TypeCategories;
 }
 
 const Label = (props: any) => (

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {
-  usePostProductCategoriesMutation,
   useGetSkinConcernsQuery,
   useGetSkinTypesQuery, usePostTypeCategoryMutation,
 } from "../../../../services";
@@ -67,7 +66,7 @@ export const FormCreate = (props: FormCreateProp) => {
       opened={open}
       onClose={onClose}
       size="xl"
-      title="Add ProdSeries"
+      title="Add Categories"
     >
 
       <Box
@@ -109,7 +108,24 @@ export const FormCreate = (props: FormCreateProp) => {
                 label="Icon"
                 error={touched.icon && errors.icon}
             >
-              <ImagePicker result={""} propsOnChange={(value: any) => setFieldValue('icon', value)}/>
+              <ImagePicker
+                  result={""}
+                  propsOnChange={(value: any) => setFieldValue('icon', value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+                required
+                label="Icon"
+                error={touched.banner && errors.banner}
+            >
+              <ImagePicker
+                  result={""}
+                  propsOnChange={(value: any) => setFieldValue('banner', value)}
+                  aspectRatio={1213/504}
+              />
             </InputWrapper>
           </Grid.Col>
         </Grid>

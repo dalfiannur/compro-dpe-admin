@@ -94,7 +94,7 @@ export const FormCreate = (props: FormCreateProp) => {
       opened={open}
       onClose={onClose}
       size="xl"
-      title="Add ProdSeries"
+      title="Add Product"
     >
 
       <Box

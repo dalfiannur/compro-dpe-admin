@@ -91,7 +91,7 @@ export const FormEdit = (props: FormEditProp) => {
     <Modal
       opened={open}
       onClose={onClose}
-      title="Edit ProdSeries"
+      title="Edit Product"
       size="xl"
     >
       <Box className="modal-body">

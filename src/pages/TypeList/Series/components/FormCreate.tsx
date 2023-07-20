@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {
-  usePostProductCategoriesMutation,
+  usePostTypeSeriesMutation,
   useGetSkinConcernsQuery,
   useGetSkinTypesQuery,
 } from "../../../../services";
@@ -24,7 +24,7 @@ export const FormCreate = (props: FormCreateProp) => {
   const theme = useMantineTheme();
   const series = useGetCategories();
 
-  const [onSubmit, {data: result}] = usePostProductCategoriesMutation();
+  const [onSubmit, {data: result}] = usePostTypeSeriesMutation();
   const {data: skinConcerns} = useGetSkinConcernsQuery({page: 1, perPage: 100});
   const {data: skinTypes} = useGetSkinTypesQuery({page: 1, perPage: 100});
 
@@ -44,6 +44,7 @@ export const FormCreate = (props: FormCreateProp) => {
     initialValues: {
       name: '',
       description: '',
+      banner: '',
       slug: '',
       icon: '',
     },
@@ -65,7 +66,7 @@ export const FormCreate = (props: FormCreateProp) => {
           opened={open}
           onClose={onClose}
           size="xl"
-          title="Add ProdSeries"
+          title="Add Series"
       >
 
         <Box
@@ -105,13 +106,28 @@ export const FormCreate = (props: FormCreateProp) => {
               <InputWrapper
                   required
                   label="Icon"
-                  error={touched.icon && errors.icon}
+                  error={errors.icon as string}
               >
-                <ImagePicker result={(val) => setIcon(val)}/>
+                <ImagePicker
+                    result={''}
+                    propsOnChange={(value: any) => setFieldValue("icon", value[0])}
+                />
               </InputWrapper>
             </Grid.Col>
 
-
+            <Grid.Col>
+              <InputWrapper
+                  required
+                  label="Icon"
+                  error={errors.banner as string}
+              >
+                <ImagePicker
+                    result={''}
+                    propsOnChange={(value: any) => setFieldValue("banner", value[0])}
+                    aspectRatio={1213/504}
+                />
+              </InputWrapper>
+            </Grid.Col>
           </Grid>
         </Box>
 

@@ -4,11 +4,12 @@ import {useFormik} from "formik";
 import * as y from 'yup';
 import '../../../../assets/style.css'
 import {ImagePicker} from "../../../../components/ImagePicker";
-import {usePutTypeCategoryMutation} from "../../../../services";
+import {usePutTypeSeriesMutation} from "../../../../services";
 import {RichTextEditor} from "@mantine/rte";
+import {TypeSeries} from "entities";
 
 type FormEditProp = {
-  data: any;
+  data: TypeSeries;
   open: boolean;
   onClose: () => void
   onUpdated: () => void
@@ -17,7 +18,7 @@ type FormEditProp = {
 export const FormEdit = (props: FormEditProp) => {
   const {data, open, onClose, onUpdated} = props;
 
-  const [onSubmit, {data: result}] = usePutTypeCategoryMutation();
+  const [onSubmit, {data: result}] = usePutTypeSeriesMutation();
 
   const [icon, setIcon] = useState('');
 
@@ -33,6 +34,7 @@ export const FormEdit = (props: FormEditProp) => {
       id: data.id,
       name: data.name,
       description: data.description,
+      banner: data.bannerUrl,
       slug: data.slug,
       icon: data.iconUrl,
     },
@@ -51,11 +53,10 @@ export const FormEdit = (props: FormEditProp) => {
   }, [icon]);
 
   return (
-
         <Modal
             opened={open}
             onClose={onClose}
-            title="Edit ProdSeries"
+            title="Edit Series"
             size="xl"
         >
           <Box className="modal-body">
@@ -100,7 +101,25 @@ export const FormEdit = (props: FormEditProp) => {
                     label="Icon"
                     error={errors.icon as string}
                 >
-                  <ImagePicker result={(val) => setIcon(val)} defaultImage={values.icon}/>
+                  <ImagePicker
+                      result={''}
+                      propsOnChange={(value: any) => setFieldValue("icon", value[0])}
+                      defaultImage={values.icon}
+                  />
+                </InputWrapper>
+              </Grid.Col>
+              <Grid.Col>
+                <InputWrapper
+                    required
+                    label="Icon"
+                    error={errors.banner as string}
+                >
+                  <ImagePicker
+                      result={''}
+                      propsOnChange={(value: any) => setFieldValue("banner", value[0])}
+                      defaultImage={values.banner}
+                      aspectRatio={1213/504}
+                  />
                 </InputWrapper>
               </Grid.Col>
             </Grid>
