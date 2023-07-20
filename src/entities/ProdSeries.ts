@@ -25,7 +25,26 @@ export interface ProdSeries {
   createdAt: string;
   featuredImage: string;
   images: ProductImage[];
-  relatedProductIds: ProductDto[]
+  relatedProductIds: ProductDto[];
+  relates: relatesObj[];
+}
+
+export interface relatesObj {
+  categoryId: any
+  createdAt: string
+  description: string
+  featuredImage: any
+  featuredImageUrl: any
+  howToUse: string
+  id: number
+  isFeatured: number
+  keyingredient: string
+  name: string
+  seriesId: number
+  sku: string
+  slug: string
+  updatedAt: string
+  usedAs: string
 }
 
 export interface ProductDto {

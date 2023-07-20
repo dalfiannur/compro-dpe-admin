@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {ProdSeries} from "../../../entities/ProdSeries";
+import {ProdSeries, relatesObj} from "../../../entities/ProdSeries";
 import {
   useGetProductCategoriesPaginationQuery,
   useGetSkinConcernsQuery,
@@ -71,7 +71,7 @@ export const FormEdit = (props: FormEditProp) => {
       images: ['', ''],
       imagesUrlBottle: data.images[0]?.imageSourceUrl,
       imagesUrlBox: data.images[1]?.imageSourceUrl || "",
-      relatedProductIds: data.relates.map((item) => item.id.toString())
+      relatedProductIds: data.relates.map((item:relatesObj) => item.id.toString())
     },
     onSubmit,
     enableReinitialize: true
