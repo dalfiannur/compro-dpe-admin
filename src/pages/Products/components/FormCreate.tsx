@@ -73,7 +73,7 @@ export const FormCreate = (props: FormCreateProp) => {
       skinConcernIds: [],
       skinTypeIds: [],
       images: ['', ''],
-      relates: []
+      relatedProductIds: []
     },
     onSubmit
   });
@@ -239,13 +239,13 @@ export const FormCreate = (props: FormCreateProp) => {
             <InputWrapper
                 label="Related Products"
                 required
-                error={errors.relates}
+                error={errors.relatedProductIds}
             >
               <MultiSelect
-                  value={values.relates}
+                  value={values.relatedProductIds}
                   data={products?.data.map((item: any)=> ({label: item.name, value: item.id})) || []}
                   //@ts-ignore
-                  onChange={(value) => setFieldValue('relates', value)}
+                  onChange={(value) => setFieldValue('relatedProductIds', value)}
                   maxSelectedValues={4}
               />
             </InputWrapper>

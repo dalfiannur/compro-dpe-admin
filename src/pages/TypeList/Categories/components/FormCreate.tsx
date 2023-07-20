@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {
-  usePostProductMutation,
+  usePostProductCategoriesMutation,
   useGetSkinConcernsQuery,
-  useGetSkinTypesQuery,
+  useGetSkinTypesQuery, usePostTypeCategoryMutation,
 } from "../../../../services";
 import {ImagePicker} from "../../../../components/ImagePicker";
 import {Modal, Box, Grid, InputWrapper, Input, Select, MultiSelect, Button} from "@mantine/core";
@@ -24,7 +24,7 @@ export const FormCreate = (props: FormCreateProp) => {
   const theme = useMantineTheme();
   const categories = useGetCategories();
 
-  const [onSubmit, {data: result}] = usePostProductMutation();
+  const [onSubmit, {data: result}] = usePostTypeCategoryMutation();
   const {data: skinConcerns} = useGetSkinConcernsQuery({page: 1, perPage: 100});
   const {data: skinTypes} = useGetSkinTypesQuery({page: 1, perPage: 100});
 
@@ -35,7 +35,8 @@ export const FormCreate = (props: FormCreateProp) => {
 
   const validationSchema = y.object({
     name: y.string().required(),
-    icon: y.string().required(),
+    icon: y.string(),
+    banner: y.string(),
     description: y.string()
   });
 
@@ -45,6 +46,7 @@ export const FormCreate = (props: FormCreateProp) => {
       name: '',
       description: '',
       slug: '',
+      banner: '',
       icon: '',
     },
     onSubmit
@@ -107,7 +109,7 @@ export const FormCreate = (props: FormCreateProp) => {
                 label="Icon"
                 error={touched.icon && errors.icon}
             >
-              <ImagePicker result={(val) => setIcon(val)}/>
+              <ImagePicker result={""} propsOnChange={(value: any) => setFieldValue('icon', value)}/>
             </InputWrapper>
           </Grid.Col>
         </Grid>

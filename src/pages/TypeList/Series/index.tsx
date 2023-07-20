@@ -102,7 +102,8 @@ const TypeSeries = () => {
                         radius="md"
                         src={item.iconUrl}
                         alt={item.slug}
-                        width={50}
+                        height={40}
+                        width={40}
                     />
                   </td>
                   <td
@@ -110,7 +111,7 @@ const TypeSeries = () => {
                       display: "flex",
                       flexDirection: "row",
                       gap: 5,
-                      height: 50,
+                      height: 75,
                     }}
                   >
                     <ActionIcon

@@ -25,7 +25,7 @@ export interface ProdSeries {
   createdAt: string;
   featuredImage: string;
   images: ProductImage[];
-  relates: ProductDto[]
+  relatedProductIds: ProductDto[]
 }
 
 export interface ProductDto {
@@ -42,5 +42,5 @@ export interface ProductDto {
   description: string;
   keyingredient: string;
   isFeatured: boolean;
-  relates: number[] | string[]
+  relatedProductIds: number[] | string[]
 }

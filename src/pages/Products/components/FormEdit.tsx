@@ -46,7 +46,7 @@ export const FormEdit = (props: FormEditProp) => {
     isFeatured: y.boolean().required(),
     skinConcernIds: y.array(y.string()).min(1),
     skinTypeIds: y.array(y.string()).required().min(1),
-    relates: y.array(y.string()).min(1),
+    relatedProductIds: y.array(y.string()).min(1),
     featuredImage: y.string().required(),
   });
 
@@ -72,7 +72,7 @@ export const FormEdit = (props: FormEditProp) => {
       // ------------------ IMAGES DAN RELATED PRODUCT BELUM ADA DI ENTITIES ----------------------------------
       images: ['', ''],
       imagesUrl: data.images[0]?.imageSourceUrl,
-      relates: data.relates.map((item) => item.id.toString())
+      relatedProductIds: data.relates.map((item) => item.id.toString())
     },
     onSubmit,
     enableReinitialize: true
@@ -226,12 +226,12 @@ export const FormEdit = (props: FormEditProp) => {
             <InputWrapper
                 label="Related Products"
                 required
-                error={errors.relates}
+                error={errors.relatedProductIds}
             >
               <MultiSelect
-                  value={values.relates}
+                  value={values.relatedProductIds}
                   data={products?.data.map((item: any)=> ({label: item.name, value: item.id.toString()})) || []}
-                  onChange={(value) => setFieldValue('relates', value)}
+                  onChange={(value) => setFieldValue('relatedProductIds', value)}
                   maxSelectedValues={4}
               />
             </InputWrapper>

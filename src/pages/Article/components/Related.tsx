@@ -18,7 +18,6 @@ import { FC, useEffect, useState } from "react";
 import { Eye, Link, Pencil, Trash } from "tabler-icons-react";
 import {
   useLazyGetArticleQuery,
-  useGetProductPaginationQuery,
   usePostRelatedProductOnArticleMutation,
   useDeleteRelatedProductOnArticleMutation, useGetProductCategoriesPaginationQuery,
 } from "../../../services";
