@@ -13,7 +13,6 @@ import {useFormik} from "formik";
 import * as y from 'yup';
 import {RichTextEditor} from "@mantine/rte";
 import { useMantineTheme} from "@mantine/core";
-import {useGetCategories} from "../hooks/useGetCategories";
 
 const validationSchema = y.object({
   name: y.string().required(),
@@ -264,8 +263,18 @@ export const FormCreate = (props: FormCreateProp) => {
           <Grid.Col>
             <InputWrapper
               required
-              label="Images"
+              label="Bottle"
               error={errors.images}
+            >
+              <ImagePicker result={""} propsOnChange={(value: any) => setFieldValue('images', value)}/>
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+                required
+                label="Box"
+                error={errors.images}
             >
               <ImagePicker result={""} propsOnChange={(value: any) => setFieldValue('images', value)}/>
             </InputWrapper>

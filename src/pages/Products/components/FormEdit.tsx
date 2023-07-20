@@ -55,8 +55,6 @@ export const FormEdit = (props: FormEditProp) => {
     initialValues: {
       id: data.id,
       name: data.name,
-
-      // ------------------- SERIES BELUM MASUK ------------------------------
       seriesId: data.seriesId,
       categoryId: data.categoryId,
       sku: data.sku,
@@ -71,7 +69,8 @@ export const FormEdit = (props: FormEditProp) => {
       skinTypeIds: data.skinTypes.map((item) => item.id.toString()),
       // ------------------ IMAGES DAN RELATED PRODUCT BELUM ADA DI ENTITIES ----------------------------------
       images: ['', ''],
-      imagesUrl: data.images[0]?.imageSourceUrl,
+      imagesUrlBottle: data.images[0]?.imageSourceUrl,
+      imagesUrlBox: data.images[1]?.imageSourceUrl || "",
       relatedProductIds: data.relates.map((item) => item.id.toString())
     },
     onSubmit,
@@ -130,7 +129,7 @@ export const FormEdit = (props: FormEditProp) => {
               <Select
                   value={String(values.seriesId)}
                   data={series?.data.map((item: any) => ({label: item.name, value: String(item.id)})) || []}
-                  onChange={(e) => setFieldValue('seriesId', String(e))}
+                  onChange={(e:string) => setFieldValue('seriesId', String(e))}
               />
             </InputWrapper>
           </Grid.Col>
@@ -141,9 +140,9 @@ export const FormEdit = (props: FormEditProp) => {
               error={errors.categoryId}
             >
               <Select
-                value={String(values.categoryId)}
+                value={String(values.categoryId) || ""}
                 data={categories?.data.map((item: any) => ({label: item.name, value: String(item.id)})) || []}
-                onChange={(e: any) => setFieldValue('categoryId', String(e))}
+                onChange={(e: string) => setFieldValue('categoryId', String(e))}
               />
             </InputWrapper>
           </Grid.Col>
@@ -250,10 +249,29 @@ export const FormEdit = (props: FormEditProp) => {
           <Grid.Col>
             <InputWrapper
                 required
-                label="Images"
+                label="Bottle"
                 error={errors.images}
             >
-              <ImagePicker result={values.imagesUrl} propsOnChange={(value: any) => setFieldValue('images', value)}/>
+              <ImagePicker result={values.imagesUrlBottle} propsOnChange={(value: any) => {
+                const imgTemp = values.images
+                imgTemp[0] = value[0]
+                setFieldValue('images', imgTemp)
+              }}/>
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
+                required
+                label="Box Bottle"
+                error={errors.images}
+            >
+              <ImagePicker result={values.imagesUrlBox} propsOnChange={(value: any) => {
+                const imgTemp = values.images
+                imgTemp[1] = value[0]
+                console.log(imgTemp)
+                setFieldValue('images', imgTemp)}
+              }/>
             </InputWrapper>
           </Grid.Col>
         </Grid>

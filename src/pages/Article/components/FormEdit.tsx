@@ -49,7 +49,7 @@ export const FormEdit = (props: FormCreateProp) => {
         label: item.name,
         value: item.id.toString()
       }))
-    } 
+    }
     return []
   }, [user])
 
@@ -160,7 +160,7 @@ export const FormEdit = (props: FormCreateProp) => {
             >
               <ImagePicker
                 result={''}
-                propsOnChange={(value: any) => setFieldValue("thumbnail", value)}
+                propsOnChange={(value: any) => setFieldValue("thumbnail", value[0])}
                 aspectRatio={16 / 9}
                 defaultImage={data.thumbnailUrl}
               />

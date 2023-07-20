@@ -24,7 +24,7 @@ type ImagePickerProp = {
 
 export const ImagePicker = (props: ImagePickerProp) => {
     const theme = useMantineTheme();
-    const {width, result, aspectRatio = 1, defaultImage, propsOnChange} = props;
+    const {width, result = "", aspectRatio = 1, defaultImage, propsOnChange} = props;
     const [onSubmit, {data: resultImg}] = usePostImgMutation();
     const inputRef = useRef<any>();
     const [dataUrl, setDataUrl] = useState<string>();
@@ -35,18 +35,24 @@ export const ImagePicker = (props: ImagePickerProp) => {
     const [croppedImage, setCroppedImage] = useState<string>();
     const [crop, setCrop] = useState({x: 0, y: 0})
     const [zoom, setZoom] = useState(1)
-    const [resultUrl, setResultUrl] = useState(result)
+    const [resultUrl, setResultUrl] = useState("")
     const [name, setName] = useState("")
+    const [urlImg, setUrlImg] = useState("")
 
     const handleSubmit = (values: { images: any; }) => {
-        onSubmit({ images: values.images })
-            .then((result:any) => {
-                console.log(result?.data.data)
-                propsOnChange(result?.data.data)
-            })
-            .catch((error) => {
-                console.error('API call error!', error);
-            });
+        if (!urlImg) {
+            onSubmit({ images: values.images })
+                .then((result:any) => {
+                    console.log(result?.data.data)
+                    setUrlImg(result?.data.data)
+                    propsOnChange(result?.data.data)
+                })
+                .catch((error) => {
+                    console.error('API call error!', error);
+                });
+        } else {
+            propsOnChange(urlImg)
+        }
     };
 
     const {values, errors, submitForm, setFieldValue} = useFormik({
@@ -149,6 +155,9 @@ export const ImagePicker = (props: ImagePickerProp) => {
         getImage();
     }, []);
 
+    useEffect(() => {
+        setResultUrl(result)
+    }, []);
 
 
     return (
