@@ -18,7 +18,7 @@ export const NavigationBar: FC<NavigationBarProp> = ({opened}) => {
 
   return (
     <Navbar
-      p="md"
+      py="md"
       hiddenBreakpoint="sm"
       hidden={opened}
       width={{

@@ -121,7 +121,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
 
             if (inputRef.current.files) {
                 const file = inputRef.current.files[0];
-                if (file.size < 5000000) {
+                if (file.size < 5242880) {
                     setName(file.name)
                     setFieldValue("images", [file])
                     reader.readAsDataURL(file);
