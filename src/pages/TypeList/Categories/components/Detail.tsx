@@ -1,7 +1,8 @@
 import { Modal, Box, Text, Image, List, Button } from "@mantine/core";
 import { TypeCategories } from "entities";
-import { FC } from "react";
+import React, { FC } from "react";
 import '../../../../assets/style.css'
+import {formatDate} from "../../../../../helpers/helper";
 
 interface DetailProps {
   open: boolean;
@@ -19,99 +20,69 @@ export const Detail: FC<DetailProps> = (props) => {
   const { open, onClose, data } = props;
   return (
     <Modal opened={open} onClose={onClose} title="Detail ProdSeries" size="xl">
-      <pre>{JSON.stringify(data)}</pre>
-      {/*<Box className="modal-body">*/}
-      {/*  <Box*/}
-      {/*    sx={{*/}
-      {/*      display: "grid",*/}
-      {/*      gridTemplateColumns: "1fr 1fr 1fr",*/}
-      {/*      gap: 6,*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <Box sx={boxBorderStyle}>*/}
-      {/*      <Label>ProdSeries Name</Label>*/}
-      {/*      <Text>{data.name}</Text>*/}
-      {/*    </Box>*/}
+      <Box className="modal-body">
+        <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 6,
+            }}
+        >
+          <Box sx={boxBorderStyle}>
+            <Label>ProdSeries Name</Label>
+            <Text>{formatDate(data.createdAt)}</Text>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 6,
+          }}
+        >
+          <Box sx={boxBorderStyle}>
+            <Label>ProdSeries Name</Label>
+            <Text>{data.name}</Text>
+          </Box>
+        </Box>
 
-      {/*    <Box sx={boxBorderStyle}>*/}
-      {/*      <Label>SKU</Label>*/}
-      {/*      <Text>{data.sku}</Text>*/}
-      {/*    </Box>*/}
+        <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 6,
+            }}
+        >
+          <Box sx={boxBorderStyle}>
+            <Label>ProdSeries Slug</Label>
+            <Text>{data.slug}</Text>
+          </Box>
+        </Box>
 
-      {/*    <Box sx={boxBorderStyle}>*/}
-      {/*      <Label>Category</Label>*/}
-      {/*      <Text>{data.category.name}</Text>*/}
-      {/*    </Box>*/}
-      {/*  </Box>*/}
+        <Box sx={boxBorderStyle}>
+          <Label>Description</Label>
+          <Text dangerouslySetInnerHTML={{ __html: data.description }} />
+        </Box>
 
-      {/*  <Box*/}
-      {/*    sx={{*/}
-      {/*      display: "grid",*/}
-      {/*      gridTemplateColumns: "1fr 1fr",*/}
-      {/*      gap: 6,*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <Box sx={boxBorderStyle}>*/}
-      {/*      <Label>Skin Concerns</Label>*/}
-      {/*      <List>*/}
-      {/*        {data.skinConcerns.map((item) => (*/}
-      {/*          <List.Item>{item.name}</List.Item>*/}
-      {/*        ))}*/}
-      {/*      </List>*/}
-      {/*    </Box>*/}
+        <Box sx={boxBorderStyle}>
+          <Label>Icon</Label>
+          <Image src={data.iconUrl} />
+        </Box>
 
-      {/*    <Box sx={boxBorderStyle}>*/}
-      {/*      <Label>Skin Types</Label>*/}
-      {/*      <List>*/}
-      {/*        {data.skinTypes.map((item) => (*/}
-      {/*          <List.Item>{item.name}</List.Item>*/}
-      {/*        ))}*/}
-      {/*      </List>*/}
-      {/*    </Box>*/}
-      {/*  </Box>*/}
+        <Box sx={boxBorderStyle}>
+          <Label>Banner</Label>
+          <Image src={data.bannerUrl} />
+        </Box>
 
-      {/*  <Box sx={boxBorderStyle}>*/}
-      {/*    <Label>Used As</Label>*/}
-      {/*    <Text>{data.usedAs}</Text>*/}
-      {/*  </Box>*/}
-
-      {/*  <Box sx={boxBorderStyle}>*/}
-      {/*    <Label>Ingredient</Label>*/}
-      {/*    <Text>{data.keyingredient}</Text>*/}
-      {/*  </Box>*/}
-
-      {/*  <Box sx={boxBorderStyle}>*/}
-      {/*    <Label>Description</Label>*/}
-      {/*    <Text dangerouslySetInnerHTML={{ __html: data.description }} />*/}
-      {/*  </Box>*/}
-
-      {/*  <Box sx={boxBorderStyle}>*/}
-      {/*    <Label>How To Use</Label>*/}
-      {/*    <Text dangerouslySetInnerHTML={{ __html: data.howToUse }} />*/}
-      {/*  </Box>*/}
-
-      {/*  <Box sx={boxBorderStyle}>*/}
-      {/*    <Label>ProdSeries Image</Label>*/}
-      {/*    <Box*/}
-      {/*      sx={{*/}
-      {/*        display: "flex",*/}
-      {/*      }}*/}
-      {/*    >*/}
-      {/*      {data.images.map((image) => (*/}
-      {/*        <Image src={image.imageSourceUrl} />*/}
-      {/*      ))}*/}
-      {/*    </Box>*/}
-      {/*  </Box>*/}
-
-      {/*  <Box*/}
-      {/*    sx={{*/}
-      {/*      display: "flex",*/}
-      {/*      justifyContent: "end",*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <Button onClick={onClose}>Close</Button>*/}
-      {/*  </Box>*/}
-      {/*</Box>*/}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "end",
+          }}
+        >
+          <Button onClick={onClose}>Close</Button>
+        </Box>
+      </Box>
     </Modal>
   );
 };

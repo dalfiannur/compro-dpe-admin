@@ -133,6 +133,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
     };
     useEffect(() => {
         const getImage = async () => {
+            console.log(props)
             if (defaultImage) {
                 try {
                     fetch(defaultImage)

@@ -5,4 +5,7 @@ export interface TypeSeries {
   description: string;
   iconUrl: string;
   bannerUrl: string;
+  created_at: string;
+  update_at: string;
+  icon: string;
 }

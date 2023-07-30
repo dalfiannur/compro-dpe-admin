@@ -5,4 +5,6 @@ export interface TypeCategories {
   description: string;
   iconUrl: string;
   bannerUrl: string;
+  createdAt: string;
+  updateAt: string;
 }

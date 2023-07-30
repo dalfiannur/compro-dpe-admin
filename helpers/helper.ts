@@ -1,3 +1,4 @@
+import {DateTime} from 'luxon';
 export default function base64ToImageFile(base64String: string, fileName: string): File {
     // Remove the data URI prefix
     const base64Data = base64String.replace(/^data:image\/\w+;base64,/, '');
@@ -21,3 +22,10 @@ export default function base64ToImageFile(base64String: string, fileName: string
 
     return imageFile;
 }
+
+export function formatDate(inputDate: string) {
+    const date = DateTime.fromISO(inputDate, { zone: 'utc' });
+    const formattedDate = date.toLocaleString(DateTime.DATETIME_FULL);
+    return formattedDate;
+}
+

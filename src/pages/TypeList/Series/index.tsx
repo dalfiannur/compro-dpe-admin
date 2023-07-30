@@ -67,7 +67,6 @@ const TypeSeries = () => {
 
   return (
     <>
-      {console.log(typeSeriesList)}
       <Container size="md">
         <Button onClick={() => setModal("create", true)}>
           Add New Series

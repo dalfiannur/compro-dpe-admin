@@ -102,10 +102,6 @@ const ProductPage = () => {
                             Add New Product
                         </Button>
                     </Grid.Col>
-                    <Grid.Col span={2}>
-                        <Select
-                            data={useGetCategories()}/>
-                    </Grid.Col>
                 </Grid>
             </Container>
 

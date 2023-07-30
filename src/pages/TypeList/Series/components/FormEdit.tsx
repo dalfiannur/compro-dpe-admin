@@ -20,8 +20,6 @@ export const FormEdit = (props: FormEditProp) => {
 
   const [onSubmit, {data: result}] = usePutTypeSeriesMutation();
 
-  const [icon, setIcon] = useState('');
-
   const validationSchema = y.object({
     name: y.string().required(),
     slug: y.string().required(),
@@ -34,9 +32,9 @@ export const FormEdit = (props: FormEditProp) => {
       id: data.id,
       name: data.name,
       description: data.description,
+      icon: data.iconUrl,
       banner: data.bannerUrl,
       slug: data.slug,
-      icon: data.iconUrl,
     },
     onSubmit,
     enableReinitialize: true
@@ -47,10 +45,6 @@ export const FormEdit = (props: FormEditProp) => {
       onUpdated()
     }
   }, [result]);
-
-  useEffect(() => {
-    setFieldValue('icon', icon);
-  }, [icon]);
 
   return (
         <Modal
