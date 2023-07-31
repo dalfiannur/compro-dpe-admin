@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { User } from 'tabler-icons-react'
+import { setupListeners } from '@reduxjs/toolkit/query/react';
 
 import {
   skinConcernApi,
@@ -25,7 +25,20 @@ export const store = configureStore({
     [typeCategoriesApi.reducerPath]: typeCategoriesApi.reducer,
     [typeSeriesApi.reducerPath]: typeSeriesApi.reducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
+      authApi.middleware,
+      bannerApi.middleware,
+      typeSeriesApi.middleware,
+      productCategoriesApi.middleware,
+      skinTypeApi.middleware,
+      skinConcernApi.middleware,
+      articleApi.middleware,
+      userApi.middleware,
+      typeCategoriesApi.middleware
+      ),
 })
+
+setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
