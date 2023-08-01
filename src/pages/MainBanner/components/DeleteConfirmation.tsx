@@ -13,7 +13,7 @@ type DeleteConfirmationProp = {
 const DeleteConfirmation = (props: DeleteConfirmationProp) => {
   const {item, open, onClose, onDeleted} = props;
 
-  const [deleteRequest, {data}] = useDeleteBannerMutation();
+  const [deleteRequest, {isSuccess}] = useDeleteBannerMutation();
 
   const handleDeleteButton = () => {
     if (item) {
@@ -22,10 +22,10 @@ const DeleteConfirmation = (props: DeleteConfirmationProp) => {
   };
 
   useEffect(() => {
-    if (data) {
+    if (isSuccess) {
       onDeleted();
     }
-  }, [data, onDeleted]);
+  }, [isSuccess]);
 
   return (
     <Modal

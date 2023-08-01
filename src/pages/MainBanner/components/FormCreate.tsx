@@ -14,7 +14,7 @@ type FormCreateProp = {
 const FormCreate = (props: FormCreateProp) => {
   const {open, onClose, onCreated} = props;
 
-  const [onSubmit, {data}] = usePostBannerMutation();
+  const [onSubmit, {isSuccess}] = usePostBannerMutation();
 
   const {values, errors, setFieldValue, submitForm} = useFormik({
     initialValues: {
@@ -26,10 +26,10 @@ const FormCreate = (props: FormCreateProp) => {
   });
 
   useEffect(() => {
-    if (data) {
+    if (isSuccess) {
       onCreated();
     }
-  }, [data, onCreated]);
+  }, [isSuccess]);
 
   return (
     <Modal
