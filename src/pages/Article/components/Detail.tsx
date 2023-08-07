@@ -1,4 +1,4 @@
-import { Box, Button, Image, MantineTheme, Modal, Text } from "@mantine/core";
+import {Box, Button, Image, List, MantineTheme, Modal, Text} from "@mantine/core";
 import { Article } from "entities";
 import { useDateTimeFormat } from "../../../hooks/useDateTimeFormat";
 import React, { FC } from "react";
@@ -44,6 +44,15 @@ export const Detail: FC<DetailProps> = (props) => {
           <Box sx={itemSection}>
             <Label>Created At</Label>
             <Text>{formatDate(data.createdAt)}</Text>
+          </Box>
+
+          <Box sx={itemSection}>
+            <Label>tags</Label>
+            <List>
+              {data.tags.map((item) => (
+                  <List.Item>{item.name}</List.Item>
+              ))}
+            </List>
           </Box>
         </Box>
 

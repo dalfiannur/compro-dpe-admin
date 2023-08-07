@@ -13,6 +13,8 @@ import {RichTextEditor} from "@mantine/rte";
 import {useFormik} from "formik";
 import * as y from 'yup';
 import '../../../assets/style.css'
+import {ImageUploader} from "../../../components/ImageUploader";
+import {useModal} from "../../../hooks/useModal";
 
 type FormEditProp = {
   data: ProdSeries;
@@ -86,6 +88,13 @@ export const FormEdit = (props: FormEditProp) => {
   useEffect(() => {
     setFieldValue('images', [bottle, bottleBox]);
   }, [bottle, bottleBox]);
+
+  const [modal, setModal] = useModal();
+  const handleUploaderImage = (item: any) => {
+    setModal("edit", true);
+  };
+
+  const [testData, setTestData] = useState<string>("")
 
   return (
     <Modal
@@ -237,43 +246,133 @@ export const FormEdit = (props: FormEditProp) => {
           </Grid.Col>
 
           <Grid.Col>
-            <InputWrapper
-                required
-                label="Featured Image"
-                error={errors.featuredImage}
+            <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 20,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
             >
-              <ImagePicker result={values.featuredImageUrl} propsOnChange={(value: any) => setFieldValue('featuredImage', value[0])}/>
-            </InputWrapper>
+              <InputWrapper
+                  required
+                  label="Featured Image"
+                  error={errors.featuredImage}
+              >
+                <ImageUploader
+                    open={modal.edit}
+                    defaultImage={values.featuredImageUrl}
+                    onClose={() => setModal("edit", false)}
+                    propsOnChange={(value:any) => setFieldValue("featuredImage", value[0])}
+                />
+              </InputWrapper>
+              <Button style={{width: 200}} onClick={handleUploaderImage}>Change Image Here</Button>
+            </div>
           </Grid.Col>
 
-          <Grid.Col>
-            <InputWrapper
-                required
-                label="Bottle"
-                error={errors.images}
-            >
-              <ImagePicker result={values.imagesUrlBottle} propsOnChange={(value: any) => {
-                const imgTemp = values.images
-                imgTemp[0] = value[0]
-                setFieldValue('images', imgTemp)
-              }}/>
-            </InputWrapper>
-          </Grid.Col>
+          {/*<Grid.Col>*/}
+          {/*  <InputWrapper*/}
+          {/*      required*/}
+          {/*      label="Featured Image"*/}
+          {/*      error={errors.featuredImage}*/}
+          {/*  >*/}
+          {/*    <ImagePicker result={values.featuredImageUrl} propsOnChange={(value: any) => {*/}
+          {/*      setFieldValue('featuredImage', value[0])*/}
+          {/*    }}/>*/}
+          {/*  </InputWrapper>*/}
+          {/*</Grid.Col>*/}
 
           <Grid.Col>
-            <InputWrapper
-                required
-                label="Box Bottle"
-                error={errors.images}
+            <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 20,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
             >
-              <ImagePicker result={values.imagesUrlBox} propsOnChange={(value: any) => {
-                const imgTemp = values.images
-                imgTemp[1] = value[0]
-                console.log(imgTemp)
-                setFieldValue('images', imgTemp)}
-              }/>
-            </InputWrapper>
+              <InputWrapper
+                  required
+                  label="Featured Image"
+                  error={errors.images}
+              >
+                <ImageUploader
+                    open={modal.edit}
+                    defaultImage={values.imagesUrlBottle}
+                    onClose={() => setModal("edit", false)}
+                    propsOnChange={(value:any) => {
+                      const imgTemp = values.images
+                      imgTemp[0] = value[0]
+                      console.log(imgTemp)
+                      setFieldValue('images', imgTemp)}
+                    }
+                />
+              </InputWrapper>
+              <Button style={{width: 200}} onClick={handleUploaderImage}>Change Image Here</Button>
+            </div>
           </Grid.Col>
+
+          {/*<Grid.Col>*/}
+          {/*  <InputWrapper*/}
+          {/*      required*/}
+          {/*      label="Bottle"*/}
+          {/*      error={errors.images}*/}
+          {/*  >*/}
+          {/*    <ImagePicker result={values.imagesUrlBottle} propsOnChange={(value: any) => {*/}
+          {/*      const imgTemp = values.images*/}
+          {/*      imgTemp[0] = value[0]*/}
+          {/*      setFieldValue('images', imgTemp)*/}
+          {/*    }}/>*/}
+          {/*  </InputWrapper>*/}
+          {/*</Grid.Col>*/}
+
+          <Grid.Col>
+            <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 20,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+            >
+              <InputWrapper
+                  required
+                  label="Featured Image"
+                  error={errors.images}
+              >
+                <ImageUploader
+                    open={modal.edit}
+                    defaultImage={values.imagesUrlBottle}
+                    onClose={() => setModal("edit", false)}
+                    propsOnChange={(value:any) => {
+                      const imgTemp = values.images
+                      imgTemp[1] = value[0]
+                      console.log(imgTemp)
+                      setFieldValue('images', imgTemp)}
+                    }
+                />
+              </InputWrapper>
+              <Button style={{width: 200}} onClick={handleUploaderImage}>Change Image Here</Button>
+            </div>
+          </Grid.Col>
+
+          {/*<Grid.Col>*/}
+          {/*  <InputWrapper*/}
+          {/*      required*/}
+          {/*      label="Box Bottle"*/}
+          {/*      error={errors.images}*/}
+          {/*  >*/}
+          {/*    <ImagePicker result={values.imagesUrlBox} propsOnChange={(value: any) => {*/}
+          {/*      const imgTemp = values.images*/}
+          {/*      imgTemp[1] = value[0]*/}
+          {/*      console.log(imgTemp)*/}
+          {/*      setFieldValue('images', imgTemp)}*/}
+          {/*    }/>*/}
+          {/*  </InputWrapper>*/}
+          {/*</Grid.Col>*/}
         </Grid>
       </Box>
 

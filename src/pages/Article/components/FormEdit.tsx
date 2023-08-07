@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo } from "react";
-import { useGetUsersQuery, usePutArticleMutation } from "../../../services";
+import React, {ChangeEvent, useEffect, useMemo, useRef, useState} from "react";
+import {useGetUsersQuery, usePostImgMutation, usePutArticleMutation} from "../../../services";
 import { ImagePicker } from "../../../components/ImagePicker";
 import {
   Modal,
@@ -9,7 +9,7 @@ import {
   Input,
   Button,
   MultiSelect,
-  Select,
+  Select, Image,
 } from "@mantine/core";
 import { RichTextEditor } from "@mantine/rte";
 import { useMantineTheme } from "@mantine/core";
@@ -18,13 +18,15 @@ import * as y from "yup";
 import { useInputState } from "@mantine/hooks";
 import { Article } from "entities";
 import '../../../assets/style.css'
+import {useModal} from "../../../hooks/useModal";
+import {ImageUploader} from "../../../components/ImageUploader";
 
 const validationSchema = y.object({
   title: y.string().required(),
   authorId: y.number().required(),
   content: y.string(),
   thumbnail: y.string().required(),
-  // tags: y.array(y.string()).required()
+  tags: y.array(y.string()).required()
 });
 
 type FormCreateProp = {
@@ -62,9 +64,10 @@ export const FormEdit = (props: FormCreateProp) => {
       authorId: data.user.id,
       title: data.title,
       content: data.content,
-      thumbnail: "",
+      thumbnail: data.thumbnail,
+      thumbnailUrl: data.thumbnailUrl,
       isFeatured: data.isFeatured,
-      // tags: "",
+      tags: data.tags.map((item) => item.id.toString()),
     },
     onSubmit,
     enableReinitialize: true
@@ -82,9 +85,17 @@ export const FormEdit = (props: FormCreateProp) => {
 
   useEffect(() => {
     console.log(errors);
+
   }, [errors])
 
-  console.log(data)
+
+  const [modal, setModal] = useModal();
+  const handleUploaderImage = (item: any) => {
+    setModal("edit", true);
+  };
+
+  console.log(values.thumbnail)
+  console.log(data.thumbnailUrl)
 
   return (
     <Modal opened={open} onClose={onClose} size="xl" title="Edit Article">
@@ -116,6 +127,7 @@ export const FormEdit = (props: FormCreateProp) => {
               error={errors.authorId}
             >
               <Select
+                value={String(values.authorId)}
                 data={userOption}
                 onChange={(e) => setFieldValue('authorId', + (e as string))}
               />
@@ -135,7 +147,7 @@ export const FormEdit = (props: FormCreateProp) => {
             </InputWrapper>
           </Grid.Col>
 
-          {/* <Grid.Col>
+          <Grid.Col>
             <InputWrapper
               id="input-tags"
               label="Tags"
@@ -143,28 +155,42 @@ export const FormEdit = (props: FormCreateProp) => {
               error={touched.tags && errors.tags}
             >
               <MultiSelect
-                data={tags}
+                data={data.tags.map((item) => ({label: item.name, value: item.id.toString()}))}
                 searchable
                 creatable
+                value={values.tags}
+                // data={data.tags?.map((item) => ({label: item.name, value: item.id.toString()})) || []}
+                onChange={(value: any) => setFieldValue('tags', value)}
                 getCreateLabel={(query) => `+ Create ${query}`}
                 onCreate={(query) => setTags([...tags, query])}
               />
             </InputWrapper>
-          </Grid.Col> */}
-
+          </Grid.Col>
           <Grid.Col>
-            <InputWrapper
-              required
-              label="Thumbnail"
-              error={touched.thumbnail && errors.thumbnail}
+            <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 20,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
             >
-              <ImagePicker
-                result={''}
-                propsOnChange={(value: any) => setFieldValue("thumbnail", value[0])}
-                aspectRatio={16 / 9}
-                defaultImage={data.thumbnailUrl}
-              />
-            </InputWrapper>
+              <InputWrapper
+                  required
+                  label="Thumbnail"
+                  error={touched.thumbnail && errors.thumbnail}
+              >
+                <ImageUploader
+                    open={modal.edit}
+                    defaultImage={values.thumbnailUrl}
+                    onClose={() => setModal("edit", false)}
+                    propsOnChange={(value:any) => setFieldValue("thumbnail", value[0])}
+                />
+              </InputWrapper>
+              <Button style={{width: 200}} onClick={handleUploaderImage}>Change Image Here</Button>
+            </div>
+
           </Grid.Col>
         </Grid>
       </Box>

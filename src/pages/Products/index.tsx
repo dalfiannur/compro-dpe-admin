@@ -140,6 +140,12 @@ const ProductPage = () => {
                                 >
                                     <ActionIcon
                                         color="blue"
+                                        onClick={() => handleOnViewRequest(item)}
+                                    >
+                                        <Eye />
+                                    </ActionIcon>
+                                    <ActionIcon
+                                        color="blue"
                                         onClick={() => handleOnEditRequest(item)}
                                     >
                                         <Pencil/>

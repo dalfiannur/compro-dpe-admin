@@ -4,6 +4,7 @@ export interface Article {
   id: number;
   title: string;
   slug: string;
+  tags: Tags[];
   content: string;
   thumbnail: string;
   thumbnailUrl: string;
@@ -21,5 +22,11 @@ export interface ArticleDto {
   content: string;
   thumbnail: string;
   isFeatured: boolean;
-  // tags: string,
+  authorId: number;
+  tags: number[] | string[],
+}
+
+export interface Tags {
+  id: number;
+  name: string;
 }

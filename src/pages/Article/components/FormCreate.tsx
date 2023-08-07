@@ -16,6 +16,8 @@ import { useMantineTheme } from "@mantine/core";
 import { useFormik } from "formik";
 import * as y from "yup";
 import { useInputState } from "@mantine/hooks";
+import {ImageUploader} from "../../../components/ImageUploader";
+import {useModal} from "../../../hooks/useModal";
 
 const validationSchema = y.object({
   title: y.string().required(),
@@ -62,7 +64,7 @@ export const FormCreate = (props: FormCreateProp) => {
       content: '',
       thumbnail: '',
       isFeatured: false,
-      tags: "",
+      tags: [],
     },
     onSubmit,
     enableReinitialize: true
@@ -85,6 +87,12 @@ export const FormCreate = (props: FormCreateProp) => {
   // useEffect(() => {
   //   console.log(errors);
   // }, [errors])
+
+  const [modal, setModal] = useModal();
+  const handleUploaderImage = (item: any) => {
+    setModal("edit", true);
+  };
+
 
   return (
     <Modal opened={open} onClose={onClose} size="xl" title="Add Article">
@@ -152,15 +160,40 @@ export const FormCreate = (props: FormCreateProp) => {
           </Grid.Col>
 
           <Grid.Col>
-            <InputWrapper
-              required
-              label="Thumbnail"
-              error={touched.thumbnail && errors.thumbnail}
+            <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 20,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
             >
-              <ImagePicker result={""} propsOnChange={(value: any) => setFieldValue('thumbnail', value[0])}
-                aspectRatio={16 / 9}
-              />
-            </InputWrapper>
+              <InputWrapper
+                  required
+                  label="Thumbnail"
+                  error={touched.thumbnail && errors.thumbnail}
+              >
+                <div style={{
+                  position: "relative",
+                  border: `1px solid #cecece`,
+                  borderRadius: 4,
+                  width: "100%",
+                  minHeight: 400,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}>
+                  <ImageUploader
+                      open={modal.edit}
+                      onClose={() => setModal("edit", false)}
+                      propsOnChange={(value:any) => setFieldValue("thumbnail", value[0])}
+                  />
+                </div>
+              </InputWrapper>
+              <Button style={{width: 200}} onClick={handleUploaderImage}>Change Image Here</Button>
+            </div>
           </Grid.Col>
         </Grid>
       </Box>

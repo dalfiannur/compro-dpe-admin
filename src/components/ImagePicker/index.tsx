@@ -39,6 +39,8 @@ export const ImagePicker = (props: ImagePickerProp) => {
     const [name, setName] = useState("")
     const [urlImg, setUrlImg] = useState("")
 
+    console.log(urlImg)
+
     const handleSubmit = (values: { images: any; }) => {
         if (!urlImg) {
             onSubmit({ images: values.images })

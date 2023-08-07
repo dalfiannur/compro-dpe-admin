@@ -10,7 +10,7 @@ import {
   userApi,
   typeSeriesApi,
   typeCategoriesApi,
-  productCategoriesApi
+  productCategoriesApi, imgUploaderApi
 } from '../services'
 
 export const store = configureStore({
@@ -24,6 +24,7 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [typeCategoriesApi.reducerPath]: typeCategoriesApi.reducer,
     [typeSeriesApi.reducerPath]: typeSeriesApi.reducer,
+    [imgUploaderApi.reducerPath]: imgUploaderApi.reducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
       authApi.middleware,
@@ -34,7 +35,8 @@ export const store = configureStore({
       skinConcernApi.middleware,
       articleApi.middleware,
       userApi.middleware,
-      typeCategoriesApi.middleware
+      typeCategoriesApi.middleware,
+      imgUploaderApi.middleware
       ),
 })
 
