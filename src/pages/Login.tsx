@@ -47,6 +47,23 @@ export default () => {
     }
   }, [isLoading, data, error]);
 
+
+  useEffect(() => {
+    const keyDownHandler = (event: any) => {
+      if (event.key == 'Enter') {
+        event.preventDefault()
+
+        submitForm()
+      }
+    }
+
+    document.addEventListener('keydown', keyDownHandler)
+
+    return () => {
+      document.removeEventListener('keydown', keyDownHandler)
+    }
+  }, [])
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
