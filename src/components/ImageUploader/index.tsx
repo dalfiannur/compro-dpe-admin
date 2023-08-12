@@ -3,12 +3,11 @@ import {usePostImgMutation} from "../../services";
 import {Button, Image, Modal} from "@mantine/core";
 import {useFormik} from "formik";
 import * as y from "yup";
+import {useModal} from "../../hooks/useModal";
 
 type ImageUploader = {
-    open: boolean;
-    onClose: () => void;
     propsOnChange?: any
-    defaultImage?: string
+    defaultImage?: any
 };
 
 const validationSchema = y.object({
@@ -16,12 +15,17 @@ const validationSchema = y.object({
 });
 
 export const ImageUploader = (props: ImageUploader) => {
-    const {open, onClose, propsOnChange, defaultImage} = props;
+    const {propsOnChange, defaultImage} = props;
     const [imageUrl, setImageUrl] = useState<string>("")
     const [createObjectURL, setCreateObjectURL] = useState<string>("")
     const inputRef = useRef<any>()
     const [urlLocal, setUrlLocal] = useState<string>("")
     const [onSubmit, {data: resultImg}] = usePostImgMutation();
+    const [modal, setModal] = useModal();
+
+    const handleUploaderImage = (item: any) => {
+        setModal("edit", true);
+    };
 
     const handleSubmit = (values: { images: any; }) => {
         if (createObjectURL) {
@@ -32,7 +36,7 @@ export const ImageUploader = (props: ImageUploader) => {
                     setCreateObjectURL(result?.data.data)
                     propsOnChange(result?.data.data)
                     setUrlLocal(imageUrl)
-                    onClose()
+                    setModal("edit", false);
                 })
                 .catch((error) => {
                     console.error('API call error!', error);
@@ -74,7 +78,7 @@ export const ImageUploader = (props: ImageUploader) => {
         }
     };
 
-    // console.log(propsOnChange.values)
+    console.log(!urlLocal ? defaultImage : urlLocal)
 
     return (
         <div style={{
@@ -87,9 +91,10 @@ export const ImageUploader = (props: ImageUploader) => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            gap: 20,
         }}>
-            <Image src={!urlLocal ? defaultImage : urlLocal} />
-            <Modal opened={open} onClose={onClose} size="xl" title="Image Editor">
+            <Image src={urlLocal ? urlLocal : defaultImage} />
+            <Modal opened={modal.edit} onClose={() => setModal("edit", false)} size="xl" title="Image Editor">
                 <div style={{
                     display: "flex",
                     flexDirection: "column",
@@ -112,6 +117,7 @@ export const ImageUploader = (props: ImageUploader) => {
                     </div>
                 </div>
             </Modal>
+            <Button style={{width: 200}} onClick={handleUploaderImage}>Change Image Here</Button>
         </div>
     )
 }

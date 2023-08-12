@@ -89,14 +89,6 @@ export const FormEdit = (props: FormCreateProp) => {
   }, [errors])
 
 
-  const [modal, setModal] = useModal();
-  const handleUploaderImage = (item: any) => {
-    setModal("edit", true);
-  };
-
-  console.log(values.thumbnail)
-  console.log(data.thumbnailUrl)
-
   return (
     <Modal opened={open} onClose={onClose} size="xl" title="Edit Article">
       <Box
@@ -167,30 +159,16 @@ export const FormEdit = (props: FormCreateProp) => {
             </InputWrapper>
           </Grid.Col>
           <Grid.Col>
-            <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 20,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+            <InputWrapper
+                required
+                label="Thumbnail"
+                error={touched.thumbnail && errors.thumbnail}
             >
-              <InputWrapper
-                  required
-                  label="Thumbnail"
-                  error={touched.thumbnail && errors.thumbnail}
-              >
-                <ImageUploader
-                    open={modal.edit}
-                    defaultImage={values.thumbnailUrl}
-                    onClose={() => setModal("edit", false)}
-                    propsOnChange={(value:any) => setFieldValue("thumbnail", value[0])}
-                />
-              </InputWrapper>
-              <Button style={{width: 200}} onClick={handleUploaderImage}>Change Image Here</Button>
-            </div>
-
+              <ImageUploader
+                  defaultImage={values.thumbnailUrl}
+                  propsOnChange={(value:any) => setFieldValue("thumbnail", value[0])}
+              />
+            </InputWrapper>
           </Grid.Col>
         </Grid>
       </Box>

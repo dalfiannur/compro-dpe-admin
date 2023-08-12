@@ -13,6 +13,8 @@ import {useFormik} from "formik";
 import * as y from 'yup';
 import {RichTextEditor} from "@mantine/rte";
 import { useMantineTheme} from "@mantine/core";
+import {ImageUploader} from "../../../components/ImageUploader";
+import {MultiImageControl} from "../../Article/components/MultiImageControl";
 
 const validationSchema = y.object({
   name: y.string().required(),
@@ -68,10 +70,10 @@ export const FormCreate = (props: FormCreateProp) => {
       howToUse: '',
       keyingredient: '',
       isFeatured: false,
-      featuredImage: "",
+      featuredImage: "images/e71d2406-6c51-4622-9b4b-8cf6ebe57022.jpg",
       skinConcernIds: [],
       skinTypeIds: [],
-      images: ['', ''],
+      images: [],
       relatedProductIds: []
     },
     onSubmit
@@ -83,12 +85,12 @@ export const FormCreate = (props: FormCreateProp) => {
     }
   }, [result]);
 
-  useEffect(() => {
-    setFieldValue('images', [bottle, bottleBox])
-  }, [bottle, bottleBox]);
+  const [imagesList, setImagesList] = useState<any>([])
 
-  // @ts-ignore
-  // @ts-ignore
+  // useEffect(() => {
+  //   setFieldValue('images', [bottle, bottleBox])
+  // }, [bottle, bottleBox]);
+
   return (
     <Modal
       opened={open}
@@ -250,34 +252,79 @@ export const FormCreate = (props: FormCreateProp) => {
             </InputWrapper>
           </Grid.Col>
 
-          <Grid.Col>
-            <InputWrapper
-              required
-              label="Featured Image"
-              error={errors.featuredImage}
-            >
-              <ImagePicker result={""} propsOnChange={(value: any) => setFieldValue('featuredImage', value[0])}/>
-            </InputWrapper>
-          </Grid.Col>
+          {/*<Grid.Col>*/}
+          {/*  <InputWrapper*/}
+          {/*    required*/}
+          {/*    label="Featured Image"*/}
+          {/*    error={errors.featuredImage}*/}
+          {/*  >*/}
+          {/*    <ImagePicker result={""} propsOnChange={(value: any) => setFieldValue('featuredImage', value[0])}/>*/}
+          {/*  </InputWrapper>*/}
+          {/*</Grid.Col>*/}
+          
+          {/*<Grid.Col>*/}
+          {/*  <InputWrapper*/}
+          {/*      required*/}
+          {/*      label="Featured Image"*/}
+          {/*      error={errors.featuredImage}*/}
+          {/*  >*/}
+          {/*    <ImageUploader*/}
+          {/*      propsOnChange={(value:any) => setFieldValue('featuredImage', value[0])}*/}
+          {/*    />*/}
+          {/*  </InputWrapper>*/}
+          {/*</Grid.Col>*/}
 
           <Grid.Col>
             <InputWrapper
-              required
-              label="Bottle"
-              error={errors.images}
+                required
+                label="Featured Image"
+                error={errors.images}
             >
-              <ImagePicker result={""} propsOnChange={(value: any) => setFieldValue('images', value)}/>
+              <ImageUploader
+                  propsOnChange={(value:any) => {
+                    let imgTemp: any;
+                    imgTemp = imagesList;
+                    imgTemp[0] = value[0]
+
+                    setImagesList(imgTemp)
+
+                    // console.log(imagesList)
+
+                    setFieldValue('images', imagesList)
+                  }
+                  }
+              />
             </InputWrapper>
           </Grid.Col>
 
           <Grid.Col>
             <InputWrapper
                 required
-                label="Box"
+                label="Featured Image"
                 error={errors.images}
             >
-              <ImagePicker result={""} propsOnChange={(value: any) => setFieldValue('images', value)}/>
+              <ImageUploader
+                  propsOnChange={(value:any) => {
+                    let imgTemp: any;
+                    imgTemp = imagesList;
+                    imgTemp[1] = value[0]
+
+                    setImagesList(imgTemp)
+
+                    // console.log(imagesList)
+
+                    setFieldValue('images', imagesList)
+                  }
+                  }
+              />
             </InputWrapper>
+
+
+
+            {/*<MultiImageControl*/}
+            {/*    errorMessage={errors.images}*/}
+            {/*    propsOnChange={(value: any) => setFieldValue("thumbnail", value)}*/}
+            {/*/>*/}
           </Grid.Col>
         </Grid>
       </Box>
