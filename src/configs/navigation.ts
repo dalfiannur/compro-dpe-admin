@@ -1,4 +1,4 @@
-import {Home, List, ListDetails, Archive, Artboard, BoxMargin, File, User, PictureInPicture} from "tabler-icons-react";
+import {Home, List, ListDetails, Archive, Artboard, BoxMargin, File, User, PictureInPicture, Map} from "tabler-icons-react";
 
 export const navigationLinks = [
   // {
@@ -40,6 +40,11 @@ export const navigationLinks = [
     icon: File,
     label: 'Article',
     path: '/article'
+  },
+  {
+    icon: Map,
+    label: 'Clinics',
+    path: '/clinics'
   },
   {
     icon: User,
