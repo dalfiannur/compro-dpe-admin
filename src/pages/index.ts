@@ -8,3 +8,4 @@ export const SkinTypePage = lazy(() => import('./SkinType'));
 export const ProductCategories = lazy(() => import('./Products'));
 export const ArticlePage = lazy(() => import('./Article'));
 export const UserPage = lazy(() => import('./User'));
+export const ClinicsPage = lazy(() => import('./Clinics'))

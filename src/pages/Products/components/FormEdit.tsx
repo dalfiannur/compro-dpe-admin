@@ -340,82 +340,51 @@ export const FormEdit = (props: FormEditProp) => {
 
           </Grid.Col>
 
-
-
           {/*<Grid.Col>*/}
           {/*  <InputWrapper*/}
           {/*      required*/}
-          {/*      label="Bottle"*/}
+          {/*      label="Featured Image"*/}
           {/*      error={errors.images}*/}
           {/*  >*/}
-          {/*    <ImagePicker result={values.imagesUrlBottle} propsOnChange={(value: any) => {*/}
-          {/*      const imgTemp = values.images*/}
-          {/*      imgTemp[0] = value[0]*/}
-          {/*      setFieldValue('images', imgTemp)*/}
-          {/*    }}/>*/}
+          {/*    <ImageUploader*/}
+          {/*        defaultImage={values.imagesUrl[0]}*/}
+          {/*        propsOnChange={(value:any) => {*/}
+          {/*          let imgTemp: any;*/}
+          {/*          imgTemp = imagesList;*/}
+          {/*          imgTemp[0] = value[0]*/}
+
+          {/*          setImagesList(imgTemp)*/}
+
+          {/*          // console.log(imagesList)*/}
+
+          {/*          setFieldValue('images', imagesList)*/}
+          {/*        }*/}
+          {/*        }*/}
+          {/*    />*/}
           {/*  </InputWrapper>*/}
           {/*</Grid.Col>*/}
 
-          <Grid.Col>
-            <InputWrapper
-                required
-                label="Featured Image"
-                error={errors.images}
-            >
-              <ImageUploader
-                  defaultImage={values.imagesUrl[0]}
-                  propsOnChange={(value:any) => {
-                    let imgTemp: any;
-                    imgTemp = imagesList;
-                    imgTemp[0] = value[0]
-
-                    setImagesList(imgTemp)
-
-                    // console.log(imagesList)
-
-                    setFieldValue('images', imagesList)
-                  }
-                  }
-              />
-            </InputWrapper>
-          </Grid.Col>
-
-          <Grid.Col>
-            <InputWrapper
-                required
-                label="Featured Image"
-                error={errors.images}
-            >
-              <ImageUploader
-                  defaultImage={values.imagesUrl[1]}
-                  propsOnChange={(value:any) => {
-                    let imgTemp: any;
-                    imgTemp = imagesList;
-                    imgTemp[1] = value[0]
-
-                    setImagesList(imgTemp)
-
-                    // console.log(imagesList)
-
-                    setFieldValue('images', imagesList)
-                  }
-                  }
-              />
-            </InputWrapper>
-          </Grid.Col>
-
           {/*<Grid.Col>*/}
           {/*  <InputWrapper*/}
           {/*      required*/}
-          {/*      label="Box Bottle"*/}
+          {/*      label="Featured Image"*/}
           {/*      error={errors.images}*/}
           {/*  >*/}
-          {/*    <ImagePicker result={values.imagesUrlBox} propsOnChange={(value: any) => {*/}
-          {/*      const imgTemp = values.images*/}
-          {/*      imgTemp[1] = value[0]*/}
-          {/*      console.log(imgTemp)*/}
-          {/*      setFieldValue('images', imgTemp)}*/}
-          {/*    }/>*/}
+          {/*    <ImageUploader*/}
+          {/*        defaultImage={values.imagesUrl[1]}*/}
+          {/*        propsOnChange={(value:any) => {*/}
+          {/*          let imgTemp: any;*/}
+          {/*          imgTemp = imagesList;*/}
+          {/*          imgTemp[1] = value[0]*/}
+
+          {/*          setImagesList(imgTemp)*/}
+
+          {/*          // console.log(imagesList)*/}
+
+          {/*          setFieldValue('images', imagesList)*/}
+          {/*        }*/}
+          {/*        }*/}
+          {/*    />*/}
           {/*  </InputWrapper>*/}
           {/*</Grid.Col>*/}
         </Grid>

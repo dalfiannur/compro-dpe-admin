@@ -1,5 +1,15 @@
 import React from "react";
-import {LoginPage, DashboardPage, BannerPage, SkinConcernPage, SkinTypePage, ProductCategories, ArticlePage, UserPage} from "../pages";
+import {
+  LoginPage,
+  DashboardPage,
+  BannerPage,
+  SkinConcernPage,
+  SkinTypePage,
+  ProductCategories,
+  ArticlePage,
+  UserPage,
+  ClinicsPage
+} from "../pages";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {BaseLayout} from "../layouts/BaseLayout";
 import TypeCategories from "../pages/TypeList/Categories";
@@ -20,6 +30,7 @@ export const MainRoutes = () => {
           <Route element={<UserPage />} path="/user" />
           <Route element={<TypeCategories />} path="/type/categories" />
           <Route element={<TypeSeries />} path="/type/series" />
+          <Route element={<ClinicsPage />} path="/clinics" />
         </Route>
       </Routes>
     </BrowserRouter>
