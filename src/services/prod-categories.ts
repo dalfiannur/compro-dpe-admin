@@ -1,6 +1,5 @@
 import {createApi} from '@reduxjs/toolkit/query/react'
 import {PaginationMeta} from '../entities/PaginationMeta';
-import {ProdSeries, ProductDto} from '../entities/ProdSeries';
 import {baseQuery} from './base'
 
 type PaginationResult = {
