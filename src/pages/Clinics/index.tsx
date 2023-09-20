@@ -5,8 +5,8 @@ import {Clinics} from "../../entities";
 import {useGetClinicsQuery} from "../../services";
 import {Pencil, Trash} from "tabler-icons-react";
 import {FormCreate} from "./components/FormCreate"
-import {FormEdit} from "../SkinType/components/FormEdit";
-import {DeleteConfirmation} from "../SkinType/components/DeleteConfirmation";
+import {FormEdit} from "./components/FormEdit"
+import {DeleteConfirmation} from "./components/DeleteConfirmation";
 
 const ClinicsPage = () => {
     const [modal, setModal] = useModal();
@@ -89,11 +89,11 @@ const ClinicsPage = () => {
                 </Card>
             </Box>
 
-            {/*<FormCreate*/}
-            {/*    open={modal.create}*/}
-            {/*    onClose={() => setModal("create", false)}*/}
-            {/*    onCreated={handleOnCreated}*/}
-            {/*/>*/}
+            <FormCreate
+                open={modal.create}
+                onClose={() => setModal("create", false)}
+                onCreated={handleOnCreated}
+            />
 
             {selectedItem && (
                 <>

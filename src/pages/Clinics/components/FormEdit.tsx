@@ -1,13 +1,16 @@
-import React, {useEffect} from 'react';
-import {Box, Button, Grid, Input, InputWrapper, Modal, useMantineTheme} from "@mantine/core";
+import React, {useEffect} from "react";
 import * as y from "yup";
-import {useGetClinicsQuery, usePostClinicMutation} from "../../../services";
+import {Box, Button, Grid, Input, InputWrapper, Modal, useMantineTheme} from "@mantine/core";
+import {usePutClinicMutation} from "../../../services";
 import {useFormik} from "formik";
+import {Clinics} from "../../../entities";
+
 
 type FormCreateProp = {
     open: boolean;
+    data: Clinics
     onClose: () => void;
-    onCreated: () => void;
+    onUpdated: () => void;
 };
 
 const validationSchema = y.object({
@@ -18,40 +21,35 @@ const validationSchema = y.object({
     icon: y.string()
 })
 
-export const FormCreate = (props: FormCreateProp) => {
-    const {open, onClose, onCreated} = props;
+export const FormEdit = (props: FormCreateProp) => {
+    const { open, onClose, onUpdated, data } = props;
 
     const theme = useMantineTheme();
-    const {data} = useGetClinicsQuery({
-        page: 1,
-        perPage: 100,
-    })
 
-    const [onSubmit, {data: result}] = usePostClinicMutation();
+    const [onSubmit, {data: result}] = usePutClinicMutation();
 
-    const { values, errors, setFieldValue, submitForm, touched} = useFormik({
+    const {values, errors, setFieldValue, submitForm, touched} = useFormik({
         validationSchema,
         initialValues: {
-            name: "",
-            address: "",
-            latitude: "",
-            longitude: "",
-            icon: "images/62356769-83bb-4ee8-befe-d402d86f8b30.png"
+            id: data.id,
+            name: data.name,
+            address: data.address,
+            latitude: data.latitude,
+            longitude: data.longitude,
+            icon: data.icon
         },
         onSubmit,
         enableReinitialize: true
-    });
+    })
 
     useEffect(() => {
-        if(result) {
-            onCreated()
+        if (result) {
+            onUpdated()
         }
-    }, [result])
-
-
+    }, [result]);
 
     return (
-        <Modal opened={open} onClose={onClose} size="xl" title="Add Clinics">
+        <Modal opened={open} onClose={onClose} size="xl" title="Edit Clinics">
             <Box sx={{marginTop: 1}}>
                 <Grid>
                     <Grid.Col>
