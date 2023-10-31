@@ -10,6 +10,7 @@ import * as y from 'yup';
 import {RichTextEditor} from "@mantine/rte";
 import { useMantineTheme } from "@mantine/core";
 import {useGetCategories} from "../hooks/useGetCategories";
+import {ImageUploader} from "../../../../components/ImageUploader";
 
 type FormCreateProp = {
   open: boolean;
@@ -45,7 +46,7 @@ export const FormCreate = (props: FormCreateProp) => {
       name: '',
       description: '',
       slug: '',
-      banner: '',
+      banner: [],
       icon: '',
     },
     onSubmit
@@ -104,27 +105,22 @@ export const FormCreate = (props: FormCreateProp) => {
 
           <Grid.Col>
             <InputWrapper
-                required
                 label="Icon"
                 error={touched.icon && errors.icon}
             >
-              <ImagePicker
-                  result={""}
-                  propsOnChange={(value: any) => setFieldValue('icon', value)}
+              <ImageUploader
+                  propsOnChange={(value: any) => setFieldValue('icon', value[0])}
               />
             </InputWrapper>
           </Grid.Col>
 
           <Grid.Col>
             <InputWrapper
-                required
                 label="Icon"
                 error={touched.banner && errors.banner}
             >
-              <ImagePicker
-                  result={""}
-                  propsOnChange={(value: any) => setFieldValue('banner', value)}
-                  aspectRatio={1213/504}
+              <ImageUploader
+                  propsOnChange={(value: any) => setFieldValue('banner', value[0])}
               />
             </InputWrapper>
           </Grid.Col>

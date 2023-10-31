@@ -41,7 +41,7 @@ export const FormEdit = (props: FormEditProp) => {
 
   const validationSchema = y.object({
     name: y.string().required(),
-    seriesId: y.string().required(),
+    seriesId: y.string(),
     categoryId: y.string().required(),
     sku: y.string().required(),
     description: y.string().required(),
@@ -152,11 +152,10 @@ export const FormEdit = (props: FormEditProp) => {
           <Grid.Col>
             <InputWrapper
                 label="Series"
-                required
                 error={errors.seriesId}
             >
               <Select
-                  value={String(values.seriesId)}
+                  value={String(values.seriesId) || ""}
                   data={series?.data.map((item: any) => ({label: item.name, value: String(item.id)})) || []}
                   onChange={(e:string) => setFieldValue('seriesId', String(e))}
               />
@@ -209,7 +208,7 @@ export const FormEdit = (props: FormEditProp) => {
             >
               <TextInput
                 value={values.usedAs}
-                onChange={(e: any) => setFieldValue("name", e.target.value)}
+                onChange={(e: any) => setFieldValue("usedAs", e.target.value)}
               />
             </InputWrapper>
           </Grid.Col>
@@ -340,53 +339,53 @@ export const FormEdit = (props: FormEditProp) => {
 
           </Grid.Col>
 
-          {/*<Grid.Col>*/}
-          {/*  <InputWrapper*/}
-          {/*      required*/}
-          {/*      label="Featured Image"*/}
-          {/*      error={errors.images}*/}
-          {/*  >*/}
-          {/*    <ImageUploader*/}
-          {/*        defaultImage={values.imagesUrl[0]}*/}
-          {/*        propsOnChange={(value:any) => {*/}
-          {/*          let imgTemp: any;*/}
-          {/*          imgTemp = imagesList;*/}
-          {/*          imgTemp[0] = value[0]*/}
+          <Grid.Col>
+            <InputWrapper
+                required
+                label="Featured Image"
+                error={errors.images}
+            >
+              <ImageUploader
+                  defaultImage={values.imagesUrl[0]}
+                  propsOnChange={(value:any) => {
+                    let imgTemp: any;
+                    imgTemp = imagesList;
+                    imgTemp[0] = value[0]
 
-          {/*          setImagesList(imgTemp)*/}
+                    setImagesList(imgTemp)
 
-          {/*          // console.log(imagesList)*/}
+                    // console.log(imagesList)
 
-          {/*          setFieldValue('images', imagesList)*/}
-          {/*        }*/}
-          {/*        }*/}
-          {/*    />*/}
-          {/*  </InputWrapper>*/}
-          {/*</Grid.Col>*/}
+                    setFieldValue('images', imagesList)
+                  }
+                  }
+              />
+            </InputWrapper>
+          </Grid.Col>
 
-          {/*<Grid.Col>*/}
-          {/*  <InputWrapper*/}
-          {/*      required*/}
-          {/*      label="Featured Image"*/}
-          {/*      error={errors.images}*/}
-          {/*  >*/}
-          {/*    <ImageUploader*/}
-          {/*        defaultImage={values.imagesUrl[1]}*/}
-          {/*        propsOnChange={(value:any) => {*/}
-          {/*          let imgTemp: any;*/}
-          {/*          imgTemp = imagesList;*/}
-          {/*          imgTemp[1] = value[0]*/}
+          <Grid.Col>
+            <InputWrapper
+                required
+                label="Featured Image"
+                error={errors.images}
+            >
+              <ImageUploader
+                  defaultImage={values.imagesUrl[1]}
+                  propsOnChange={(value:any) => {
+                    let imgTemp: any;
+                    imgTemp = imagesList;
+                    imgTemp[1] = value[0]
 
-          {/*          setImagesList(imgTemp)*/}
+                    setImagesList(imgTemp)
 
-          {/*          // console.log(imagesList)*/}
+                    // console.log(imagesList)
 
-          {/*          setFieldValue('images', imagesList)*/}
-          {/*        }*/}
-          {/*        }*/}
-          {/*    />*/}
-          {/*  </InputWrapper>*/}
-          {/*</Grid.Col>*/}
+                    setFieldValue('images', imagesList)
+                  }
+                  }
+              />
+            </InputWrapper>
+          </Grid.Col>
         </Grid>
       </Box>
 

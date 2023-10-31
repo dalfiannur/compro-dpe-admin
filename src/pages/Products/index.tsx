@@ -17,7 +17,7 @@ const ProductPage = () => {
 
     const [modal, setModal] = useModal();
     const [page, setPage] = useState<number>(1);
-    const [perPage, setPerPage] = useState<number>(25);
+    const [perPage, setPerPage] = useState<number>(15);
 
     const [selectedProduct, setSelectedProduct] = useState<ProdSeries | null>(null);
 

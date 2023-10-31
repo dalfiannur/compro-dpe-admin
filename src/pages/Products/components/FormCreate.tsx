@@ -18,7 +18,7 @@ import {MultiImageControl} from "../../Article/components/MultiImageControl";
 
 const validationSchema = y.object({
   name: y.string().required(),
-  seriesId: y.string().required(),
+  seriesId: y.string(),
   categoryId: y.string().required(),
   sku: y.string().required(),
   description: y.string().required(),
@@ -122,7 +122,6 @@ export const FormCreate = (props: FormCreateProp) => {
           <Grid.Col>
             <InputWrapper
                 label="Series"
-                required
                 error={errors.seriesId}
             >
               <Select
@@ -276,7 +275,6 @@ export const FormCreate = (props: FormCreateProp) => {
 
           <Grid.Col>
             <InputWrapper
-                required
                 label="Featured Image"
                 error={errors.images}
             >
@@ -299,7 +297,6 @@ export const FormCreate = (props: FormCreateProp) => {
 
           <Grid.Col>
             <InputWrapper
-                required
                 label="Featured Image"
                 error={errors.images}
             >

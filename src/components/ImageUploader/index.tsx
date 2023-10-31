@@ -32,7 +32,7 @@ export const ImageUploader = (props: ImageUploader) => {
             console.log("change")
             onSubmit({ images: values.images })
                 .then((result:any) => {
-                    console.log(result?.data.data)
+                    // console.log(result?.data.data)
                     setCreateObjectURL(result?.data.data)
                     propsOnChange(result?.data.data)
                     setUrlLocal(imageUrl)
@@ -78,7 +78,7 @@ export const ImageUploader = (props: ImageUploader) => {
         }
     };
 
-    console.log(!urlLocal ? defaultImage : urlLocal)
+    // console.log(!urlLocal ? defaultImage : urlLocal)
 
     return (
         <div style={{

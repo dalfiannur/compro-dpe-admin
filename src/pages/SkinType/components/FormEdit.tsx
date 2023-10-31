@@ -1,5 +1,5 @@
 import React, {ChangeEvent, FC, useEffect} from "react";
-import {SkinType} from "../../../entities/SkinType";
+import {SkinType} from "../../../entities";
 import {usePutSkinTypeMutation} from "../../../services";
 import {Box, Button, Grid, Input, InputWrapper, Modal} from "@mantine/core";
 import {useFormik} from "formik";
