@@ -11,6 +11,7 @@ import {
 import {Eye, Pencil, Trash} from "tabler-icons-react";
 import {Detail} from "./components/Detail";
 import {useGetCategories} from "./hooks/useGetCategories";
+import {IsFeatured} from "./components/IsFeatured";
 
 const ProductPage = () => {
     const tableRef = useRef<any>();
@@ -83,6 +84,11 @@ const ProductPage = () => {
         refetch();
     };
 
+    // const handleOnFeatured = () => {
+    //     setModal("related", false);
+    //     refetch();
+    // }
+
     const handleOnFormEditClose = () => {
         setModal("edit", false);
         setSelectedProduct(null);
@@ -100,6 +106,11 @@ const ProductPage = () => {
                     <Grid.Col span={2}>
                         <Button onClick={() => setModal("create", true)}>
                             Add New Product
+                        </Button>
+                    </Grid.Col>
+                    <Grid.Col span={2}>
+                        <Button onClick={() => setModal("related", true)}>
+                            Featured Product
                         </Button>
                     </Grid.Col>
                 </Grid>
@@ -176,6 +187,11 @@ const ProductPage = () => {
                 onClose={() => setModal("create", false)}
             />
 
+            <IsFeatured
+                open={modal.related}
+                onClose={() => setModal("related", false)}
+            />
+
             {selectedProduct && (
                 <>
                     <FormEdit
@@ -191,6 +207,7 @@ const ProductPage = () => {
                         onClose={() => setModal("delete", false)}
                         onDeleted={handleOnDeleted}
                     />
+
 
                     <Detail
                         data={selectedProduct}

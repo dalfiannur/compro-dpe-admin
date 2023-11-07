@@ -26,6 +26,16 @@ export const productCategoriesApi = createApi({
         }
       }
     }),
+    getProductCategoriesFeatured: builder.query<PaginationResult, PaginationQuery>({
+      query: ({page, perPage}) => {
+        const query = new URLSearchParams();
+        query.set('page', page.toString());
+        query.set('perPage', perPage.toString());
+        return {
+          url: '/product/featured',
+        }
+      }
+    }),
     postProductCategories: builder.mutation<any, any>({
       query: (body) => ({
         url: '/product',
@@ -57,6 +67,7 @@ export const productCategoriesApi = createApi({
 
 export const {
   useGetProductCategoriesPaginationQuery,
+  useGetProductCategoriesFeaturedQuery,
   usePutProductCategoriesMutation,
   usePostProductCategoriesMutation,
   useDeleteProductCategoriesMutation
