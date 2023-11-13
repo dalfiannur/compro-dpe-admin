@@ -1,6 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react'
 import {PaginationMeta} from '../entities/PaginationMeta';
 import {baseQuery} from './base'
+import {ProdSeries} from "../entities";
 
 type PaginationResult = {
   data: any,
@@ -10,6 +11,10 @@ type PaginationResult = {
 type PaginationQuery = {
   page: number
   perPage: number
+}
+
+type ProductResult = {
+  data: ProdSeries
 }
 
 export const productCategoriesApi = createApi({
@@ -26,15 +31,15 @@ export const productCategoriesApi = createApi({
         }
       }
     }),
-    getProductCategoriesFeatured: builder.query<PaginationResult, PaginationQuery>({
-      query: ({page, perPage}) => {
-        const query = new URLSearchParams();
-        query.set('page', page.toString());
-        query.set('perPage', perPage.toString());
-        return {
-          url: '/product/featured',
-        }
-      }
+    getProductCategoriesFeatured: builder.query<PaginationResult, any>({
+      query: () => ({
+        url: '/product/featured?perPage=99'
+      }),
+    }),
+    getProductCategories: builder.query<any, any>({
+      query: (slug: string) => ({
+        url: `/product/slug/`+ slug,
+      }),
     }),
     postProductCategories: builder.mutation<any, any>({
       query: (body) => ({
@@ -68,6 +73,7 @@ export const productCategoriesApi = createApi({
 export const {
   useGetProductCategoriesPaginationQuery,
   useGetProductCategoriesFeaturedQuery,
+  useGetProductCategoriesQuery,
   usePutProductCategoriesMutation,
   usePostProductCategoriesMutation,
   useDeleteProductCategoriesMutation
