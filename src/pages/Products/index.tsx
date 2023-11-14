@@ -30,26 +30,28 @@ const ProductPage = () => {
     const {data: seriesList} = useGetTypeSeriesQuery({});
 
     const {data: categoryList} = useGetTypeCategoryQuery({});
+    // console.log(categoryList)
+    // console.log(productList)
 
-    const seriesObj = useMemo(() => {
-        if (seriesList) {
-            return seriesList.data.reduce((result:any, item:any) => {
-                result[item.id] = item.name;
-                return result;
-            }, {});
-        }
-        return {}
-    }, [seriesList])
-
-    const categoryObj = useMemo(() => {
-        if (categoryList) {
-            return categoryList.data.reduce((result:any, item:any) => {
-                result[item.id] = item.name;
-                return result;
-            }, {});
-        }
-        return {}
-    }, [categoryList])
+    // const seriesObj = useMemo(() => {
+    //     if (seriesList) {
+    //         return seriesList.data.reduce((result:any, item:any) => {
+    //             result[item.id] = item.name;
+    //             return result;
+    //         }, {});
+    //     }
+    //     return {}
+    // }, [seriesList])
+    //
+    // const categoryObj = useMemo(() => {
+    //     if (categoryList) {
+    //         return categoryList.data.reduce((result:any, item:any) => {
+    //             result[item.id] = item.name;
+    //             return result;
+    //         }, {});
+    //     }
+    //     return {}
+    // }, [categoryList])
 
     const totalPage = useMemo(() => {
         if (productList) {
@@ -140,8 +142,8 @@ const ProductPage = () => {
                                 <td>{page === 1 ? index + 1 :  ((page - 1)  * perPage) + index + 1}</td>
                                 <td>{item.id}</td>
                                 <td>{item.name}</td>
-                                <td>{seriesObj[item.seriesId] || "-"}</td>
-                                <td>{categoryObj[item.categoryId] || "-"}</td>
+                                <td>{item.series? item.series.name : "-"}</td>
+                                <td>{item.category? item.category.name : "-"}</td>
                                 <td
                                     style={{
                                         display: "flex",
