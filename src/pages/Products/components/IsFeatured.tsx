@@ -138,16 +138,16 @@ export const IsFeatured = (props: DetailProps) => {
                 <Table sx={{ marginTop: 20 }}>
                     <thead>
                     <tr>
-                        <th>#ID</th>
+                        <th>#</th>
                         <th>Name</th>
                         <th>#Action</th>
                     </tr>
                     </thead>
 
                     <tbody>
-                    {productList?.data.data.map((item: any) => (
+                    {productList?.data.data.map((item: any, index:number) => (
                         <tr>
-                            <td>{item.id}</td>
+                            <td>{index+1}</td>
                             <td>{item.name}</td>
                             <td
                                 style={{

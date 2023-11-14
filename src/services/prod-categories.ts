@@ -32,7 +32,7 @@ export const productCategoriesApi = createApi({
         query.set('page', page.toString());
         query.set('perPage', perPage.toString());
         return {
-          url: '/product/featured',
+          url: '/product/featured?perPage=100',
         }
       }
     }),
