@@ -36,6 +36,11 @@ export const productCategoriesApi = createApi({
         }
       }
     }),
+    getProductCategories: builder.query<any, any>({
+      query: (slug: string) => ({
+        url: "product/slug/" + slug,
+      }),
+    }),
     postProductCategories: builder.mutation<any, any>({
       query: (body) => ({
         url: '/product',
@@ -68,6 +73,7 @@ export const productCategoriesApi = createApi({
 export const {
   useGetProductCategoriesPaginationQuery,
   useGetProductCategoriesFeaturedQuery,
+  useGetProductCategoriesQuery,
   usePutProductCategoriesMutation,
   usePostProductCategoriesMutation,
   useDeleteProductCategoriesMutation

@@ -12,9 +12,9 @@ import {
     Select,
     Grid,
 } from "@mantine/core";
-import {Article, relatesObj} from "entities";
+import {Article, ProdSeries, relatesObj} from "entities";
 import { useDateTimeFormat } from "../../../hooks/useDateTimeFormat";
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Eye, Link, Pencil, Trash } from "tabler-icons-react";
 import {
     useLazyGetArticleQuery,
@@ -24,6 +24,11 @@ import {
     useGetProductCategoriesFeaturedQuery, usePutProductCategoriesMutation,
 } from "../../../services";
 import {useFormik} from "formik";
+import {useModal} from "../../../hooks/useModal";
+import {FormEdit} from "./FormEdit";
+import {DeleteConfirmation} from "./DeleteConfirmation";
+import {Detail} from "./Detail";
+import {DeleteFeaturedConfirmation} from "./DeleteFeaturedConfirmation";
 
 interface DetailProps {
     open: boolean;
@@ -38,8 +43,10 @@ const Label = (props: any) => (
 
 export const IsFeatured = (props: DetailProps) => {
     const { open, onClose } = props;
+    const [modal, setModal] = useModal();
     const [product, setProduct] = useState<any>();
-    const {data: productList} = useGetProductCategoriesFeaturedQuery({
+    const [selectedProduct, setSelectedProduct] = useState<any>();
+    const {data: productList, refetch} = useGetProductCategoriesFeaturedQuery({
         page: 1,
         perPage: 100,
     });
@@ -67,7 +74,6 @@ export const IsFeatured = (props: DetailProps) => {
             // featuredImageUrl: product?.featuredImageUrl,
             skinConcernIds: product?.skinConcerns.map((item: any) => item.id.toString()),
             skinTypeIds: product?.skinTypes.map((item: any) => item.id.toString()),
-            // ------------------ IMAGES DAN RELATED PRODUCT BELUM ADA DI ENTITIES ----------------------------------
             images: product?.images.map((item: any) => item.imageSource.toString()),
             imagesUrl: product?.images.map((item: any) => item.imageSourceUrl.toString()),
             // imagesUrlBottle: product?.images[0]?.imageSourceUrl,
@@ -78,20 +84,23 @@ export const IsFeatured = (props: DetailProps) => {
         enableReinitialize: true
     });
 
-
-    console.log(productList?.data.data)
-
     const handleDeleteButton = (item: any) => {
-        setFieldValue('isFeatured', 0)
-        // submitForm()
+        setSelectedProduct(item.slug)
+        // console.log(item)
+        setModal("delete", true)
     };
-    //
-    // useEffect(() => {
-    //     if (data) {
-    //         fetcher(data.slug);
-    //     }
-    // }, [data]);
-    //
+
+    const handleOnDeleted = () => {
+        setModal("delete", false);
+        refetch();
+    };
+
+    useEffect(() => {
+        if (result) {
+            refetch();
+        }
+    }, [result]);
+
     // useEffect(() => {
     //     if (isSuccess || delIsSuccess) {
     //         fetcher(data.slug);
@@ -158,6 +167,16 @@ export const IsFeatured = (props: DetailProps) => {
                     ))}
                     </tbody>
                 </Table>
+                {selectedProduct && (
+                    <>
+                        <DeleteFeaturedConfirmation
+                            slug={selectedProduct}
+                            open={modal.delete}
+                            onClose={() => setModal("delete", false)}
+                            onDeleted={handleOnDeleted}
+                        />
+                    </>
+                )}
             </Box>
         </Modal>
     );
