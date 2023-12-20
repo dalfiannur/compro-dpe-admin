@@ -12,7 +12,7 @@ import {
     Select,
     Grid,
 } from "@mantine/core";
-import {Article, relatesObj} from "entities";
+import {Article, ProdSeries, relatesObj} from "entities";
 import { useDateTimeFormat } from "../../../hooks/useDateTimeFormat";
 import React, { FC, useEffect, useState } from "react";
 import { Eye, Link, Pencil, Trash } from "tabler-icons-react";
@@ -24,11 +24,11 @@ import {
     useGetProductCategoriesFeaturedQuery, usePutProductCategoriesMutation,
 } from "../../../services";
 import {useFormik} from "formik";
+import {useModal} from "../../../hooks/useModal";
 import {FormEdit} from "./FormEdit";
 import {DeleteConfirmation} from "./DeleteConfirmation";
 import {Detail} from "./Detail";
 import {DeleteFeaturedConfirmation} from "./DeleteFeaturedConfirmation";
-import {useModal} from "../../../hooks/useModal";
 
 interface DetailProps {
     open: boolean;
@@ -45,7 +45,7 @@ export const IsFeatured = (props: DetailProps) => {
     const { open, onClose } = props;
     const [modal, setModal] = useModal();
     const [product, setProduct] = useState<any>();
-    const [selectedProduct, setSelectedProduct] = useState<any>()
+    const [selectedProduct, setSelectedProduct] = useState<any>();
     const {data: productList, refetch} = useGetProductCategoriesFeaturedQuery({
         page: 1,
         perPage: 100,
@@ -56,7 +56,7 @@ export const IsFeatured = (props: DetailProps) => {
         perPage: 1000,
     });
 
-    const [onSubmit, {isSuccess}] = usePutProductCategoriesMutation();
+    const [onSubmit, {data: result}] = usePutProductCategoriesMutation();
 
     const {values, setFieldValue, submitForm} = useFormik({
         initialValues: {
@@ -74,7 +74,6 @@ export const IsFeatured = (props: DetailProps) => {
             // featuredImageUrl: product?.featuredImageUrl,
             skinConcernIds: product?.skinConcerns.map((item: any) => item.id.toString()),
             skinTypeIds: product?.skinTypes.map((item: any) => item.id.toString()),
-            // ------------------ IMAGES DAN RELATED PRODUCT BELUM ADA DI ENTITIES ----------------------------------
             images: product?.images.map((item: any) => item.imageSource.toString()),
             imagesUrl: product?.images.map((item: any) => item.imageSourceUrl.toString()),
             // imagesUrlBottle: product?.images[0]?.imageSourceUrl,
@@ -85,27 +84,23 @@ export const IsFeatured = (props: DetailProps) => {
         enableReinitialize: true
     });
 
-    // console.log(productList?.data.data)
-
     const handleDeleteButton = (item: any) => {
-        setSelectedProduct(item)
+        setSelectedProduct(item.slug)
+        // console.log(item)
         setModal("delete", true)
-        // submitForm()
     };
-    console.log(isSuccess)
 
     const handleOnDeleted = () => {
         setModal("delete", false);
         refetch();
     };
 
-    //
     useEffect(() => {
-        if (isSuccess) {
+        if (result) {
             refetch();
         }
-    }, [isSuccess]);
-    //
+    }, [result]);
+
     // useEffect(() => {
     //     if (isSuccess || delIsSuccess) {
     //         fetcher(data.slug);
@@ -115,7 +110,7 @@ export const IsFeatured = (props: DetailProps) => {
     // console.log(products?.data)
     //
 
-    console.log(product)
+    // console.log(product)
     return (
         <Modal opened={open} size="lg" onClose={onClose} title="Featured Products">
             <Box>
@@ -152,7 +147,7 @@ export const IsFeatured = (props: DetailProps) => {
                     <tbody>
                     {productList?.data.data.map((item: any, index:number) => (
                         <tr>
-                            <td>{index + 1}</td>
+                            <td>{index+1}</td>
                             <td>{item.name}</td>
                             <td
                                 style={{
@@ -163,7 +158,7 @@ export const IsFeatured = (props: DetailProps) => {
                             >
                                 <ActionIcon
                                     color="red"
-                                    onClick={() => handleDeleteButton(item.slug)}
+                                    onClick={() => handleDeleteButton(item)}
                                 >
                                     <Trash />
                                 </ActionIcon>
@@ -172,18 +167,17 @@ export const IsFeatured = (props: DetailProps) => {
                     ))}
                     </tbody>
                 </Table>
+                {selectedProduct && (
+                    <>
+                        <DeleteFeaturedConfirmation
+                            slug={selectedProduct}
+                            open={modal.delete}
+                            onClose={() => setModal("delete", false)}
+                            onDeleted={handleOnDeleted}
+                        />
+                    </>
+                )}
             </Box>
-
-            {selectedProduct && (
-                <>
-                    <DeleteFeaturedConfirmation
-                        slug={selectedProduct}
-                        open={modal.delete}
-                        onClose={() => setModal("delete", false)}
-                        onDeleted={handleOnDeleted}
-                    />
-                </>
-            )}
         </Modal>
     );
 };

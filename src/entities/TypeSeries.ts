@@ -8,4 +8,5 @@ export interface TypeSeries {
   created_at: string;
   update_at: string;
   icon: string;
+  banner: string;
 }

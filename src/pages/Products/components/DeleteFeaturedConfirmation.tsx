@@ -14,12 +14,12 @@ type DeleteConfirmationProp = {
 export const DeleteFeaturedConfirmation = (props: DeleteConfirmationProp) => {
   const {open, slug, onClose, onDeleted} = props;
 
-  const {data : product} = useGetProductCategoriesQuery(slug)
-  const [onSubmit, {isSuccess}] = usePutProductCategoriesMutation();
+  const [onSubmit, {data: result}] = usePutProductCategoriesMutation();
+  const {data: product} = useGetProductCategoriesQuery(slug)
 
-  console.log(product)
+  // console.log(product)
 
-  const {values, setFieldValue, submitForm} = useFormik({
+  const {values,setFieldValue , submitForm} = useFormik({
     initialValues: {
       id: product?.data.id,
       name: product?.data.name,
@@ -35,7 +35,6 @@ export const DeleteFeaturedConfirmation = (props: DeleteConfirmationProp) => {
       // featuredImageUrl: product?.data.featuredImageUrl,
       skinConcernIds: product?.data.skinConcerns.map((item: any) => item.id.toString()),
       skinTypeIds: product?.data.skinTypes.map((item: any) => item.id.toString()),
-      // ------------------ IMAGES DAN RELATED PRODUCT BELUM ADA DI ENTITIES ----------------------------------
       images: product?.data.images.map((item: any) => item.imageSource.toString()),
       imagesUrl: product?.data.images.map((item: any) => item.imageSourceUrl.toString()),
       // imagesUrlBottle: product?.data.images[0]?.imageSourceUrl,
@@ -46,42 +45,41 @@ export const DeleteFeaturedConfirmation = (props: DeleteConfirmationProp) => {
     enableReinitialize: true
   });
 
-
   useEffect(() => {
-    if (isSuccess) {
+    if (result) {
       onDeleted()
     }
-  }, [isSuccess]);
+  }, [result]);
 
   return (
-    <Modal
-      opened={open}
-      onClose={onClose}
-      title="Delete Product"
-    >
-      <Box>
-        <Text>
-          Are you sure want to delete this product?
-        </Text>
-      </Box>
-
-      <Box
-        sx={(theme) => ({
-          display: 'flex',
-          justifyContent: 'end',
-          gap: theme.spacing.md,
-          marginTop: theme.spacing.md
-        })}
+      <Modal
+          opened={open}
+          onClose={onClose}
+          title="Delete Product"
       >
-        <Button onClick={onClose}>No</Button>
-        <Button
-          color="red"
-          variant="outline"
-          onClick={submitForm}
+        <Box>
+          <Text>
+            Are you sure want to delete this product?
+          </Text>
+        </Box>
+
+        <Box
+            sx={(theme) => ({
+              display: 'flex',
+              justifyContent: 'end',
+              gap: theme.spacing.md,
+              marginTop: theme.spacing.md
+            })}
         >
-          Yes
-        </Button>
-      </Box>
-    </Modal>
+          <Button onClick={onClose}>No</Button>
+          <Button
+              color="red"
+              variant="outline"
+              onClick={submitForm}
+          >
+            Yes
+          </Button>
+        </Box>
+      </Modal>
   )
 };

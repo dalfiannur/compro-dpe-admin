@@ -116,7 +116,7 @@ export const FormCreate = (props: FormCreateProp) => {
 
           <Grid.Col>
             <InputWrapper
-                label="Icon"
+                label="Banner"
                 error={touched.banner && errors.banner}
             >
               <ImageUploader

@@ -36,9 +36,11 @@ export const FormEdit = (props: FormEditProp) => {
       id: data.id,
       name: data.name,
       description: data.description,
-      banner: data.bannerUrl,
+      icon: data.icon,
+      banner: data.banner,
+      iconUrl: data.iconUrl,
+      bannerUrl: data.bannerUrl,
       slug: data.slug,
-      icon: data.iconUrl,
     },
     onSubmit,
     enableReinitialize: true
@@ -107,19 +109,19 @@ export const FormEdit = (props: FormEditProp) => {
                   <ImagePicker
                       result={''}
                       propsOnChange={(value: any) => setFieldValue("icon", value[0])}
-                      defaultImage={values.icon}/>
+                      defaultImage={values.iconUrl}/>
                 </InputWrapper>
               </Grid.Col>
               <Grid.Col>
                 <InputWrapper
                     required
-                    label="Icon"
+                    label="Banner"
                     error={errors.banner as string}
                 >
                   <ImagePicker
                       result={''}
                       propsOnChange={(value: any) => setFieldValue("banner", value[0])}
-                      defaultImage={values.banner}
+                      defaultImage={values.bannerUrl}
                       aspectRatio={1213/504}
                   />
                 </InputWrapper>

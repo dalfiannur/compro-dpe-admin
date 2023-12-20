@@ -56,7 +56,6 @@ export const FormEdit = (props: FormEditProp) => {
   });
 
   const {values, errors, setFieldValue, submitForm} = useFormik({
-    validationSchema,
     initialValues: {
       id: data.id,
       name: data.name,
@@ -72,7 +71,6 @@ export const FormEdit = (props: FormEditProp) => {
       // featuredImageUrl: data.featuredImageUrl,
       skinConcernIds: data.skinConcerns.map((item) => item.id.toString()),
       skinTypeIds: data.skinTypes.map((item) => item.id.toString()),
-      // ------------------ IMAGES DAN RELATED PRODUCT BELUM ADA DI ENTITIES ----------------------------------
       images: data.images.map((item) => item.imageSource.toString()),
       imagesUrl: data.images.map((item) => item.imageSourceUrl.toString()),
       // imagesUrlBottle: data.images[0]?.imageSourceUrl,

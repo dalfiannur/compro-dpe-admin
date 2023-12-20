@@ -3,7 +3,6 @@ import { baseQuery } from './base';
 
 // Function to convert an object into FormData
 function objectToFormData(img:any) {
-    console.log(img)
     const formData = new FormData();
     img.images.map((item:File, index:number) => {
         formData.append(`images[${index}]`, item);

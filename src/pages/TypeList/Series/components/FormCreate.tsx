@@ -118,7 +118,7 @@ export const FormCreate = (props: FormCreateProp) => {
             <Grid.Col>
               <InputWrapper
                   required
-                  label="Icon"
+                  label="Banner"
                   error={errors.banner as string}
               >
                 <ImagePicker

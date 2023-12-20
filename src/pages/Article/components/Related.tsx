@@ -66,7 +66,7 @@ export const Related: FC<DetailProps> = (props) => {
     }
   }, [isSuccess, delIsSuccess]);
 
-  console.log(products?.data)
+  // console.log(products?.data)
 
   return (
     <Modal opened={open} size="lg" onClose={onClose} title="Related Products">

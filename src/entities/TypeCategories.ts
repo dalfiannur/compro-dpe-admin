@@ -7,4 +7,6 @@ export interface TypeCategories {
   bannerUrl: string;
   createdAt: string;
   updateAt: string;
+  icon: string;
+  banner: string;
 }

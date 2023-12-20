@@ -22,7 +22,7 @@ export const MultiImageControl = (props: MultiImageControl) => {
 
         setImageList(array)
 
-        console.log(imageList)
+        // console.log(imageList)
     }
 
     const handleDeleteImage = () => {

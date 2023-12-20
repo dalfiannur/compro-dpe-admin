@@ -39,13 +39,13 @@ export const ImagePicker = (props: ImagePickerProp) => {
     const [name, setName] = useState("")
     const [urlImg, setUrlImg] = useState("")
 
-    console.log(urlImg)
+    // console.log(urlImg)
 
     const handleSubmit = (values: { images: any; }) => {
         if (!urlImg) {
             onSubmit({ images: values.images })
                 .then((result:any) => {
-                    console.log(result?.data.data)
+                    // console.log(result?.data.data)
                     setUrlImg(result?.data.data)
                     propsOnChange(result?.data.data)
                 })
