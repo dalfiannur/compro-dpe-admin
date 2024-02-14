@@ -18,6 +18,7 @@ const validationSchema = y.object({
     address: y.string().required(),
     latitude: y.string().required(),
     longitude: y.string().required(),
+    map_url: y.string().required(),
     icon: y.string()
 })
 
@@ -36,6 +37,7 @@ export const FormEdit = (props: FormCreateProp) => {
             address: data.address,
             latitude: data.latitude,
             longitude: data.longitude,
+            map_url: data.mapUrl,
             icon: data.icon
         },
         onSubmit,
@@ -94,13 +96,26 @@ export const FormEdit = (props: FormCreateProp) => {
 
                     <Grid.Col>
                         <InputWrapper
-                            label="longitude"
+                            label="Longitude"
                             required
                             error={touched.longitude && errors.longitude}
                         >
                             <Input
                                 value={values.longitude}
                                 onChange={(e) => setFieldValue("longitude", e.target.value)}
+                            />
+                        </InputWrapper>
+                    </Grid.Col>
+
+                    <Grid.Col>
+                        <InputWrapper
+                            label="Url Map"
+                            required
+                            error={touched.map_url && errors.map_url}
+                        >
+                            <Input
+                                value={values.map_url}
+                                onChange={(e) => setFieldValue("map_url", e.target.value)}
                             />
                         </InputWrapper>
                     </Grid.Col>

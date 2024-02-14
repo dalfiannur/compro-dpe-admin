@@ -135,7 +135,6 @@ export const FormCreate = (props: FormCreateProp) => {
           <Grid.Col>
             <InputWrapper
                 label="Category"
-                required
                 error={errors.categoryId}
             >
               <Select

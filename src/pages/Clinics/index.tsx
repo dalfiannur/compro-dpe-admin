@@ -42,6 +42,8 @@ const ClinicsPage = () => {
         refetch();
     };
 
+    console.log(clinics)
+
     return(
         <Container size="xl">
             <Button onClick={() => setModal("create", true)}>

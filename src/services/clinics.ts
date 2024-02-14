@@ -11,12 +11,24 @@ type GetClinicResult = {
     data: Clinics;
 };
 
+type PaginationQuery = {
+    page: number
+    perPage: number
+  }
+
 export const clinicsApi = createApi({
     reducerPath: 'clinicsApi',
     baseQuery,
     endpoints: (build) => ({
-        getClinics: build.query<GetClinicsResult, any>({
-            query: () => '/clinics'
+        getClinics: build.query<GetClinicsResult, PaginationQuery>({
+            query: ({page, perPage}) => {
+                const query = new URLSearchParams();
+                query.set('page', page.toString());
+                query.set('perPage', perPage.toString());
+                return {
+                    url: '/clinics?' + query.toString(),
+                }
+            }
         }),
         postClinic: build.mutation<GetClinicResult, any>({
             query: (body) => ({
