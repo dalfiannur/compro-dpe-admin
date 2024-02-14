@@ -19,7 +19,7 @@ import {MultiImageControl} from "../../Article/components/MultiImageControl";
 const validationSchema = y.object({
   name: y.string().required(),
   seriesId: y.string(),
-  categoryId: y.string().required(),
+  categoryId: y.string(),
   sku: y.string().required(),
   description: y.string().required(),
   usedAs: y.string().required(),
