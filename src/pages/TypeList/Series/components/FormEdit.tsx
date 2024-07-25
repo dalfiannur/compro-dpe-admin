@@ -99,7 +99,7 @@ export const FormEdit = (props: FormEditProp) => {
                 >
                   <ImagePicker
                       result={''}
-                      propsOnChange={(value: any) => setFieldValue("iconUrl", value[0])}
+                      propsOnChange={(value: any) => setFieldValue("icon", value[0])}
                       defaultImage={values.iconUrl}
                   />
                 </InputWrapper>
@@ -112,7 +112,7 @@ export const FormEdit = (props: FormEditProp) => {
                 >
                   <ImagePicker
                       result={''}
-                      propsOnChange={(value: any) => setFieldValue("bannerUrl", value[0])}
+                      propsOnChange={(value: any) => setFieldValue("banner", value[0])}
                       defaultImage={values.bannerUrl}
                       aspectRatio={1213/504}
                   />
