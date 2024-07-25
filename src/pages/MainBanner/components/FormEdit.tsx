@@ -1,34 +1,39 @@
+import { Banner } from "entities";
 import { useFormik } from "formik";
-import React, { useEffect } from "react";
-import { ImagePicker } from "../../../components/ImagePicker";
-import { usePostBannerMutation } from "../../../services";
+import { usePutBannerMutation } from "../../../services";
+import { useEffect } from "react";
 import { Box, Button, Grid, Input, InputWrapper, Modal } from "@mantine/core";
-import { TextField } from "@mui/material";
+import { ImagePicker } from "../../../components/ImagePicker";
 
-type FormCreateProp = {
+type FormEditProp = {
+  data: Banner;
   open: boolean;
   onClose: () => void;
-  onCreated: () => void;
+  onUpdated: () => void;
 };
 
-const FormCreate = (props: FormCreateProp) => {
-  const { open, onClose, onCreated } = props;
+const FormEdit = (props: FormEditProp) => {
+  const { data, open, onClose, onUpdated } = props;
 
-  const [onSubmit, { isSuccess }] = usePostBannerMutation();
+  const [onSubmit, { isSuccess }] = usePutBannerMutation();
 
   const { values, errors, setFieldValue, submitForm } = useFormik({
     initialValues: {
-      title: "",
-      subTitle: "",
-      imageSource: "",
-      imageSourceCropped: "",
+      id: data.id,
+      title: data.title,
+      subTitle: data.subTitle,
+      imageSource: data.imageSource,
+      imageSourceCropped: data.imageSourceCropped,
+      imageSourceUrl: data.imageSourceUrl,
+      imageSourceCroppedUrl: data.imageSourceCroppedUrl,
     },
     onSubmit,
+    enableReinitialize: true,
   });
 
   useEffect(() => {
     if (isSuccess) {
-      onCreated();
+      onUpdated();
     }
   }, [isSuccess]);
 
@@ -66,6 +71,7 @@ const FormCreate = (props: FormCreateProp) => {
                   setFieldValue("imageSource", value[0]);
                 }}
                 aspectRatio={12 / 5}
+                defaultImage={values.imageSourceUrl}
               />
             </InputWrapper>
           </Grid.Col>
@@ -82,6 +88,7 @@ const FormCreate = (props: FormCreateProp) => {
                   setFieldValue("imageSourceCropped", value[0]);
                 }}
                 aspectRatio={2 / 1}
+                defaultImage={values.imageSourceCroppedUrl}
               />
             </InputWrapper>
           </Grid.Col>
@@ -107,4 +114,4 @@ const FormCreate = (props: FormCreateProp) => {
   );
 };
 
-export default FormCreate;
+export default FormEdit;

@@ -13,7 +13,8 @@ import {
   Image,
 } from "@mantine/core";
 import { useGetBannersQuery } from "../../services";
-import { Trash } from "tabler-icons-react";
+import { Pencil, Trash } from "tabler-icons-react";
+import FormEdit from "./components/FormEdit";
 
 const BannerPage = () => {
   const [modal, setModal] = useModal();
@@ -29,8 +30,18 @@ const BannerPage = () => {
     setModal("delete", true);
   };
 
+  const handleOnEditRequest = (item: any) => {
+    setSelectedItem(item);
+    setModal("edit", true);
+  };
+
   const handleOnCreated = () => {
     setModal("create", false);
+    refetch();
+  };
+
+  const handleOnUpdated = () => {
+    setModal("edit", false);
     refetch();
   };
 
@@ -74,7 +85,21 @@ const BannerPage = () => {
                   </td>
                   <td>{item.title}</td>
                   <td>{item.subTitle}</td>
-                  <td>
+                  <td
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 5,
+                      height: 80,
+                    }}
+                  >
+                    <ActionIcon
+                      color="blue"
+                      onClick={() => handleOnEditRequest(item)}
+                    >
+                      <Pencil />
+                    </ActionIcon>
                     <ActionIcon
                       color="red"
                       onClick={() => handleDeleteRequest(item)}
@@ -96,12 +121,21 @@ const BannerPage = () => {
       />
 
       {selectedItem && (
-        <DeleteConfirmation
-          item={selectedItem}
-          open={modal.delete}
-          onClose={() => setModal("delete", false)}
-          onDeleted={handleOnDeleted}
-        />
+        <>
+          <FormEdit
+            data={selectedItem}
+            open={modal.edit}
+            onClose={() => setModal("edit", false)}
+            onUpdated={handleOnUpdated}
+          />
+
+          <DeleteConfirmation
+            item={selectedItem}
+            open={modal.delete}
+            onClose={() => setModal("delete", false)}
+            onDeleted={handleOnDeleted}
+          />
+        </>
       )}
     </Container>
   );
