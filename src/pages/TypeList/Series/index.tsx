@@ -3,10 +3,19 @@ import { FormEdit } from "./components/FormEdit";
 import { FormCreate } from "./components/FormCreate";
 import { useModal } from "../../../hooks/useModal";
 import { DeleteConfirmation } from "./components/DeleteConfirmation";
-import {ActionIcon, Button, Card, Container, Table, Pagination, Image} from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Card,
+  Container,
+  Table,
+  Pagination,
+  Image,
+  Box,
+} from "@mantine/core";
 import { Eye, Pencil, Trash } from "tabler-icons-react";
 import { Detail } from "./components/Detail";
-import {useGetTypeSeriesPaginationQuery} from "../../../services";
+import { useGetTypeSeriesPaginationQuery } from "../../../services";
 
 const TypeSeries = () => {
   const tableRef = useRef<any>();
@@ -22,13 +31,12 @@ const TypeSeries = () => {
     perPage,
   });
 
-
   const totalPage = useMemo(() => {
-    if (typeSeriesList){
-      return Math.ceil(typeSeriesList.meta.total/perPage)
+    if (typeSeriesList) {
+      return Math.ceil(typeSeriesList.meta.total / perPage);
     }
-    return 0
-  }, [typeSeriesList])
+    return 0;
+  }, [typeSeriesList]);
 
   const handleOnEditRequest = (item: any) => {
     setSelectedProduct(item);
@@ -68,9 +76,7 @@ const TypeSeries = () => {
   return (
     <>
       <Container size="md">
-        <Button onClick={() => setModal("create", true)}>
-          Add New Series
-        </Button>
+        <Button onClick={() => setModal("create", true)}>Add New Series</Button>
       </Container>
 
       <Container size="md">
@@ -83,8 +89,10 @@ const TypeSeries = () => {
             <thead>
               <tr>
                 <th>#</th>
-                <th>Name (<b>#id</b>)</th>
-                <th>Slug</th>
+                <th>
+                  Name (<b>#id</b>)
+                </th>
+                <th>Slug - Color</th>
                 <th>Icon</th>
                 <th>#Action</th>
               </tr>
@@ -92,17 +100,30 @@ const TypeSeries = () => {
 
             <tbody>
               {typeSeriesList?.data.map((item: any) => (
-                <tr key={item.id} >
+                <tr key={item.id}>
                   <td>{typeSeriesList.data.indexOf(item) + 1}</td>
-                  <td>{item.name} <b>({item.id})</b></td>
-                  <td>{item.slug}</td>
+                  <td>
+                    {item.name} <b>({item.id})</b>
+                  </td>
+                  <td>
+                    <Box style={{display: "flex", gap: 10}}>
+                      {item.slug} -
+                      <Box
+                        style={{
+                          width: 40,
+                          height: 20,
+                          backgroundColor: item.bg_color_hex,
+                        }}
+                      />
+                    </Box>
+                  </td>
                   <td>
                     <Image
-                        radius="md"
-                        src={item.iconUrl}
-                        alt={item.slug}
-                        height={40}
-                        width={40}
+                      radius="md"
+                      src={item.iconUrl}
+                      alt={item.slug}
+                      height={40}
+                      width={40}
                     />
                   </td>
                   <td
@@ -138,11 +159,7 @@ const TypeSeries = () => {
               ))}
             </tbody>
           </Table>
-          <Pagination
-              total={totalPage}
-              page={page}
-              onChange={setPage}
-            />
+          <Pagination total={totalPage} page={page} onChange={setPage} />
         </Card>
       </Container>
 

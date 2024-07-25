@@ -3,6 +3,7 @@ export interface TypeSeries {
   name: string;
   slug: string;
   description: string;
+  bg_color_hex: string;
   iconUrl: string;
   bannerUrl: string;
   created_at: string;

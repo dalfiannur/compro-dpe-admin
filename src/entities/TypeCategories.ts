@@ -3,6 +3,7 @@ export interface TypeCategories {
   name: string;
   slug: string;
   description: string;
+  bgColorHex: string;
   iconUrl: string;
   bannerUrl: string;
   createdAt: string;

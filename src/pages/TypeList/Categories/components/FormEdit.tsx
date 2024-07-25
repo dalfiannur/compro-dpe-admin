@@ -37,6 +37,7 @@ export const FormEdit = (props: FormEditProp) => {
       name: data.name,
       description: data.description,
       icon: data.icon,
+      bgColorHex: data.bgColorHex,
       banner: data.banner,
       iconUrl: data.iconUrl,
       bannerUrl: data.bannerUrl,
