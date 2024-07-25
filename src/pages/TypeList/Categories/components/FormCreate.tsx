@@ -46,6 +46,7 @@ export const FormCreate = (props: FormCreateProp) => {
       name: '',
       description: '',
       slug: '',
+      bgColorHex: '',
       banner: [],
       icon: '',
     },
