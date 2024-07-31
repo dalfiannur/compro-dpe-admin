@@ -112,7 +112,7 @@ const ProductPage = () => {
                     </Grid.Col>
                     <Grid.Col span={2}>
                         <Button onClick={() => setModal("related", true)}>
-                            Featured Product
+                            Product Slider
                         </Button>
                     </Grid.Col>
                 </Grid>

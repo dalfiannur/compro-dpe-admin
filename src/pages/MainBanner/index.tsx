@@ -94,12 +94,12 @@ const BannerPage = () => {
                       height: 80,
                     }}
                   >
-                    <ActionIcon
+                    {/* <ActionIcon
                       color="blue"
                       onClick={() => handleOnEditRequest(item)}
                     >
                       <Pencil />
-                    </ActionIcon>
+                    </ActionIcon> */}
                     <ActionIcon
                       color="red"
                       onClick={() => handleDeleteRequest(item)}
