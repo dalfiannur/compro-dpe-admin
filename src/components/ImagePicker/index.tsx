@@ -188,9 +188,9 @@ export const ImagePicker = (props: ImagePickerProp) => {
                             accept="image/*"
                         />
                         {isTooLarge && fetchImageStatus ? (
-                            <p style={{color: "red"}}>Ukuran file terlalu besar. Max: 5MB</p>
+                            <p style={{color: "red"}}>Ukuran file terlalu besar. Max: 1MB</p>
                         ) : (
-                            !dataUrl && <p>Ukuran Maksimal adalah 5MB</p>
+                            !dataUrl && <p>Ukuran Maksimal adalah 1MB</p>
                         )}
                         {fetchImageStatus ?
                             dataUrl ? (
