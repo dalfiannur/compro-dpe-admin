@@ -4,7 +4,7 @@ import {
   useGetSkinTypesQuery, usePostTypeCategoryMutation,
 } from "../../../../services";
 import {ImagePicker} from "../../../../components/ImagePicker";
-import {Modal, Box, Grid, InputWrapper, Input, Select, MultiSelect, Button} from "@mantine/core";
+import {Modal, Box, Grid, InputWrapper, Input, Select, MultiSelect, Button, ColorInput} from "@mantine/core";
 import {useFormik} from "formik";
 import * as y from 'yup';
 import {RichTextEditor} from "@mantine/rte";
@@ -106,6 +106,20 @@ export const FormCreate = (props: FormCreateProp) => {
 
           <Grid.Col>
             <InputWrapper
+              required
+              label="Color"
+              error={errors.bgColorHex as string}
+            >
+              <ColorInput
+                placeholder="Pick Color"
+                value={values.bgColorHex}
+                onChange={(value) => setFieldValue("bgColorHex", value)}
+              />
+            </InputWrapper>
+          </Grid.Col>
+
+          <Grid.Col>
+            <InputWrapper
                 label="Icon"
                 error={touched.icon && errors.icon}
             >
@@ -117,6 +131,7 @@ export const FormCreate = (props: FormCreateProp) => {
 
           <Grid.Col>
             <InputWrapper
+                required
                 label="Banner"
                 error={touched.banner && errors.banner}
             >

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Box, Button, Grid, Input, InputWrapper, Modal, MultiSelect, Select, TextInput} from "@mantine/core";
+import {Box, Button, ColorInput, Grid, Input, InputWrapper, Modal, MultiSelect, Select, TextInput} from "@mantine/core";
 import {useFormik} from "formik";
 import * as y from 'yup';
 import '../../../../assets/style.css'
@@ -98,6 +98,19 @@ export const FormEdit = (props: FormEditProp) => {
                   <RichTextEditor
                       value={values.description}
                       onChange={(value) => setFieldValue("description", value)}
+                  />
+                </InputWrapper>
+              </Grid.Col>
+              <Grid.Col>
+                <InputWrapper
+                  required
+                  label="Color"
+                  error={errors.bgColorHex as string}
+                >
+                  <ColorInput
+                    placeholder="Pick Color"
+                    value={values.bgColorHex}
+                    onChange={(value) => setFieldValue("bgColorHex", value)}
                   />
                 </InputWrapper>
               </Grid.Col>

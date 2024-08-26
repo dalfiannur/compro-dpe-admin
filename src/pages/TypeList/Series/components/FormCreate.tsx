@@ -32,7 +32,7 @@ export const FormCreate = (props: FormCreateProp) => {
 
   const validationSchema = y.object({
     name: y.string().required(),
-    icon: y.string().required(),
+    icon: y.string(),
     description: y.string(),
   });
 
@@ -109,7 +109,7 @@ export const FormCreate = (props: FormCreateProp) => {
           </Grid.Col>
 
           <Grid.Col>
-            <InputWrapper required label="Icon" error={errors.icon as string}>
+            <InputWrapper label="Icon" error={errors.icon as string}>
               <ImagePicker
                 result={""}
                 propsOnChange={(value: any) => setFieldValue("icon", value[0])}

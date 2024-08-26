@@ -3,7 +3,7 @@ import { FormEdit } from "./components/FormEdit";
 import { FormCreate } from "./components/FormCreate";
 import { useModal } from "../../../hooks/useModal";
 import { DeleteConfirmation } from "./components/DeleteConfirmation";
-import {ActionIcon, Button, Card, Container, Table, Pagination, Image} from "@mantine/core";
+import {ActionIcon, Button, Card, Container, Table, Pagination, Image, Box} from "@mantine/core";
 import { useGetTypeCategoryPaginationQuery } from "../../../services/type-categories";
 import { Eye, Pencil, Trash } from "tabler-icons-react";
 import { Detail } from "./components/Detail";
@@ -84,7 +84,7 @@ const TypeCategories = () => {
               <tr>
                 <th>#</th>
                 <th>Name (<b>#id</b>)</th>
-                <th>Slug</th>
+                <th>Slug - Color</th>
                 <th>#Action</th>
               </tr>
             </thead>
@@ -94,7 +94,18 @@ const TypeCategories = () => {
                 <tr key={item.id}>
                   <td>{typeCategoriesList.data.indexOf(item) + 1}</td>
                   <td>{item.name} <b>({item.id})</b></td>
-                  <td>{item.slug}</td>
+                  <td>
+                    <Box style={{display: "flex", gap: 10}}>
+                      {item.slug} -
+                      <Box
+                        style={{
+                          width: 40,
+                          height: 20,
+                          backgroundColor: item.bg_color_hex,
+                        }}
+                      />
+                    </Box>
+                  </td>
                   <td
                     style={{
                       display: "flex",
