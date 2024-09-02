@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -6,18 +5,16 @@ import {
   Grid,
   Input,
   InputWrapper,
-  Modal,
-  MultiSelect,
-  Select,
-  TextInput,
+  Modal
 } from "@mantine/core";
-import { useFormik } from "formik";
-import * as y from "yup";
-import "../../../../assets/style.css";
-import { ImagePicker } from "../../../../components/ImagePicker";
-import { usePutTypeSeriesMutation } from "../../../../services";
 import { RichTextEditor } from "@mantine/rte";
 import { TypeSeries } from "entities";
+import { useFormik } from "formik";
+import { useEffect } from "react";
+import * as y from "yup";
+import "../../../../assets/style.css";
+import { InputImage } from "../../../../components/InputImage";
+import { usePutTypeSeriesMutation } from "../../../../services";
 
 type FormEditProp = {
   data: TypeSeries;
@@ -117,8 +114,8 @@ export const FormEdit = (props: FormEditProp) => {
               label="Icon"
               error={errors.iconUrl as string}
             >
-              <ImagePicker
-                result={""}
+              <InputImage
+                imgRatio={1/1}
                 propsOnChange={(value: any) => setFieldValue("icon", value[0])}
                 defaultImage={values.iconUrl}
               />
@@ -130,13 +127,12 @@ export const FormEdit = (props: FormEditProp) => {
               label="Banner"
               error={errors.bannerUrl as string}
             >
-              <ImagePicker
-                result={""}
+              <InputImage
                 propsOnChange={(value: any) =>
                   setFieldValue("banner", value[0])
                 }
                 defaultImage={values.bannerUrl}
-                aspectRatio={1213 / 504}
+                imgRatio={12 / 5}
               />
             </InputWrapper>
           </Grid.Col>

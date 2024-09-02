@@ -18,6 +18,7 @@ import {useModal} from "../../../hooks/useModal";
 import {array} from "yup";
 import {Pencil, Trash} from "tabler-icons-react";
 import {MultiImageControl} from "../../Article/components/MultiImageControl";
+import { InputImage } from "../../../components/InputImage";
 
 type FormEditProp = {
   data: ProdSeries;
@@ -67,14 +68,10 @@ export const FormEdit = (props: FormEditProp) => {
       howToUse: data.howToUse,
       keyingredient: data.keyingredient,
       isFeatured: data.isFeatured,
-      // featuredImage: data.featuredImage,
-      // featuredImageUrl: data.featuredImageUrl,
       skinConcernIds: data.skinConcerns.map((item) => item.id.toString()),
       skinTypeIds: data.skinTypes.map((item) => item.id.toString()),
       images: data.images.map((item) => item.imageSource.toString()),
       imagesUrl: data.images.map((item) => item.imageSourceUrl.toString()),
-      // imagesUrlBottle: data.images[0]?.imageSourceUrl,
-      // imagesUrlBox: data.images[1]?.imageSourceUrl || "",
       relatedProductIds: data.relates.map((item:relatesObj) => item.id.toString())
     },
     onSubmit,
@@ -89,30 +86,6 @@ export const FormEdit = (props: FormEditProp) => {
 
 
   const [imagesList, setImagesList] = useState<any>([])
-  // const [imageListUrl, setImageListUrl] = useState<any>(values.imagesUrl)
-
-  // const handleAddImage = () => {
-  //   const array = [...imageList]
-  //   array.splice(imageList.length + 1, 0, "")
-  //
-  //   setImageList(array)
-  //   setFieldValue("images", imageList)
-  //
-  //   console.log(imageList)
-  // }
-
-  // useEffect(() => {
-  //   setImageList(values.images)
-  // })
-  //
-  // console.log(values.images)
-
-
-  // console.log("IMAGES FORMIK")
-  // console.log(values.images)
-  //
-  // console.log("Images data")
-  // console.log(data.images)
 
   return (
     <Modal
@@ -275,65 +248,7 @@ export const FormEdit = (props: FormEditProp) => {
           {/*  </InputWrapper>*/}
           {/*</Grid.Col>*/}
 
-          {/*<Grid.Col>*/}
-          {/*  <InputWrapper*/}
-          {/*      required*/}
-          {/*      label="Featured Image"*/}
-          {/*      error={errors.featuredImage}*/}
-          {/*  >*/}
-          {/*    <ImagePicker result={values.featuredImageUrl} propsOnChange={(value: any) => {*/}
-          {/*      setFieldValue('featuredImage', value[0])*/}
-          {/*    }}/>*/}
-          {/*  </InputWrapper>*/}
-          {/*</Grid.Col>*/}
-
-
           <Grid.Col style={{display: "flex", flexDirection: "column", gap: 25}}>
-
-          {/*{imageList.map((item: any, index: number) => {*/}
-          {/*  return (*/}
-          {/*      <InputWrapper*/}
-          {/*          required*/}
-          {/*          label="Featured Image"*/}
-          {/*          error={errors.images}*/}
-          {/*      >*/}
-          {/*        <ActionIcon*/}
-          {/*            color="red"*/}
-          {/*            sx={{*/}
-          {/*              background: "white"*/}
-          {/*            }}*/}
-          {/*            // onClick={handleOnEditRequest}*/}
-          {/*        >*/}
-          {/*          <Trash/>*/}
-          {/*        </ActionIcon>*/}
-          {/*        <ImageUploader*/}
-          {/*            defaultImage={values.imagesUrl[index] ? values.imagesUrl[index]: null}*/}
-          {/*            propsOnChange={(value:any) => {*/}
-          {/*              let imgTemp: any;*/}
-          {/*              imgTemp = imageList;*/}
-          {/*              imgTemp[index] = value[0]*/}
-
-          {/*              setImageList(imgTemp)*/}
-
-          {/*              console.log(imageList)*/}
-
-          {/*              setFieldValue('images', imageList)*/}
-          {/*            }*/}
-          {/*            }*/}
-          {/*        />*/}
-          {/*      </InputWrapper>*/}
-          {/*  )*/}
-          {/*})}*/}
-          {/*  <Button onClick={handleAddImage}>Add Image</Button>*/}
-
-            {/*<MultiImageControl*/}
-            {/*    errorMessage={errors.images}*/}
-            {/*    defaultImage={values.images}*/}
-            {/*    defaultImageUrl={values.imagesUrl}*/}
-            {/*    propsOnChange={(value: any) => {*/}
-            {/*      setFieldValue("images", value, true)*/}
-            {/*    }}*/}
-            {/*/>*/}
 
           </Grid.Col>
 
@@ -343,7 +258,8 @@ export const FormEdit = (props: FormEditProp) => {
                 label="Featured Image"
                 error={errors.images}
             >
-              <ImageUploader
+              <InputImage
+                  imgRatio={1/1}
                   defaultImage={values.imagesUrl[0]}
                   propsOnChange={(value:any) => {
                     let imgTemp: any;
@@ -367,7 +283,8 @@ export const FormEdit = (props: FormEditProp) => {
                 label="Featured Image"
                 error={errors.images}
             >
-              <ImageUploader
+              <InputImage
+                  imgRatio={1/1}
                   defaultImage={values.imagesUrl[1]}
                   propsOnChange={(value:any) => {
                     let imgTemp: any;

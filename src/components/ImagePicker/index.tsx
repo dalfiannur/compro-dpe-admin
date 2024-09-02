@@ -96,6 +96,7 @@ export const ImagePicker = (props: ImagePickerProp) => {
                 let croppedImageData = canvas.toDataURL();
 
                 const fileCropped = base64ToImageFile(croppedImageData, name)
+                console.log(fileCropped)
                 setCroppedImage(croppedImageData);
                 setFieldValue("images", [fileCropped])
             }

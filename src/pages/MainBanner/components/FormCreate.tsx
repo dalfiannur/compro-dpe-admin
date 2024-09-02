@@ -4,6 +4,7 @@ import { ImagePicker } from "../../../components/ImagePicker";
 import { usePostBannerMutation } from "../../../services";
 import { Box, Button, Grid, Input, InputWrapper, Modal } from "@mantine/core";
 import { TextField } from "@mui/material";
+import { InputImage } from "../../../components/InputImage";
 
 type FormCreateProp = {
   open: boolean;
@@ -60,13 +61,14 @@ const FormCreate = (props: FormCreateProp) => {
 
           <Grid.Col>
             <InputWrapper required label="Image" error={errors.imageSource}>
-              <ImagePicker
-                result={""}
+
+              <InputImage 
                 propsOnChange={(value: any) => {
                   setFieldValue("imageSource", value[0]);
                 }}
-                aspectRatio={12 / 5}
+                imgRatio={12 / 5}
               />
+              
             </InputWrapper>
           </Grid.Col>
 
@@ -76,12 +78,12 @@ const FormCreate = (props: FormCreateProp) => {
               label="Image Mobile"
               error={errors.imageSourceCropped}
             >
-              <ImagePicker
-                result={""}
+
+              <InputImage 
                 propsOnChange={(value: any) => {
                   setFieldValue("imageSourceCropped", value[0]);
                 }}
-                aspectRatio={2 / 1}
+                imgRatio={1 / 1}
               />
             </InputWrapper>
           </Grid.Col>

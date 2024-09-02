@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import * as y from "yup";
 import { ImagePicker } from "../../../../components/ImagePicker";
 import { usePostTypeSeriesMutation } from "../../../../services";
+import { InputImage } from "../../../../components/InputImage";
 
 type FormCreateProp = {
   open: boolean;
@@ -110,8 +111,8 @@ export const FormCreate = (props: FormCreateProp) => {
 
           <Grid.Col>
             <InputWrapper label="Icon" error={errors.icon as string}>
-              <ImagePicker
-                result={""}
+              <InputImage
+                imgRatio={1/1}
                 propsOnChange={(value: any) => setFieldValue("icon", value[0])}
               />
             </InputWrapper>
@@ -123,12 +124,11 @@ export const FormCreate = (props: FormCreateProp) => {
               label="Banner"
               error={errors.banner as string}
             >
-              <ImagePicker
-                result={""}
+              <InputImage
+                imgRatio={12 / 5}
                 propsOnChange={(value: any) =>
                   setFieldValue("banner", value[0])
                 }
-                aspectRatio={1213 / 504}
               />
             </InputWrapper>
           </Grid.Col>

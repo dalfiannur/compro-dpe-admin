@@ -7,6 +7,7 @@ import {ImagePicker} from "../../../../components/ImagePicker";
 import {usePutTypeCategoryMutation} from "../../../../services";
 import {RichTextEditor} from "@mantine/rte";
 import {TypeCategories} from "../../../../entities/TypeCategories";
+import { InputImage } from "../../../../components/InputImage";
 
 type FormEditProp = {
   data: TypeCategories;
@@ -37,7 +38,7 @@ export const FormEdit = (props: FormEditProp) => {
       name: data.name,
       description: data.description,
       icon: data.icon,
-      bgColorHex: data.bgColorHex,
+      bg_color_hex: data.bg_color_hex,
       banner: data.banner,
       iconUrl: data.iconUrl,
       bannerUrl: data.bannerUrl,
@@ -56,6 +57,8 @@ export const FormEdit = (props: FormEditProp) => {
   useEffect(() => {
     setFieldValue('icon', icon);
   }, [icon]);
+
+  console.log(values.iconUrl)
 
   return (
 
@@ -105,23 +108,22 @@ export const FormEdit = (props: FormEditProp) => {
                 <InputWrapper
                   required
                   label="Color"
-                  error={errors.bgColorHex as string}
+                  error={errors.bg_color_hex as string}
                 >
                   <ColorInput
                     placeholder="Pick Color"
-                    value={values.bgColorHex}
-                    onChange={(value) => setFieldValue("bgColorHex", value)}
+                    value={values.bg_color_hex}
+                    onChange={(value) => setFieldValue("bg_color_hex", value)}
                   />
                 </InputWrapper>
               </Grid.Col>
               <Grid.Col>
                 <InputWrapper
-                    required
                     label="Icon"
                     error={errors.icon as string}
                 >
-                  <ImagePicker
-                      result={''}
+                  <InputImage
+                      imgRatio={1/1}
                       propsOnChange={(value: any) => setFieldValue("icon", value[0])}
                       defaultImage={values.iconUrl}/>
                 </InputWrapper>
@@ -132,11 +134,10 @@ export const FormEdit = (props: FormEditProp) => {
                     label="Banner"
                     error={errors.banner as string}
                 >
-                  <ImagePicker
-                      result={''}
+                  <InputImage
                       propsOnChange={(value: any) => setFieldValue("banner", value[0])}
                       defaultImage={values.bannerUrl}
-                      aspectRatio={1213/504}
+                      imgRatio={1213/504}
                   />
                 </InputWrapper>
               </Grid.Col>

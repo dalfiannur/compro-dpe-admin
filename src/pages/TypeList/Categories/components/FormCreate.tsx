@@ -11,6 +11,7 @@ import {RichTextEditor} from "@mantine/rte";
 import { useMantineTheme } from "@mantine/core";
 import {useGetCategories} from "../hooks/useGetCategories";
 import {ImageUploader} from "../../../../components/ImageUploader";
+import { InputImage } from "../../../../components/InputImage";
 
 type FormCreateProp = {
   open: boolean;
@@ -46,7 +47,7 @@ export const FormCreate = (props: FormCreateProp) => {
       name: '',
       description: '',
       slug: '',
-      bgColorHex: '',
+      bg_color_hex: '',
       banner: [],
       icon: '',
     },
@@ -108,12 +109,12 @@ export const FormCreate = (props: FormCreateProp) => {
             <InputWrapper
               required
               label="Color"
-              error={errors.bgColorHex as string}
+              error={errors.bg_color_hex as string}
             >
               <ColorInput
                 placeholder="Pick Color"
-                value={values.bgColorHex}
-                onChange={(value) => setFieldValue("bgColorHex", value)}
+                value={values.bg_color_hex}
+                onChange={(value) => setFieldValue("bg_color_hex", value)}
               />
             </InputWrapper>
           </Grid.Col>
@@ -123,7 +124,8 @@ export const FormCreate = (props: FormCreateProp) => {
                 label="Icon"
                 error={touched.icon && errors.icon}
             >
-              <ImageUploader
+              <InputImage
+                  imgRatio={1/1}
                   propsOnChange={(value: any) => setFieldValue('icon', value[0])}
               />
             </InputWrapper>
@@ -135,7 +137,8 @@ export const FormCreate = (props: FormCreateProp) => {
                 label="Banner"
                 error={touched.banner && errors.banner}
             >
-              <ImageUploader
+              <InputImage
+                  imgRatio={12/5}
                   propsOnChange={(value: any) => setFieldValue('banner', value[0])}
               />
             </InputWrapper>

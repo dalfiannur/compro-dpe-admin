@@ -103,8 +103,8 @@ export const Related: FC<DetailProps> = (props) => {
           </thead>
 
           <tbody>
-            {article?.data.products.map((item) => (
-              <tr>
+            {article?.data.products.map((item, index) => (
+              <tr key={index}>
                 <td>{item.id}</td>
                 <td>{item.name}</td>
                 <td>{item.createdAt}</td>

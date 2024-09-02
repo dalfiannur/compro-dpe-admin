@@ -1,7 +1,3 @@
-import { Banner } from "entities";
-import { useFormik } from "formik";
-import { usePutBannerMutation } from "../../../services";
-import { useEffect } from "react";
 import {
     Box,
     Button,
@@ -10,7 +6,11 @@ import {
     InputWrapper,
     Modal,
 } from "@mantine/core";
-import { ImagePicker } from "../../../components/ImagePicker";
+import { InputImage } from "../../../components/InputImage";
+import { Banner } from "entities";
+import { useFormik } from "formik";
+import { useEffect } from "react";
+import { usePutBannerMutation } from "../../../services";
 
 type FormEditProp = {
     data: Banner;
@@ -101,8 +101,7 @@ const FormEdit = (props: FormEditProp) => {
                             label="Image"
                             error={errors.imageSource}
                         >
-                            <ImagePicker
-                                result={""}
+                            <InputImage
                                 propsOnChange={(
                                     value: any
                                 ) => {
@@ -111,7 +110,7 @@ const FormEdit = (props: FormEditProp) => {
                                         value[0]
                                     );
                                 }}
-                                aspectRatio={12 / 5}
+                                imgRatio={12 / 5}
                                 defaultImage={
                                     values.imageSourceUrl
                                 }
@@ -125,8 +124,7 @@ const FormEdit = (props: FormEditProp) => {
                             label="Image Mobile"
                             error={errors.imageSourceCropped}
                         >
-                            <ImagePicker
-                                result={""}
+                            <InputImage
                                 propsOnChange={(
                                     value: any
                                 ) => {
@@ -135,7 +133,7 @@ const FormEdit = (props: FormEditProp) => {
                                         value[0]
                                     );
                                 }}
-                                aspectRatio={2 / 1}
+                                imgRatio={2 / 1}
                                 defaultImage={
                                     values.imageSourceCroppedUrl
                                 }

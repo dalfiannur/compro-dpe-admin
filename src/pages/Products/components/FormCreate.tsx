@@ -15,6 +15,7 @@ import {RichTextEditor} from "@mantine/rte";
 import { useMantineTheme} from "@mantine/core";
 import {ImageUploader} from "../../../components/ImageUploader";
 import {MultiImageControl} from "../../Article/components/MultiImageControl";
+import { InputImage } from "../../../components/InputImage";
 
 const validationSchema = y.object({
   name: y.string().required(),
@@ -86,10 +87,6 @@ export const FormCreate = (props: FormCreateProp) => {
   }, [result]);
 
   const [imagesList, setImagesList] = useState<any>([])
-
-  // useEffect(() => {
-  //   setFieldValue('images', [bottle, bottleBox])
-  // }, [bottle, bottleBox]);
 
   return (
     <Modal
@@ -277,7 +274,8 @@ export const FormCreate = (props: FormCreateProp) => {
                 label="Featured Image"
                 error={errors.images}
             >
-              <ImageUploader
+              <InputImage
+                  imgRatio={1/1}
                   propsOnChange={(value:any) => {
                     let imgTemp: any;
                     imgTemp = imagesList;
@@ -299,7 +297,8 @@ export const FormCreate = (props: FormCreateProp) => {
                 label="Featured Image"
                 error={errors.images}
             >
-              <ImageUploader
+              <InputImage
+                  imgRatio={1/1}
                   propsOnChange={(value:any) => {
                     let imgTemp: any;
                     imgTemp = imagesList;
@@ -314,13 +313,6 @@ export const FormCreate = (props: FormCreateProp) => {
                   }
               />
             </InputWrapper>
-
-
-
-            {/*<MultiImageControl*/}
-            {/*    errorMessage={errors.images}*/}
-            {/*    propsOnChange={(value: any) => setFieldValue("thumbnail", value)}*/}
-            {/*/>*/}
           </Grid.Col>
         </Grid>
       </Box>
